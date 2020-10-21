@@ -12,21 +12,41 @@ summary(data)
 any(is.na(select(data,1:6,8:22)))
 #no other NA's
 #will need to impute sqft as 4500 is too many missing variables and sqft is important
+theme_set(theme_minimal())
 missing_plot(data)
 
+#there are two categorical columns that have many levels, look into those:
+data %>% group_by(type) %>% summarise(count = length(type))
+#check how prices vary by type
+price_type_plot <- data %>% ggplot(aes(x=type,y=final_price/1000)) + geom_boxplot() + theme(axis.text.x = element_text(angle = 90))
+#some of these descriptions are very similar and have few values lets combine them into similar levels
+data$type[data$type=='Att/Row/Twnhouse'] <- 'Townhouse'
+data$type[data$type=='Co-Op Apt'] <- 'Condo'
+data$type[data$type=='Co-Ownership Apt'] <- 'Condo'
+data$type[data$type=='Comm Element Condo'] <- 'Condo'
+data$type[data$type=='Condo Apt'] <- 'Condo'
+data$type[data$type=='Condo Townhouse'] <- 'Condo'
+data$type[data$type=='Link'] <- 'Detached'
+data$type[data$type=='Store W/Apt/Offc'] <- 'Condo'
+#check the summary again
+data %>% group_by(type) %>% summarise(count = length(type))
+#check how prices vary by type
+price_type_plot <- data %>% ggplot(aes(x=type,y=final_price/1000)) + geom_boxplot(alpha=0.25) + theme(axis.text.x = element_text(angle = 90))
+
+#add a column for total bedrooms
+data <- data %>% mutate(beds = bedrooms_ag+bedrooms_bg)
+
 #check for randomness
-complete <- names(select(data, 3:6,8,11,14,15,17:19))
+complete <- names(select(data, 3:6,8,11,14,15,17:19,23))
 missing <- names(select(data,7))
 
 for (i in c(1:length(complete))) {
   print(data %>% missing_compare(missing, complete[i]))
 }
-
-#add a column for total bedrooms
-data <- data %>% mutate(beds = bedrooms_ag+bedrooms_bg)
-
 #missing data seems to be strongly correlated to type of house and the price
-theme_set(theme_minimal())
+
+
+#visualize the data
 # check for distribution of numerical variables and outliers
 #final price
 h1 <- data %>% ggplot(aes(x=final_price/1000)) + geom_histogram(fill='grey', colour='black', alpha = 0.6, binwidth = 100) + xlab("Final Price in thousands") + xlim(100,5000)
@@ -51,12 +71,15 @@ grid.arrange(h1,h2,h3,h4,h5,h6,h7,h8,h9, ncol=3, nrow=3)
 
 #distribution of categorical variables
 b1 <- data %>% ggplot(aes(x=type)) + geom_bar(fill='grey',colour='black', alpha = 0.6) + theme(axis.text.x = element_text(angle = 90))
+b1
 # district (need to fix this)
 b2 <- data %>% ggplot(aes(x=city_district)) + geom_bar(fill='grey',colour='black', alpha = 0.6) + theme(axis.text.x = element_text(angle = 90))
-
+b2
 # plot showing outliers
 s1 <- data %>% ggplot(aes(x=final_price/1000,y=list_price/1000)) + geom_point(alpha=0.5)
+s1
 # 5 houses that are clear outliers on price
-
 s2 <- data %>% ggplot(aes(x=final_price/1000,y=sqft)) + geom_point(alpha=0.5)
+s2
 # no real outliers for sqft
+
