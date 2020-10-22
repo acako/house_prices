@@ -4,6 +4,7 @@ library(finalfit)
 library(ggplot2)
 library(grid)
 library(gridExtra)
+library(mice)
 
 data <- read.csv('houses_edited.csv')
 summary(data)
