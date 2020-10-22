@@ -77,10 +77,43 @@ b1
 b2 <- data %>% ggplot(aes(x=city_district)) + geom_bar(fill='grey',colour='black', alpha = 0.6) + theme(axis.text.x = element_text(angle = 90))
 b2
 # plot showing outliers
-s1 <- data %>% ggplot(aes(x=final_price/1000,y=list_price/1000)) + geom_point(alpha=0.5)
+s1 <- data %>% ggplot(aes(x=final_price/1000,y=list_price/1000)) + geom_point(alpha=0.5) + geom_abline(intercept=0,slope=1, colour='red')
 s1
 # 5 houses that are clear outliers on price
 s2 <- data %>% ggplot(aes(x=final_price/1000,y=sqft)) + geom_point(alpha=0.5)
 s2
 # no real outliers for sqft
 
+#removing outliers for price > $7.5M
+data <- data %>% subset(final_price<7500000)
+# plot showing removal of outliers
+s3 <- data %>% ggplot(aes(x=final_price/1000,y=list_price/1000)) + geom_point(alpha=0.5) + geom_abline(intercept=0,slope=1, colour='red')
+s3
+#show relationship between final and list price
+data_with_price_diff <- data %>% mutate(price_diff = final_price-list_price)
+price_diff <- data_with_price_diff %>% ggplot(aes(x=price_diff/1000)) + geom_density(fill='grey', colour='black', alpha = 0.6) + xlim(-250,250)
+price_diff
+
+#impute missing values
+set.seed(123)
+# methods that dont work include pmm, midastouch, numeric, binary, ordered, unordered
+summary(data$sqft)
+# random forest method
+imputed_data_rf <- mice(data, m=5, maxit=50, meth='rf')
+densityplot(imputed_data_rf)
+summary(imputed_data_rf$imp$sqft)
+
+# random sample of observed values
+imputed_data_sample <- mice(data, m=5, maxit=50, meth='sample')
+densityplot(imputed_data_sample)
+summary(imputed_data_sample$imp$sqft)
+
+# classification and regression trees
+imputed_data_cart <- mice(data, m=5, maxit=50, meth='cart')
+densityplot(imputed_data_cart)
+summary(imputed_data_cart$imp$sqft)
+
+#linear discriminant analysis
+imputed_data_lda <- mice(data, m=5, maxit=50, meth='lda')
+densityplot(imputed_data_lda)
+summary(imputed_data_lda$imp$sqft)
