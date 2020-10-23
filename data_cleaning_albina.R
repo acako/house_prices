@@ -37,4 +37,5 @@ cl_houseprices_randomsample<- mice(house_prices_updated,m=5,maxit=50,meth='sampl
 summary(tempData)
 #imputing using the random forest in mice
 cl_houseprices_randomforest <- mice(house_prices_updated,m=5,maxit=50,meth='rf', seed = 500)
-
+#imputing using the random forest in mice
+cl_houseprices_randomforest <- mice(house_prices_updated,m=5,maxit=50,meth='rf', seed = 500)
