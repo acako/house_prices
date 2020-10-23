@@ -54,16 +54,17 @@ library("Hmisc")
 house_prices_num_edit.rcorr = rcorr(as.matrix(house_prices_num_edit))
 house_prices_num_edit.rcorr
 #correlation plot
-corrplot(house_prices_num_edit.cor)
+
+corrplot(house_prices_num_edit.rcorr$r)
 
 #correlation scatter plot
-insttall.packages("PerformanceAnalytics")
-library(PerformanceAnalytics)
-chart.Correlation(house_prices_num_edit, histogram=TRUE, pch=19)
+#insttall.packages("PerformanceAnalytics")
+#library(PerformanceAnalytics)
+#chart.Correlation(house_prices_num_edit, histogram=TRUE, pch=19)
 
 #correlation with heat map
-col<- colorRampPalette(c("blue", "white", "red"))(20)
-heatmap(x = house_prices_num_edit, col = col, symm = TRUE)
+#col<- colorRampPalette(c("blue", "white", "red"))(20)
+#heatmap(x = house_prices_num_edit, col = col, symm = TRUE)
 
 #looking at outliers in numeric data
 boxplot(house_prices_num_edit$final_price, ylab = "Final Price")
@@ -79,3 +80,5 @@ boxplot(house_prices_num_edit$mean_district_income, ylab = "Mean District Income
 #visualizing missing data
 library(naniar)
 vis_miss(house_prices)
+
+

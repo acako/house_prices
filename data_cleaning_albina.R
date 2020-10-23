@@ -37,5 +37,22 @@ cl_houseprices_randomsample<- mice(house_prices_updated,m=5,maxit=50,meth='sampl
 summary(tempData)
 #imputing using the random forest in mice
 cl_houseprices_randomforest <- mice(house_prices_updated,m=5,maxit=50,meth='rf', seed = 500)
-#imputing using the random forest in mice
-cl_houseprices_randomforest <- mice(house_prices_updated,m=5,maxit=50,meth='rf', seed = 500)
+#imputing using cart in mice
+cl_houseprices_cart <- mice(house_prices_updated,m=5,maxit=50,meth='cart', seed = 500)
+
+#looking at summary of each imputed data
+summary(cl_houseprices_randomsample)
+summary(cl_houseprices_randomforest)
+summary(cl_houseprices_cart)
+
+
+#looking at density plot for each imputed data method
+densityplot(cl_houseprices_randomforest)
+densityplot(cl_houseprices_cart)
+densityplot(cl_houseprices_randomsample)
+
+complete_data <- complete(cl_houseprices_cart, 3)
+head(complete_data)
+
+
+
