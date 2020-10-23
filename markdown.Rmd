@@ -1,0 +1,17 @@
+---
+title: "House_price_prediction"
+author: "Albina Cako, Colin Green, Lucy Zhang, Sean Zhang"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### **Data Analysis**\
+
+```{r load packages, include=FALSE}
+# load the packages
+library(dplyr)
+library(ggplot2)
+library(readr)
