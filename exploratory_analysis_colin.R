@@ -101,14 +101,14 @@ set.seed(123)
 # methods that dont work include pmm, midastouch, numeric, binary, ordered, unordered
 summary(data$sqft)
 # random forest method
-imputed_data_rf <- mice(data, m=5, maxit=50, meth='rf')
-densityplot(imputed_data_rf)
-summary(imputed_data_rf$imp$sqft)
+#imputed_data_rf <- mice(data, m=5, maxit=50, meth='rf')
+#densityplot(imputed_data_rf)
+#summary(imputed_data_rf$imp$sqft)
 
 # random sample of observed values
-imputed_data_sample <- mice(data, m=5, maxit=50, meth='sample')
-densityplot(imputed_data_sample)
-summary(imputed_data_sample$imp$sqft)
+#imputed_data_sample <- mice(data, m=5, maxit=50, meth='sample')
+#densityplot(imputed_data_sample)
+#summary(imputed_data_sample$imp$sqft)
 
 # classification and regression trees
 imputed_data_cart <- mice(data, m=5, maxit=50, meth='cart')
@@ -116,42 +116,45 @@ densityplot(imputed_data_cart)
 summary(imputed_data_cart$imp$sqft)
 
 #linear discriminant analysis
-imputed_data_lda <- mice(data, m=5, maxit=50, meth='lda')
-densityplot(imputed_data_lda)
-summary(imputed_data_lda$imp$sqft)
+#imputed_data_lda <- mice(data, m=5, maxit=50, meth='lda')
+#densityplot(imputed_data_lda)
+#summary(imputed_data_lda$imp$sqft)
 
 #cart looks to be the best option
 #run regression on all 5 of the cart options
 
 data_cart_1 <- complete(imputed_data_cart,1)
-data_cart_2 <- complete(imputed_data_cart,2)
-data_cart_3 <- complete(imputed_data_cart,3)
-data_cart_4 <- complete(imputed_data_cart,4)
-data_cart_5 <- complete(imputed_data_cart,5)
+#data_cart_2 <- complete(imputed_data_cart,2)
+#data_cart_3 <- complete(imputed_data_cart,3)
+#data_cart_4 <- complete(imputed_data_cart,4)
+#data_cart_5 <- complete(imputed_data_cart,5)
 
 #framework for running regression:
 data_sets = list(data_cart_1, data_cart_2, data_cart_3, data_cart_4, data_cart_5)
 
 models_final_price = c()
 models_list_price = c()
-train_control = trainControl(method='cv', number=5)
+ctrl = trainControl(method='cv', number=5)
 i=1
-'
-for (set in data_sets){
-  df_final <- set %>% select(3,5:7,10,13,14,16,21,22)
-  df_list <- set %>% select(2,5:7,10,13,14,16,21,22)
-  models_final_price[i] <- #model code goes here...use df_final as dataset
-  models_list_price[i] <- #model code goes here...use df_list as dataset
-  i = i +1
-}
-'
-#glm
-for (set in data_sets){
-  df_final <- set %>% select(3,5:7,10,13,14,17,21,22)
-  df_list <- set %>% select(2,5:7,10,13,14,17,21,22)
-  models_final_price[i] <- train(final_price ~.,data=df_final,trControl=train_control, method='glm')
-  models_list_price[i] <- train(list_price ~.,data=df_list,trControl=train_control, method='glm')
-  i = i +1
-}
 
-models_final_price[1] <- train(data_cart_1$final_price ~.,data=data_cart_1,trControl=train_control, method='rpart')
+#for (set in data_sets){
+#  df_final <- set %>% select(3,5:7,10,13,14,16,21,22)
+#  df_list <- set %>% select(2,5:7,10,13,14,16,21,22)
+#  models_final_price[i] <- #model code goes here...use df_final as dataset
+#  models_list_price[i] <- #model code goes here...use df_list as dataset
+#  i = i +1
+#}
+
+#glm
+#for (set in data_sets){
+#  df_final <- set %>% select(3,5:7,10,13,14,17,21,22)
+#  df_list <- set %>% select(2,5:7,10,13,14,17,21,22)
+#  models_final_price[i] <- train(final_price ~.,data=df_final,trControl=train_control, method='glm')
+#  models_list_price[i] <- train(list_price ~.,data=df_list,trControl=train_control, method='glm')
+#  i = i +1
+#}
+
+data_cart_1 <- data_cart_1 %>% select(3,4,6:8,11,14,15,17,21:23)
+models_final_price[1] <- train(final_price ~.,
+                               data=data_cart_1,trControl = trainControl("cv",number=10,savePredictions = 'all'),
+                               method='rpart')
