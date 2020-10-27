@@ -33,10 +33,10 @@ head(house_prices_updated)
 #imputation of sqft 
 
 #imputing using the random sample in mice
-cl_houseprices_randomsample<- mice(house_prices_updated,m=5,maxit=50,meth='sample', seed = 500)
+#cl_houseprices_randomsample<- mice(house_prices_updated,m=5,maxit=50,meth='sample', seed = 500)
 summary(tempData)
 #imputing using the random forest in mice
-cl_houseprices_randomforest <- mice(house_prices_updated,m=5,maxit=50,meth='rf', seed = 500)
+#cl_houseprices_randomforest <- mice(house_prices_updated,m=5,maxit=50,meth='rf', seed = 500)
 #imputing using cart in mice
 cl_houseprices_cart <- mice(house_prices_updated,m=5,maxit=50,meth='cart', seed = 500)
 
@@ -51,8 +51,72 @@ densityplot(cl_houseprices_randomforest)
 densityplot(cl_houseprices_cart)
 densityplot(cl_houseprices_randomsample)
 
-complete_data <- complete(cl_houseprices_cart, 3)
-head(complete_data)
+complete_data_1 <- complete(cl_houseprices_cart, 1)
+complete_data_2 <- complete(cl_houseprices_cart, 2)
+complete_data_3 <- complete(cl_houseprices_cart, 3)
+complete_data_4 <- complete(cl_houseprices_cart, 4)
+complete_data_5 <- complete(cl_houseprices_cart, 5)
+
+head(complete_data_1)
+head(complete_data_2)
+head(complete_data_3)
+head(complete_data_4)
+head(complete_data_5)
+
+#convert type column to factor
+complete_data_1$type <- as.factor(complete_data_1$type)
+complete_data_2$type <- as.factor(complete_data_2$type)
+complete_data_3$type <- as.factor(complete_data_3$type)
+complete_data_4$type <- as.factor(complete_data_4$type)
+complete_data_5$type <- as.factor(complete_data_5$type)
+sapply(complete_data_1 , class)
+head(complete_data_1)
+#removing final price log/transformed, city district and list price
+complete_d1 <- subset(complete_data_1, select=-c(city_district, list_price))
+head(complete_d1)
+complete_d_1 <- subset(complete_d1, select=-c(final_price_log, final_price_transformed))
+
+complete_d2 <- subset(complete_data_2, select=-c(city_district, list_price))
+complete_d_2 <- subset(complete_d2, select=-c(final_price_log, final_price_transformed))
+
+complete_d3 <- subset(complete_data_3, select=-c(city_district, list_price))
+head(complete_d3)
+complete_d_3 <- subset(complete_d3, select=-c(final_price_log, final_price_transformed))
+
+complete_d4 <- subset(complete_data_4, select=-c(city_district, list_price))
+head(complete_d4)
+complete_d_4 <- subset(complete_d4, select=-c(final_price_log, final_price_transformed))
+
+complete_d5 <- subset(complete_data_5, select=-c(city_district, list_price))
+head(complete_d5)
+complete_d_5 <- subset(complete_d1, select=-c(final_price_log, final_price_transformed))
+
+#removing outliers on final price
+library(dplyr)
+complete_d_1 <- complete_d_1 %>% subset(final_price<7500000)
+complete_d_2 <- complete_d_2 %>% subset(final_price<7500000)
+complete_d_3 <- complete_d_3 %>% subset(final_price<7500000)
+complete_d_4 <- complete_d_4 %>% subset(final_price<7500000)
+complete_d_5 <- complete_d_5 %>% subset(final_price<7500000)
+head(complete_d_1)
+#put data sets in list -ignore for now
+#data_sets_all = list(complete_d_1, complete_d_2, complete_d_3, complete_d_4, complete_d_5)
+
+library(caret)
+library(rpart)
+install.packages("xgboost")
+library(xgboost)
+install.packages("tidyverse")
+library(tidyverse)
+model_final_price <- train(final_price ~.,data=complete_d_1,trControl = trainControl("cv",number=10,savePredictions = 'all'),
+                                   method='xgbTree')
+
+
+
+
+
+
+
 
 
 

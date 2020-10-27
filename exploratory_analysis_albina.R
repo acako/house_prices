@@ -77,6 +77,7 @@ boxplot(house_prices_num_edit$sqft, ylab = "Square Feet")
 boxplot(house_prices_num_edit$parking, ylab = "Number Of Parking Spots")
 boxplot(house_prices_num_edit$mean_district_income, ylab = "Mean District Income")
 
+
 #visualizing missing data
 library(naniar)
 vis_miss(house_prices)

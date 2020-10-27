@@ -93,9 +93,11 @@ s3 <- data %>% ggplot(aes(x=final_price/1000,y=list_price/1000)) + geom_point(al
 s3
 #show relationship between final and list price
 data_with_price_diff <- data %>% mutate(price_diff = final_price-list_price)
-price_diff <- data_with_price_diff %>% ggplot(aes(x=price_diff/1000)) + geom_density(fill='grey', colour='black', alpha = 0.6) + xlim(-250,250)
+price_diff <- data_with_price_diff %>% ggplot(aes(y=price_diff/1000, x=final_price/1000)) + geom_point()
 price_diff
 
+#show the map using lat and long
+data %>% ggplot(aes(x=lat, y=long)) + geom_point(aes(colour=city_district)) + theme(legend.position = 'none')
 #impute missing values
 set.seed(123)
 # methods that dont work include pmm, midastouch, numeric, binary, ordered, unordered
@@ -134,29 +136,267 @@ data_sets = list(data_cart_1, data_cart_2, data_cart_3, data_cart_4, data_cart_5
 
 models_final_price <- list()
 models_list_price <- list()
-ctrl = trainControl(method='cv', number=5)
-i=1
+models_final_price_cp <- list()
+models_list_price_cp <- list()
+models_final_price_md <- list()
+models_list_price_md <- list()
+ctrl <- trainControl(method='cv', number=5, savePredictions = 'all')
+i <- 1
 
-#for (set in data_sets){
-#  df_final <- set %>% select(3,6:8,11,14,15,17,21:23)
-#  df_list <- set %>% select(2,6:8,11,14,15,17,21:23)
-#  models_final_price[[i]] <- #model code goes here...use df_final as dataset
-#  models_list_price[[i]] <- #model code goes here...use df_list as dataset
-#  i = i +1
-#}
-
-#decision tree
+#decision tree no tuning
 for (set in data_sets){
-  df_final <- set %>% select(3,6:8,11,14,15,17,21:23)
-  df_list <- set %>% select(4,6:8,11,14,15,17,21:23)
-  models_final_price[[i]] <- train(final_price ~.,data=df_final,trControl = trainControl("cv",number=10,savePredictions = 'all'),
-                                 method='rpart',
-                                 tuneLength=10)
-  models_list_price[[i]] <- train(list_price ~.,data=df_list,trControl = trainControl("cv",number=10,savePredictions = 'all'),
-                                method='rpart',
-                                tuneLength=10)
+  df_final <- set %>% select(3,6:8,11,14,15,16,21:23)
+  df_list <- set %>% select(4,6:8,11,14,15,16,21:23)
+  models_final_price[[i]] <- train(final_price ~.,
+                                  data=df_final,
+                                  trControl = ctrl,
+                                  method='rpart',
+                                  tuneLength=10)
+  models_list_price[[i]] <- train(list_price ~.,
+                                  data=df_list,
+                                  trControl = ctrl,
+                                  method='rpart',
+                                  tuneLength=10)
   i = i +1
 }
 
+i <- 1
+grid_cp <- expand.grid(cp=seq(0.0001,0.05,0.001))
+#decision tree tuning cp
+for (set in data_sets){
+  df_final <- set %>% select(3,6:8,11,14,15,16,21:23)
+  df_list <- set %>% select(4,6:8,11,14,15,16,21:23)
+  models_final_price_cp[[i]] <- train(final_price ~.,
+                                      data=df_final,
+                                      trControl = ctrl,
+                                      method='rpart',
+                                      tuneGrid=grid_cp)
+  models_list_price_cp[[i]] <- train(list_price ~.,
+                                    data=df_list,
+                                    trControl = ctrl,
+                                    method='rpart',
+                                    tuneGrid=grid_cp)
+  i = i +1
+}
+
+i <- 1
+grid_md <- expand.grid(maxdepth=seq(2,11,1))
+#decision tree tuning maxdepth
+for (set in data_sets){
+  df_final <- set %>% select(3,6:8,11,14,15,16,21:23)
+  df_list <- set %>% select(4,6:8,11,14,15,16,21:23)
+  models_final_price_md[[i]] <- train(final_price ~.,
+                                      data=df_final,
+                                      trControl = ctrl,
+                                      method='rpart2',
+                                      tuneGrid=grid_md)
+  models_list_price_md[[i]] <- train(list_price ~.,
+                                    data=df_list,
+                                    trControl = ctrl,
+                                    method='rpart2',
+                                    tuneGrid=grid_md)
+  i = i +1
+}
+
+
+#model performance:
+tunes_final = list(models_final_price, models_final_price_cp, models_final_price_md)
+tunes_list = list(models_list_price, models_list_price_cp, models_list_price_md)
+
+rmse <- list()
+i = 1
+for (model in tunes_final){
+  for (y in c(1:5)){
+    for (x in c(1:10)){
+      rmse[i] <- model[[y]]$results$RMSE[x]
+      i = i + 1
+    }
+  }
+}
+
+rsquared <- list()
+i = 1
+for (model in tunes_final){
+  for (y in c(1:5)){
+    for (x in c(1:10)){
+      rsquared[i] <- model[[y]]$results$Rsquared[x]
+      i = i + 1
+    }
+  }
+}
+
+mae <- list()
+i = 1
+for (model in tunes_final){
+  for (y in c(1:5)){
+    for (x in c(1:10)){
+      mae[i] <- model[[y]]$results$MAE[x]
+      i = i + 1
+    }
+  }
+}
+
+model_names_as_strings <- list('models_final_price', 'models_final_price_cp', 'models_final_price_md')
+model_name <- list()
+i=1
+for (model in model_names_as_strings){
+  for (x in c(1:50)){
+    model_name[i] <- model
+    i = i + 1
+  }
+}
+i=1
+iteration <- list()
+for (x in c(1:15)){
+  j = 1
+  for (y in c(1:10)){
+    iteration[i] <- j
+    j = j + 1
+    i = i + 1
+  }
+}
+
+metrics_df <- data.frame(model_name=unlist(model_name), iteration=unlist(iteration), rmse=unlist(rmse), rsquared=unlist(rsquared), mae=unlist(mae))
+
+mae_rmse <- metrics_df %>% ggplot(aes(x=mae, y=rmse)) + geom_point(aes(colour=model_name))
+mae_rs <- metrics_df %>% ggplot(aes(x=mae, y=rsquared)) + geom_point(aes(colour=model_name))
+rs_rmse <- metrics_df %>% ggplot(aes(x=rsquared, y=rmse)) + geom_point(aes(colour=model_name))
+
+
+###trying it with district income instead of district name
+
+models_final_price_income <- list()
+models_list_price_income <- list()
+models_final_price_income_cp <- list()
+models_list_price_income_cp <- list()
+models_final_price_income_md <- list()
+models_list_price_income_md <- list()
+ctrl <- trainControl(method='cv', number=5, savePredictions = 'all')
+i <- 1
+
+#decision tree no tuning
+for (set in data_sets){
+  df_final <- set %>% select(3,6:8,11,14,15,17,21:23)
+  df_list <- set %>% select(4,6:8,11,14,15,17,21:23)
+  models_final_price_income[[i]] <- train(final_price ~.,
+                                          data=df_final,
+                                          trControl = ctrl,
+                                          method='rpart',
+                                          tuneLength=10)
+  models_list_price_income[[i]] <- train(list_price ~.,
+                                         data=df_list,
+                                         trControl = ctrl,
+                                         method='rpart',
+                                         tuneLength=10)
+  i = i +1
+}
+
+i <- 1
+grid_cp <- expand.grid(cp=seq(0.0001,0.05,0.001))
+#decision tree tuning cp
+for (set in data_sets){
+  df_final <- set %>% select(3,6:8,11,14,15,17,21:23)
+  df_list <- set %>% select(4,6:8,11,14,15,17,21:23)
+  models_final_price_income_cp[[i]] <- train(final_price ~.,
+                                             data=df_final,
+                                             trControl = ctrl,
+                                             method='rpart',
+                                             tuneGrid=grid_cp)
+  models_list_price_income_cp[[i]] <- train(list_price ~.,
+                                            data=df_list,
+                                            trControl = ctrl,
+                                            method='rpart',
+                                            tuneGrid=grid_cp)
+  i = i +1
+}
+
+i <- 1
+grid_md <- expand.grid(maxdepth=seq(2,11,1))
+#decision tree tuning maxdepth
+for (set in data_sets){
+  df_final <- set %>% select(3,6:8,11,14,15,17,21:23)
+  df_list <- set %>% select(4,6:8,11,14,15,17,21:23)
+  models_final_price_income_md[[i]] <- train(final_price ~.,
+                                             data=df_final,
+                                             trControl = ctrl,
+                                             method='rpart2',
+                                             tuneGrid=grid_md)
+  models_list_price_income_md[[i]] <- train(list_price ~.,
+                                            data=df_list,
+                                            trControl = ctrl,
+                                            method='rpart2',
+                                            tuneGrid=grid_md)
+  i = i +1
+}
+
+
+#model performance:
+tunes_final = list(models_final_price_income, models_final_price_income_cp, models_final_price_income_md)
+tunes_list = list(models_list_price_income, models_list_price_income_cp, models_list_price_income_md)
+
+rmse_income <- list()
+i = 1
+for (model in tunes_final){
+  for (y in c(1:5)){
+    for (x in c(1:10)){
+      rmse_income[i] <- model[[y]]$results$RMSE[x]
+      i = i + 1
+    }
+  }
+}
+
+rsquared_income <- list()
+i = 1
+for (model in tunes_final){
+  for (y in c(1:5)){
+    for (x in c(1:10)){
+      rsquared_income[i] <- model[[y]]$results$Rsquared[x]
+      i = i + 1
+    }
+  }
+}
+
+mae_income <- list()
+i = 1
+for (model in tunes_final){
+  for (y in c(1:5)){
+    for (x in c(1:10)){
+      mae_income[i] <- model[[y]]$results$MAE[x]
+      i = i + 1
+    }
+  }
+}
+
+model_names_as_strings <- list('models_final_price_income', 'models_final_price_income_cp', 'models_final_price_income_md')
+model_name <- list()
+i=1
+for (model in model_names_as_strings){
+  for (x in c(1:50)){
+    model_name[i] <- model
+    i = i + 1
+  }
+}
+i=1
+iteration <- list()
+for (x in c(1:15)){
+  j = 1
+  for (y in c(1:10)){
+    iteration[i] <- j
+    j = j + 1
+    i = i + 1
+  }
+}
+
+metrics_df_income <- data.frame(model_name=unlist(model_name), iteration=unlist(iteration), rmse=unlist(rmse_income), rsquared=unlist(rsquared_income), mae=unlist(mae_income))
+
+mae_rmse_income <- metrics_df_income %>% ggplot(aes(x=mae_income, y=rmse_income)) + geom_point(aes(colour=model_name))
+mae_rs_income <- metrics_df_income %>% ggplot(aes(x=mae_income, y=rsquared_income)) + geom_point(aes(colour=model_name))
+rs_rmse_income <- metrics_df_income %>% ggplot(aes(x=rsquared_income, y=rmse_income)) + geom_point(aes(colour=model_name))
+
+metrics_mixed <- metrics_df %>% mutate(rmse_income = metrics_df_income$rmse, rsquared_income=metrics_df_income$rsquared, mae_income = metrics_df_income$mae)
+
+mae_plot <- metrics_mixed %>% ggplot(aes(x=mae, y=mae_income)) + geom_point()
+rs_plot <- metrics_mixed %>% ggplot(aes(x=rsquared, y=rsquared_income)) + geom_point()
+rmse_plot <- metrics_mixed %>% ggplot(aes(x=rmse, y=rmse_income)) + geom_point()
 
 
