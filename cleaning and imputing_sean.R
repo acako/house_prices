@@ -222,15 +222,21 @@ barplot(nifp[10:1, 'rel.inf'], col = 'red', xlab = 'relative influence', horiz =
 #without imputation: bathrooms, mean district income, sqft, long, typeDetached, lat, parking, bedrooms, typeTownhouse, typePlex
 
 #Overall model accuracy
-pred_list_price[[1]] #RMSE: 233066.6, R2: 0.8531249, MAE: 131277.3 
+pred_list_price[[1]] #RMSE: 233066.6, R2: 0.8531249, MAE: 131277.3
+pred_list_price[[2]] #233732.7  0.8511510  130870.6
+pred_list_price[[3]] #235154.9  0.8505187  131784.2
+pred_list_price[[4]] #234800.6  0.8503774  132111.5
+pred_list_price[[5]] #234867.3  0.8510420  132023.5
 pred_final_price[[1]] #RMSE: 221545.5, R2: 0.8621175, MAE: 126529.9 
 pred_list_price_nocity[[1]] #RMSE: 233454.2, R2: 0.8522975, MAE: 131180.7
 pred_final_price_nocity[[1]]  #RMSE: 222611.5, R2: 0.8593473, MAE: 126701.0
 pred_no_imp_lp #RMSE: 243366.2, R2: 0.8388627, MAE: 134214.2
 pred_no_imp_fp  #RMSE: 234262.4, R2:  0.8436058, MAE: 130088.2
 
-#overall finding: removing city district didn't actually change error that much but greatly cut down time on training time
-#no imputation resulted in slight increase in error
+#overall finding: removing city district didn't actually change error that much but greatly cut down time on training 
+#no imputation resulted in slight increase in error but also reduces time imputing data
+
+#Will try training model on fewer categories, or perhaps use PCA first then train again, or train on bedrooms above ground?
 
 
 
