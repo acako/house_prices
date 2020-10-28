@@ -9,18 +9,29 @@
 
 library(shiny)
 library(leaflet)
+library(dplyr)
+library(tidyr)
+# load district data
 district_data <- read.csv('districts.csv')
+# load model
+model <- readRDS("decision_tree_model.rds")
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
     
     inputData <- reactive({
         data.frame(
-            "type"=input$type,
-            "bedrooms"=input$beds,
-            "bathrooms"=input,
-            "parking"=input$parking,
-            "sqft"=input$sqft,
-            "district"=input$district)
+            'bathrooms'=as.integer(input$baths),
+            'sqft'=as.integer(input$sqft),
+            'parking'=as.integer(input$parking),
+            'type'=as.factor(input$type),
+            'mean_district_income'=as.character(input$district),
+            'beds'=as.integer(input$beds))
+    })
+    
+    output$prediction <- renderText({
+        data <- inputData()
+        #data$mean_district_income[1] <- district_data$income[which(district_data$districts==data$income)]
+        pred <- paste0(round(predict(model, newdata=data, type='vector')))
     })
 
     output$map <- renderLeaflet({
