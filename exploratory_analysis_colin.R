@@ -399,4 +399,67 @@ mae_plot <- metrics_mixed %>% ggplot(aes(x=mae, y=mae_income)) + geom_point()
 rs_plot <- metrics_mixed %>% ggplot(aes(x=rsquared, y=rsquared_income)) + geom_point()
 rmse_plot <- metrics_mixed %>% ggplot(aes(x=rmse, y=rmse_income)) + geom_point()
 
+mae_plot
+rs_plot
+rmse_plot
+
+
+#final model selection
+df_list <- data_cart_1 %>% select(4,6:8,11,17,23)
+df_list$type <- as.factor(df_list$type)
+#no tuning
+decision_tree_model_1 <- train(list_price ~.,
+                              data=df_list,
+                              trControl = ctrl,
+                              method='rpart',
+                              tuneLength=30)
+plot(decision_tree_model_1)
+decision_tree_model_1$results
+decision_tree_model_1$bestTune
+#best tune has cp ~ 0.001
+#smallest cp decreased by factor of 10
+grid_cp <- expand.grid(cp=seq(0.0001,0.01,0.001))
+decision_tree_model_2 <- train(list_price ~.,
+                             data=df_list,
+                             trControl = ctrl,
+                             method='rpart',
+                             tuneGrid=grid_cp)
+plot(decision_tree_model_2)
+decision_tree_model_2$results
+decision_tree_model_2$bestTune
+#very small cp - again by factor of 10
+grid_cp <- expand.grid(cp=seq(0.00001,0.001,0.0001))
+decision_tree_model_3 <- train(list_price ~.,
+                             data=df_list,
+                             trControl = ctrl,
+                             method='rpart',
+                             tuneGrid=grid_cp)
+plot(decision_tree_model_3)
+decision_tree_model_3$results
+decision_tree_model_3$bestTune
+#trying to find a plateau
+grid_cp <- expand.grid(cp=seq(0.000001,0.0001,0.00001))
+decision_tree_model_4 <- train(list_price ~.,
+                               data=df_list,
+                               trControl = ctrl,
+                               method='rpart',
+                               tuneGrid=grid_cp)
+plot(decision_tree_model_4)
+decision_tree_model_4$results
+decision_tree_model_4$bestTune
+#plateaus around rmse of 257000
+#cp of 0.0001 seems to be around the best as a factor of 10 decrease in cp does not improve the accuracy by much
+#combine all model values
+complexity <- rbind(
+  decision_tree_model_1$results,
+  decision_tree_model_2$results,
+  decision_tree_model_3$results,
+  decision_tree_model_4$results)
+#plot the relationship on a log scale (make this prettier)
+complexity_plot <- complexity %>% ggplot(aes(x=cp,y=RMSE)) + geom_line() + scale_x_continuous(trans='log10')
+complexity_plot
+#e-03 (0.001)seems to be the most optimal without possibly overfitting the data
+decision_tree_model <- decision_tree_model_2$finalModel
+#save model
+saveRDS(decision_tree_model,"decision_tree_model.rds")
 
