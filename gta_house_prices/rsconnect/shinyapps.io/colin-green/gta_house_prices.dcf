@@ -1,0 +1,10 @@
+name: gta_house_prices
+title:
+username:
+account: colin-green
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3109493
+bundleId: 3789801
+url: https://colin-green.shinyapps.io/gta_house_prices/
+when: 1603842903.36198

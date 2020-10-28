@@ -12,16 +12,15 @@ library(shinythemes)
 library(readr)
 library(leaflet)
 #read in the district data
-district_data <- read.csv('district_data.csv')
+district_data <- read.csv('districts_data.csv')
 types <- list("Condo", "Detached", "Semi-Detached", "Multiplex", "Townhouse")
-districts <- as.list(district_data$districts)
+districts <- as.list(district_data$district)
 # Define UI for application that shows house prices
 shinyUI(fluidPage(
     theme = shinytheme("superhero"),
 
     # Application title
     titlePanel("GTA House Price Estimator"),
-    leaflet('map', width='100%', height='100%'),
     # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
@@ -51,12 +50,13 @@ shinyUI(fluidPage(
                          value = 1000),
             selectInput("district",
                         "District",
+                        selected = NULL,
                         districts)
         ),
 
-        # Show a plot of the generated distribution
+        # Show the map
         mainPanel(
-            plotOutput("distPlot")
+            leafletOutput("map")
         )
     )
 ))

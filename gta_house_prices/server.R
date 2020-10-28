@@ -8,7 +8,8 @@
 #
 
 library(shiny)
-
+library(leaflet)
+district_data <- read.csv('districts.csv')
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
     
@@ -23,6 +24,9 @@ shinyServer(function(input, output) {
     })
 
     output$map <- renderLeaflet({
-        map = leaflet () %>% setview(lng = -79.39, lat=43.7) %>% fitBounds(-79.65,43.64,-79.15,43.9)
+        leaflet () %>%
+            setView(lng=-79.39, lat=43.7, zoom=5) %>%
+            fitBounds(-79.65,43.64,-79.15,43.9) %>%
+            addTiles() %>% addCircleMarkers(data=district_data, popup = ~as.character(district))
     })
 })
