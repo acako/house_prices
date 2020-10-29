@@ -31,6 +31,7 @@ data$type[data$type=='Condo Apt'] <- 'Condo'
 data$type[data$type=='Condo Townhouse'] <- 'Condo'
 data$type[data$type=='Link'] <- 'Detached'
 data$type[data$type=='Store W/Apt/Offc'] <- 'Condo'
+data$type[data$type=='Semi=Detached'] <- 'SemiDetached'
 #check the summary again
 data %>% group_by(type) %>% summarise(count = length(type))
 #check how prices vary by type
@@ -463,3 +464,15 @@ decision_tree_model <- decision_tree_model_2$finalModel
 #save model
 saveRDS(decision_tree_model,"decision_tree_model.rds")
 
+test_frame <- spread(data.frame(
+  name = c('bathrooms',
+  'sqft',
+  'parking',
+  'typeCondo',
+  'typeDetached',
+  'typePlex',
+  'typeSemi-Detached',
+  'typeTownhouse',
+  'mean_district_income',
+  'beds'),
+  value = as.numeric(c(1,1400,0,0,1,0,0,0,66000,2))),name,value)

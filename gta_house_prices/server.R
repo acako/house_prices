@@ -11,6 +11,7 @@ library(shiny)
 library(leaflet)
 library(dplyr)
 library(tidyr)
+library(caret)
 # load district data
 district_data <- read.csv('districts.csv')
 # load model
@@ -23,8 +24,12 @@ shinyServer(function(input, output) {
             'bathrooms'=as.integer(input$baths),
             'sqft'=as.integer(input$sqft),
             'parking'=as.integer(input$parking),
-            'type'=as.factor(input$type),
-            'mean_district_income'=as.character(input$district),
+            'typeCondo'=as.integer(ifelse(input$type==1,1,0)),
+            'typeDetached'=as.integer(ifelse(input$type==2,1,0)),
+            'typePlex'=as.integer(ifelse(input$type==3,1,0)),
+            'typeSemiDetached'=as.integer(ifelse(input$type==4,1,0)),
+            'typeTownhouse'=as.integer(ifelse(input$type==5,1,0)),
+            'mean_district_income'=as.integer(input$district),
             'beds'=as.integer(input$beds))
     })
     
