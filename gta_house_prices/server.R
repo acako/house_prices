@@ -29,7 +29,7 @@ shinyServer(function(input, output) {
             'typePlex'=as.integer(ifelse(input$type==3,1,0)),
             'typeSemiDetached'=as.integer(ifelse(input$type==4,1,0)),
             'typeTownhouse'=as.integer(ifelse(input$type==5,1,0)),
-            'mean_district_income'=as.integer(input$district),
+            'mean_district_income'=as.integer(district_data$income[which(district_data$district==input$district)]),
             'beds'=as.integer(input$beds))
     })
     
