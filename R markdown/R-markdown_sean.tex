@@ -39,46 +39,6 @@
 
 \setcounter{secnumdepth}{0}
 
-\usepackage{color}
-\usepackage{fancyvrb}
-\newcommand{\VerbBar}{|}
-\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-% Add ',fontsize=\small' for more characters per line
-\usepackage{framed}
-\definecolor{shadecolor}{RGB}{248,248,248}
-\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\BuiltInTok}[1]{#1}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
-\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
-\newcommand{\ExtensionTok}[1]{#1}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\ImportTok}[1]{#1}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\NormalTok}[1]{#1}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\RegionMarkerTok}[1]{#1}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{longtable,booktabs}
 
 
@@ -195,15 +155,16 @@
 
     \vskip 8.5pt % \small 
 
-\noindent Lorem Ipsum is simply dummy text of the printing and typesetting
-industry. Lorem Ipsum has been the industry's standard dummy text ever
-since the 1500s, when an unknown printer took a galley of type and
-scrambled it to make a type specimen book. It has survived not only five
-centuries, but also the leap into electronic typesetting, remaining
-essentially unchanged. It was popularised in the 1960s with the release
-of Letraset sheets containing Lorem Ipsum passages, and more recently
-with desktop publishing software like Aldus PageMaker including versions
-of Lorem Ipsum.
+\noindent The project focus on building a machine learning model for predicting
+house price in Toronto. Although House Price Index (HPI) is commonly
+used for estimating the changes in housing price but it is not perfect
+for individual housing price prediction due to high correlation of
+housing price and other factors such as house location, income
+distribution, area, and etc. This project evaluates four different model
+and chooses the best one for deployment with ShinyApp. The app created
+for both buyer and seller to have an estimated house price due the
+location and different attributes of the house, and help users to make
+decisions.
 
 
 \vskip 8.5pt \noindent \emph{Keywords}: house prices, machine learning, caret, shiny \par
@@ -225,25 +186,61 @@ of Lorem Ipsum.
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
+The House Pricing Prediction app is created for estimate the house price
+for both buyer and seller based on different factors such as total Sqft,
+house locations, etc. The deployment was constructed using ShinyApp. An
+user friendly app for both buyer and seller, with simple click of
+factors users will get an estimated housing price. The app can be used
+for individual buyers who want to know the final price of the houses
+they are interested or for individual sellers to know what is the best
+listing price. The app uses regression model for prediction, which was
+trained by the data set of Toronto housing price. The housing price is
+strongly correlated with other factors, for increasing the model
+accuracy decreasing errors, it is important to try different factors and
+combinations. This project will comprehensively validate four different
+models: decision tree, random forest, K nearest neighbors, and gradient
+boosting machine. This report will go through data analysis, modeling
+implementation and provide an optimistic result for housing price
+<<<<<<< HEAD
+prediction.
+
 \hypertarget{objective}{%
 \subsection{Objective}\label{objective}}
 
 The objective of this project was to evaluate the application of machine
 learning algorithms to predict house prices in the Greater Toronto Area,
 and apply
+=======
+prediction. \#\# Objective The objective of this project was to evaluate
+the application of machine learning algorithms to predict house prices
+in the Greater Toronto Area, and apply
+>>>>>>> d08b2e2b5dc0105ca12693f3a21d3a5c2c36646b
 
 \hypertarget{background}{%
 \subsection{Background}\label{background}}
 
-Lorem Ipsum is simply dummy text of the printing and typesetting
-industry. Lorem Ipsum has been the industry's standard dummy text ever
-since the 1500s, when an unknown printer took a galley of type and
-scrambled it to make a type specimen book. It has survived not only five
-centuries, but also the leap into electronic typesetting, remaining
-essentially unchanged. It was popularised in the 1960s with the release
-of Letraset sheets containing Lorem Ipsum passages, and more recently
-with desktop publishing software like Aldus PageMaker including versions
-of Lorem Ipsum.
+<<<<<<< HEAD
+Purchasing a house is a big life decision for every individual and needs
+=======
+Purchasing a house if a big life decision for every individual and needs
+>>>>>>> d08b2e2b5dc0105ca12693f3a21d3a5c2c36646b
+a considerable amount of research. Everyone has different purpose of
+buying houses, someone would prefer by the house at the best rate for
+living now, someone would buy houses for future investment. Selling the
+houses is also very important and needs to do research and decide what
+is the best leasing price. Commonly, people will ask advise from various
+websites, real estate agents or realtors before purchasing or leasing;
+However, due to the trend towards big data, house pricing prediction can
+be done by using machine learning strategies base on large amount of
+data from previous years more correctly. House Price Index (HPI) can
+measure the price changes of residential housing as a percentage change,
+In Canada the new Housing Price Index is calculated monthly by
+Statistics Canada. HPI is useful but because it is a rough indicator
+calculated from all transactions, it is inefficient for predicting a
+specific house with its attributes. The purpose of this project is to
+create an app for both buyers and sellers can easily check the predicted
+list price or final price based on the attributes of the house such as
+locations, square foot, number of bedrooms, etc.
 
 \hypertarget{methodology}{%
 \section{Methodology}\label{methodology}}
@@ -253,9 +250,9 @@ of Lorem Ipsum.
 
 The housing dataset, originally shared on Github{[}1{]}, was extracted
 from Zoocasa.com in the summer of 2019. The dataset contained all
-completed property sales in the city of Toronto within an approximately
-1-year span. We performed several data exploration and cleaning steps to
-prepare this data for modeling.
+completed property sales in the city of Toronto within a 1-year span. We
+performed several data exploration and cleaning steps to prepare this
+data for modeling.
 
 \hypertarget{missingness}{%
 \subsection{Missingness}\label{missingness}}
@@ -279,23 +276,108 @@ methods: 1) simple, which imputes a value from a simple random sample
 from the rest of the data; 2) mean, which imputes the average of all
 observations; 3) random forest, which applies a random forest algorithm;
 and 4) CART, which imputes by classification and regression trees. The
-distribution of the imputed data were then evaluated with a density plot
-and chosen based on best fit.
+distribution of the imputed data were evaluated with a density plot and
+an imputed dataset was chosen based on best fit.
+<<<<<<< HEAD
+=======
+
+\hypertarget{assessing-parametric-fit}{%
+\subsection{Assessing Parametric Fit}\label{assessing-parametric-fit}}
+
+Outliers were visualized with the boxplot() function, with outliers
+falling outside Q1 - 1.5 X Inter-Quartile Range and Q3 + 1.5 X
+Inter-Quartile Range. Normality of the distribution of variables were
+visualized with density plots. A correlogram with Pearson's R determined
+collinearity. Linear relationship between outcome variable and
+predictors was tested via scatterplots.
+>>>>>>> d08b2e2b5dc0105ca12693f3a21d3a5c2c36646b
 
 \hypertarget{data-curation}{%
 \subsection{Data Curation}\label{data-curation}}
 
+The following variables were removed as they did not have any data
+utility or had free-text, which would have necessitated additional
+cleaning: title, description, mls, type, full\_link, full\_address. A
+numeric `bedrooms' column was created by combining bedrooms\_ag and
+bedrooms\_bg. We also removed district\_code and city\_district; both
+were a categorical variables with number of factors = 140; keeping it
+would significantly increase model training time. Longitude and latitude
+were also not considered to accommodate model deployment, as including
+these variables in training sets would have required geocoding and
+assignment of latitude and longitude inputs to districts; tasks which
+were outside our scope for this application. Mean\_district\_income was
+left as an approximation of the effect of districts on the house price.
+After consultation with a real-estate expert, we decreased the number of
+property types by generalizing from 10 different types to: Townhouse,
+Condo, Detached, Semi-Detached, and Plex
+
+Thus, the predictors chosen were:
+
+\begin{longtable}[]{@{}lll@{}}
+\caption{Predictor variables}\tabularnewline
+\toprule
+Label & & Description\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Label & & Description\tabularnewline
+\midrule
+\endhead
+sqft & & numeric\tabularnewline
+beds & & numeric\tabularnewline
+bathrooms & & numeric\tabularnewline
+parking & & numeric\tabularnewline
+mean\_district\_income & & numeric\tabularnewline
+type & & categorical\tabularnewline
+\bottomrule
+\end{longtable}
+
+The target variable chosen was final\_price. Rather than training two
+models to predict on both list and final price, the predicted list price
+was instead approximated by a linear equation between list and final
+price in the training data.
+
 \hypertarget{modeling}{%
 \subsection{Modeling}\label{modeling}}
 
-As the data contained a mix of categorical and numerical variables and
-did not satisfy many requirements of parametric models, such as variable
+The data contained a mix of categorical and numerical variables and did
+not satisfy many requirements of parametric models, such as variable
 independence, and normally distributed data. Thus, several parametric
 models were used. We trained four different non-parametric models using
 k-fold cross validation. The models were then tuned using various grid
 searches to improve the accuracy. The final model was chosen based on
 three metrics: Root Mean-Squared Error (RMSE), Pearson correlation
 (R\^{}2), and Mean Average Error (MAE).
+
+<<<<<<< HEAD
+\hypertarget{decision-tree-model}{%
+\subsubsection{\texorpdfstring{\textbf{Decision Tree Model}\\
+}{Decision Tree Model }}\label{decision-tree-model}}
+
+\hypertarget{random-forest-model}{%
+\subsubsection{\texorpdfstring{\textbf{Random Forest Model}\\
+}{Random Forest Model }}\label{random-forest-model}}
+
+\hypertarget{decision-tree-model-1}{%
+\subsubsection{\texorpdfstring{\textbf{Decision Tree Model}\\
+}{Decision Tree Model }}\label{decision-tree-model-1}}
+
+\hypertarget{gradient-boosting-model}{%
+\subsubsection{\texorpdfstring{\textbf{Gradient Boosting Model}\\
+}{Gradient Boosting Model }}\label{gradient-boosting-model}}
+=======
+\hypertarget{deployment}{%
+\subsection{Deployment}\label{deployment}}
+
+The application was created using R shiny. The user interface (UI)
+contains a map of Toronto generated by the leaflet library for
+geographic navigation, and allows the user to select various inputs to
+predict property price. While the user would choose a district of
+interest from the front end, the back end links the district chosen with
+income and uses mean\_district\_income as the model input instead. We
+chose INSERT\_MODEL HERE, since it was the most accurate model as the
+back-end for our application.
+>>>>>>> d08b2e2b5dc0105ca12693f3a21d3a5c2c36646b
 
 \hypertarget{results}{%
 \section{Results}\label{results}}
@@ -343,6 +425,7 @@ bedrooms\_bg & & Number of bedrooms below ground\tabularnewline
 \hypertarget{data-exploration}{%
 \subsection{Data Exploration}\label{data-exploration}}
 
+<<<<<<< HEAD
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{data <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{'houses_edited.csv'}\NormalTok{)}
@@ -351,54 +434,65 @@ bedrooms\_bg & & Number of bedrooms below ground\tabularnewline
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
- index          title            final_price         list_price      
-\end{verbatim}
+index Min. 1st Qu. Median Mean 3rd Qu. Max. 0 5678 9804 9520 13668 17543
 
-Min. : 0 Length:15234 Min. : 103000 Min. : 104900\\
-1st Qu.: 5678 Class :character 1st Qu.: 535000 1st Qu.: 529000\\
-Median : 9804 Mode :character Median : 715000 Median : 699900\\
-Mean : 9520 Mean : 882714 Mean : 875093\\
-3rd Qu.:13668 3rd Qu.: 989000 3rd Qu.: 969900\\
-Max. :17543 Max. :13180000 Max. :13180000
+title Length Class Mode 15234 character character
 
-bedrooms bathrooms sqft parking\\
-Length:15234 Min. : 1.000 Min. : 250 Min. : 0.000\\
-Class :character 1st Qu.: 1.000 1st Qu.: 650 1st Qu.: 1.000\\
-Mode :character Median : 2.000 Median : 900 Median : 1.000\\
-Mean : 2.122 Mean :1116 Mean : 1.559\\
-3rd Qu.: 3.000 3rd Qu.:1300 3rd Qu.: 2.000\\
-Max. :14.000 Max. :4374 Max. :11.000\\
-NA's :4521\\
-description mls type full\_link\\
-Length:15234 Length:15234 Length:15234 Length:15234\\
-Class :character Class :character Class :character Class :character\\
-Mode :character Mode :character Mode :character Mode :character
+final\_price Min. 1st Qu. Median Mean 3rd Qu. Max. 103000 535000 715000
+882714 989000 13180000
 
-full\_address lat long city\_district\\
-Length:15234 Min. :43.59 Min. :-79.62 Length:15234\\
-Class :character 1st Qu.:43.65 1st Qu.:-79.45 Class :character\\
-Mode :character Median :43.69 Median :-79.40 Mode :character\\
-Mean :43.70 Mean :-79.39\\
-3rd Qu.:43.76 3rd Qu.:-79.34\\
-Max. :43.84 Max. :-79.12
+list\_price Min. 1st Qu. Median Mean 3rd Qu. Max. 104900 529000 699900
+875093 969900 13180000
 
-mean\_district\_income district\_code final\_price\_transformed
-final\_price\_log Min. : 25989 Min. : 1.0 Min. :2.380 Min. :11.54\\
-1st Qu.: 34904 1st Qu.: 39.0 1st Qu.:2.390 1st Qu.:13.19\\
-Median : 50580 Median : 76.0 Median :2.391 Median :13.48\\
-Mean : 56066 Mean : 71.3 Mean :2.391 Mean :13.54\\
-3rd Qu.: 67757 3rd Qu.:101.0 3rd Qu.:2.392 3rd Qu.:13.80\\
-Max. :308010 Max. :140.0 Max. :2.397 Max. :16.39
+bedrooms Length Class Mode 15234 character character
 
-bedrooms\_ag bedrooms\_bg\\
-Min. :0.000 Min. :0.0000\\
-1st Qu.:1.000 1st Qu.:0.0000\\
-Median :2.000 Median :0.0000\\
-Mean :2.336 Mean :0.5396\\
-3rd Qu.:3.000 3rd Qu.:1.0000\\
-Max. :9.000 Max. :6.0000
+bathrooms Min. 1st Qu. Median Mean 3rd Qu. Max. 1.000 1.000 2.000 2.122
+3.000 14.000
 
+sqft Min. 1st Qu. Median Mean 3rd Qu. Max. NA's 250 650 900 1116 1300
+4374 4521
+
+parking Min. 1st Qu. Median Mean 3rd Qu. Max. 0.000 1.000 1.000 1.559
+2.000 11.000
+
+description Length Class Mode 15234 character character
+
+mls Length Class Mode 15234 character character
+
+type Length Class Mode 15234 character character
+
+full\_link Length Class Mode 15234 character character
+
+full\_address Length Class Mode 15234 character character
+
+lat Min. 1st Qu. Median Mean 3rd Qu. Max. 43.59 43.65 43.69 43.70 43.76
+43.84
+
+long Min. 1st Qu. Median Mean 3rd Qu. Max. -79.62 -79.45 -79.40 -79.39
+-79.34 -79.12
+
+city\_district Length Class Mode 15234 character character
+
+mean\_district\_income Min. 1st Qu. Median Mean 3rd Qu. Max. 25989 34904
+50580 56066 67757 308010
+
+district\_code Min. 1st Qu. Median Mean 3rd Qu. Max. 1.0 39.0 76.0 71.3
+101.0 140.0
+
+final\_price\_transformed Min. 1st Qu. Median Mean 3rd Qu. Max. 2.380
+2.390 2.391 2.391 2.392 2.397
+
+final\_price\_log Min. 1st Qu. Median Mean 3rd Qu. Max. 11.54 13.19
+13.48 13.54 13.80 16.39
+
+bedrooms\_ag Min. 1st Qu. Median Mean 3rd Qu. Max. 0.000 1.000 2.000
+2.336 3.000 9.000
+
+bedrooms\_bg Min. 1st Qu. Median Mean 3rd Qu. Max. 0.0000 0.0000 0.0000
+0.5396 1.0000 6.0000
+
+=======
+>>>>>>> d08b2e2b5dc0105ca12693f3a21d3a5c2c36646b
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}
 
