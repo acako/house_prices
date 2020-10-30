@@ -34,54 +34,45 @@ data_cart_4 <- complete(imputed_data_cart,4)
 data_cart_5 <- complete(imputed_data_cart,5)
 
 #framework for running regression:
-data_sets = list(data_cart_1, data_cart_2, data_cart_3, data_cart_4, data_cart_5)
+#data_sets = list(data_cart_1, data_cart_2, data_cart_3, data_cart_4, data_cart_5)
 
-models_final_price <- list()
-models_list_price <- list()
-ctrl = trainControl(method='cv', number=5)
-i=1
 
-for (set in data_sets){
-  df_final <- set %>% select(3,6:8,11,14,15,17,21:23)
-  df_list <- set %>% select(2,6:8,11,14,15,17,21:23)
+#for (set in data_sets){
+  #df_final <- set %>% select(3,6:8,11,14,15,17,21:23)
+  #df_list <- set %>% select(2,6:8,11,14,15,17,21:23)
   #models_final_price[[i]] <- #model code goes here...use df_final as dataset
   #models_list_price[[i]] <- #model code goes here...use df_list as dataset
   #i = i +1
-}
+#}
 
+#creat data sets used for modeling
+df_final <- data_cart_1 %>% select(3,6:8,11,14,15,17,23)
+df_list <- data_cart_1 %>% select(2,6:8,11,14,15,17,23)
+
+#Split the training data and test data
 set.seed(123)
 ind <- sample(2, nrow(df_final), replace = TRUE, prob = c(0.7, 0.3))
 train <- df_final[ind==1,]
 test <- df_final[ind==2,]
 
-set.seed(222)
-#for (set in data_sets){
-  #models_final_price[[i]] <- randomForest(final_price ~., data=train,
-                                          #ntree = 300,
-                                          #mtry = 8,
-                                          #importance = TRUE,
-                                          #proximity = TRUE)
-  #model code goes here...use df_final as dataset
-  #models_list_price[[i]] <- #model code goes here...use df_list as dataset
-  #i = i +1
-#}
 
-ctrl = trainControl(method='cv', number=5)
+set.seed(222)
+#create the model using randomForest package
+#I tried some different number of trees and no big difference
 models_rf <- randomForest(final_price ~., data=train,
                           trControl = trainControl("cv",number=10,savePredictions = 'all'),
                           ntree = 150,
                           mtry = 6,
                           importance = TRUE,
                           proximity = TRUE)
+
 print(models_rf)
 attributes(models_rf)
-
-summary(models_rf)
-
-
+#predict the outcome on a test set
 p1 <- predict(models_rf, test)
 head(p1)
 head(test)
+#check the performance of the model
 RMSE(p1, test$final_price)
 R2(p1, test$final_price)
 
@@ -89,7 +80,7 @@ plot(models_rf)
 
 which.min(models_rf$mse)
 sqrt(models_rf$mse[which.min(models_rf$mse)])
-
+#to find the best mtry, I tried multiple different mtry the results are really similiar
 t <- tuneRF(test[,-1], test[,1],
             stepFactor = 0.5,
             plot = TRUE,
@@ -97,7 +88,7 @@ t <- tuneRF(test[,-1], test[,1],
             trace = TRUE,
             improve = 0.05)
 
-
+#variable importance
 varImpPlot(models_rf,
            sort = T,
            n.var = 5,
@@ -106,5 +97,26 @@ varImpPlot(models_rf,
 importance(models_rf)
 varUsed(models_rf)
 
-summary(models_rf)
+#create the model using caret package
+#Specify the tuning grid for different parameters
+rf_grid <- expand.grid(mtry = c(2,4),
+                       splitrule = c("gini"),
+                       min.node.size = c(1))
+#model using kfold
+rf_fit_final <- train(as.factor(final_price) ~ ., 
+                data = train, 
+                method = "ranger",
+                trControl = trainControl("cv",number=10,savePredictions = 'all'),
+                #tuneGrid = rf_grid
+                )
+
+rf_fit_final
+
+#predict the outcome on a test set
+rf_predict_final <- predict(rf_fit_final, test)
+
+
+
+
+
 
