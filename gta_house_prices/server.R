@@ -64,7 +64,11 @@ shinyServer(function(input, output) {
 
     observe({
         district <- district_change()
-        if (nrow(district) > 0){
+        if (district$district == "Please select a district"){
+            map <- leafletProxy("map")
+            map %>% fitBounds(-79.6,43.59,-79.15,43.83) %>%
+                addTiles() %>% addCircleMarkers(data=district_data, popup = ~as.character(district))
+        } else {
             map <- leafletProxy("map")
             dist <- 0.02
             lat <- district$lat[1]
