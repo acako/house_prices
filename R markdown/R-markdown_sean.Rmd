@@ -67,8 +67,17 @@ library(knitr)
 library(VIM)
 library(gbm)
 library(qwraps2)
+library(descr)
 
 ```
+### **Decision Tree Model**\
+
+### **Random Forest Model**\
+
+### **Decision Tree Model**\
+
+### **Gradient Boosting Model**\
+
 
 # Results
 The original housing dataset contained 21 variables and 15234 observations. Table 1 defines each variable of the dataset.
@@ -97,8 +106,20 @@ predictor_cols <- list('bathrooms', 'sqft', 'parking', 'lat', 'long', 'mean_dist
 
 
 ```{r, results = "asis", echo=FALSE}
-descr(data)
+descr(data, style = 'rmarkdown')
 #summary(data)
+```
+
+
+###
+
+```{r}
+#histograms - note skew in prices
+par(mfrow=c(2, 5))
+for (i in numeric_cols) {
+  hist(data[[i]], main = paste(i), xlab = '', col = 4)
+}
+
 ```
 
 
