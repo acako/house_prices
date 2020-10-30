@@ -66,19 +66,21 @@ models_rf <- randomForest(final_price ~., data=train,
                           importance = TRUE,
                           proximity = TRUE)
 
-print(models_rf)
+print(models_rf)#has mean of squared residuals:42284526674
 attributes(models_rf)
 #predict the outcome on a test set
 p1 <- predict(models_rf, test)
 head(p1)
 head(test)
 #check the performance of the model
-RMSE(p1, test$final_price)
-R2(p1, test$final_price)
-
+RMSE(p1, test$final_price)#RMSE
+R2(p1, test$final_price)#R2
+MAE(p1, test$final_price)#MAE
+mean((test$final_pricel - p1)^2)
 plot(models_rf)
 
-which.min(models_rf$mse)
+which.min(models_rf$mse)#MIN MSE
+
 sqrt(models_rf$mse[which.min(models_rf$mse)])
 #to find the best mtry, I tried multiple different mtry the results are really similiar
 t <- tuneRF(test[,-1], test[,1],
@@ -106,7 +108,7 @@ rf_grid <- expand.grid(mtry = c(2,4),
 rf_fit_final <- train(as.factor(final_price) ~ ., 
                 data = train, 
                 method = "ranger",
-                trControl = trainControl("cv",number=10,savePredictions = 'all'),
+                #trControl = trainControl("cv",number=10,savePredictions = 'all'),
                 #tuneGrid = rf_grid
                 )
 
