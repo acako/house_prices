@@ -5,6 +5,7 @@ library(ggplot2)
 library(VIM)
 library(caret)
 library(gbm)
+library(mice)
 
 df <- read.csv('houses_edited.csv')
 
@@ -54,179 +55,89 @@ train_df <- read.csv('imputed_data.csv')
 train_df <- train_df[, names(train_df) %in% c('final_price','bathrooms','sqft','parking','type','mean_district_income','beds')]
 train_df$type <- as.factor(train_df$type)
 
-gbm1 <- gbm(final_price ~.,data = train_df, cv.folds = 10, n.trees = 200)
-gbm1_plot <- summary(gbm1)
-gbm.perf(gbm1)
+# Training the first model with k-fold cross validation. Shrinkage was held at a constant 0.1, n.minobsinnode 
+#held at constant of 10. Interaction depth was varied between 1:3, n.trees varied between 50, 100, 150
+#Final model: n.trees = 100, interaction.depth = 3, shrinkage = 0.1, n.minobssinnode = 10
+# 269699.9  0.8101509  148161.2
 
+cv <- trainControl(method = 'cv', number = 10)
+gbm1 <- train(final_price ~.,data = train_df, trControl = cv, method = 'gbm')
+gbm1_plot <- summary(gbm1$finalModel)
+gbm.perf(gbm1$finalModel) #60 trees
+summary(gbm1)
+gbm1
+plot(gbm1)
 saveRDS(gbm1, 'gbm1.rds')
 
-#barplot of importance
-
-hyper_grid <- expand.grid(
-  learning_rate = c(0.3, 0.1, 0.05, 0.01, 0.005),
-  RMSE = NA,
-  trees = NA,
-  time = NA
-)
-
-gbm_tune <- gbm(final_price ~.,data = train_df, cv.folds = 10, )
+#interaction depth = number of splits
+#shrinkage = learning rate (reduces size of steps in-between iterations). High learn rates can overfit models with poor performance, use a small shrinkage rate when growing many trees
+#trees = number of trees (number of gradient boosting iterations)
+#minobsinnode = default 10, can try higher for regression
 
 
+#Random grid search was then performed:
+# here, best model was n.trees = 288, interaction.depth = 10, shrinkage = 0.2017825 and n.minobsinnode = 18
+# seemed to prefer a higher number of trees, interaction depth, shrinkage, and n.minobssinnode. However, model accuracy was not improved
+# 276098.6  0.8062016  136506.9
+rndmCtrl <- trainControl(method = 'cv', number = 10, search = 'random')
+gbm_rndm <- train(final_price ~.,data = train_df, trControl = rndmCtrl, method = 'gbm', tuneLength = 10)
+gbm_rndm2_plot <- summary(gbm_rndm$finalModel)
+gbm.perf(gbm_rndm$finalModel)
+gbm.perf(gbm_rndm$finalModel, method = 'OOB')
+summary(gbm_rndm)
+gbm_rndm
+saveRDS(gbm_rndm, 'gbm_rndm.rds')
 
+#Use an even larger grid. seemed like n.trees didn't need to go very high. however here, we evaluate shrinkage 
+# and give the model an opportunity to grow smaller trees while evaluating smaller shrinkage
+# best model used n.trees = 200, interaction.depth = 9, shrinkage = 0.1 and n.minobsinnode = 20.
+# RMSE: 257316.5  R2: 0.8282601  MAE: 134117.1
+gbmGrid <- expand.grid(interaction.depth = c(1, 5, 9), 
+                       n.trees = c(50, 100, 200), 
+                       shrinkage = c(0.1, 0.01, 0.001),
+                       n.minobsinnode = c(1, 10, 20)
+                       )
+gbm3 <- train(final_price ~.,data = train_df, trControl = cv, tuneGrid = gbmGrid, method = 'gbm')
+gbm3_plot <- summary(gbm3$finalModel)
+gbm.perf(gbm3$finalModel)
+gbm.perf(gbm3$finalModel, method = 'OOB')
+summary(gbm3)
+gbm3
+saveRDS(gbm3, 'gbm3.rds')
 
-
-
-##############
-
-
-pred_final_price <- list()
-for (i in 1:5){
-  pred_final_price[[i]] <- train(final_price ~.,data = train_final_price[[i]],trControl = trainControl('cv', number=10, savePredictions = 'all'),
-                                method='gbm')
-}
-
-saveRDS(pred_final_price,'pred_final_price.rds')
-
-
-
-## training removing city
-train_list_price_nocity <- list()
-for (i in 1:5){
-  train_list_price_nocity[[i]] <- train_list[[i]][, !names(train_list[[i]]) %in% c('final_price', 'city_district', 'district_code')]
-}
-
-train_final_price_nocity <- list()
-for (i in 1:5){
-  train_final_price_nocity[[i]] <- train_list[[i]][, !names(train_list[[i]]) %in% c('list_price', 'city_district', 'district_code')]
-}
-
-pred_list_price_nocity <- list()
-for (i in 1:5){
-  pred_list_price_nocity[[i]] <- train(list_price ~.,data = train_list_price_nocity[[i]],trControl = trainControl('cv', number=10, savePredictions = 'all'),
-                                method='gbm')
-}
-saveRDS(pred_list_price_nocity,'pred_list_price_nocity.rds')
-
-pred_final_price_nocity <- list()
-for (i in 1:5){
-  pred_final_price_nocity[[i]] <- train(final_price ~.,data = train_final_price_nocity[[i]],trControl = trainControl('cv', number=10, savePredictions = 'all'),
-                                 method='gbm')
-}
-saveRDS(pred_final_price_nocity,'pred_final_price_nocity.rds')
-
-#model evaluation
-#list price model summaries
-pred_final_price <- readRDS('pred_final_price.rds')
-pred_final_price_nocity <- readRDS("pred_final_price_nocity.rds")
-pred_list_price <- readRDS("pred_list_price.rds")
-pred_list_price_nocity <- readRDS("pred_list_price_nocity.rds")
-pred_no_imp_lp <- readRDS("pred_no_imp_lp.rds")
-pred_no_imp_fp <- readRDS("pred_no_imp_fp.rds")
-
-
-
-lp1 <- data.frame(summary(pred_list_price[[1]]$finalModel))
-lp2 <- summary(pred_list_price[[2]]$finalModel)
-lp3 <- summary(pred_list_price[[3]]$finalModel)
-lp4 <- summary(pred_list_price[[4]]$finalModel)
-lp5 <- summary(pred_list_price[[5]]$finalModel)
-
-par(mfrow=c(2,3))
-barplot(lp1[10:1, 'rel.inf'], col = 'blue', xlab = 'relative influence', horiz = TRUE, las = 2, names = lp1[10:1, 'var'], main = 'Variable importance - List price df 1')
-barplot(lp2[10:1, 'rel.inf'], col = 'blue', xlab = 'relative influence', horiz = TRUE, las = 2, names = lp2[10:1, 'var'], main = 'Variable importance - List price df 2')
-barplot(lp3[10:1, 'rel.inf'], col = 'blue', xlab = 'relative influence', horiz = TRUE, las = 2, names = lp3[10:1, 'var'], main = 'Variable importance - List price df 3')
-barplot(lp4[10:1, 'rel.inf'], col = 'blue', xlab = 'relative influence', horiz = TRUE, las = 2, names = lp4[10:1, 'var'], main = 'Variable importance - List price df 4')
-barplot(lp5[10:1, 'rel.inf'], col = 'blue', xlab = 'relative influence', horiz = TRUE, las = 2, names = lp5[10:1, 'var'], main = 'Variable importance - List price df 5')
-
-#final price models
-fp1 <- summary(pred_final_price[[1]]$finalModel)
-fp2 <- summary(pred_final_price[[2]]$finalModel)
-fp3 <- summary(pred_final_price[[3]]$finalModel)
-fp4 <- summary(pred_final_price[[4]]$finalModel)
-fp5 <- summary(pred_final_price[[5]]$finalModel)
-
-par(mfrow=c(2,3))
-barplot(fp1[10:1, 'rel.inf'], col = 'blue', xlab = 'relative influence', horiz = TRUE, las = 2, names = fp1[10:1, 'var'], main = 'Variable importance - Final price df 1')
-barplot(fp2[10:1, 'rel.inf'], col = 'blue', xlab = 'relative influence', horiz = TRUE, las = 2, names = fp2[10:1, 'var'], main = 'Variable importance - Final price df 2')
-barplot(fp3[10:1, 'rel.inf'], col = 'blue', xlab = 'relative influence', horiz = TRUE, las = 2, names = fp3[10:1, 'var'], main = 'Variable importance - Final price df 3')
-barplot(fp4[10:1, 'rel.inf'], col = 'blue', xlab = 'relative influence', horiz = TRUE, las = 2, names = fp4[10:1, 'var'], main = 'Variable importance - Final price df 4')
-barplot(fp5[10:1, 'rel.inf'], col = 'blue', xlab = 'relative influence', horiz = TRUE, las = 2, names = fp5[10:1, 'var'], main = 'Variable importance - Final price df 5')
-
-
-
-#list price no city model summaries
-lpnc1 <- summary(pred_list_price_nocity[[1]]$finalModel)
-lpnc2 <- summary(pred_list_price_nocity[[2]]$finalModel)
-lpnc3 <- summary(pred_list_price_nocity[[3]]$finalModel)
-lpnc4 <- summary(pred_list_price_nocity[[4]]$finalModel)
-lpnc5 <- summary(pred_list_price_nocity[[5]]$finalModel)
-
-par(mfrow=c(2,3))
-barplot(lpnc1[10:1, 'rel.inf'], col = 'green', xlab = 'relative influence', horiz = TRUE, las = 2, names = lpnc1[10:1, 'var'], main = 'Variable importance - List price df 1')
-barplot(lpnc2[10:1, 'rel.inf'], col = 'green', xlab = 'relative influence', horiz = TRUE, las = 2, names = lpnc2[10:1, 'var'], main = 'Variable importance - List price df 2')
-barplot(lpnc3[10:1, 'rel.inf'], col = 'green', xlab = 'relative influence', horiz = TRUE, las = 2, names = lpnc3[10:1, 'var'], main = 'Variable importance - List price df 3')
-barplot(lpnc4[10:1, 'rel.inf'], col = 'green', xlab = 'relative influence', horiz = TRUE, las = 2, names = lpnc4[10:1, 'var'], main = 'Variable importance - List price df 4')
-barplot(lpnc5[10:1, 'rel.inf'], col = 'green', xlab = 'relative influence', horiz = TRUE, las = 2, names = lpnc5[10:1, 'var'], main = 'Variable importance - List price df 5')
-
-
-#final price no city model summaries
-
-fpnc1 <- summary(pred_final_price_nocity[[1]]$finalModel)
-fpnc2 <- summary(pred_final_price_nocity[[2]]$finalModel)
-fpnc3 <- summary(pred_final_price_nocity[[3]]$finalModel)
-fpnc4 <- summary(pred_final_price_nocity[[4]]$finalModel)
-fpnc5 <- summary(pred_final_price_nocity[[5]]$finalModel)
-
-par(mfrow=c(2,3))
-barplot(fpnc1[10:1, 'rel.inf'], col = 'green', xlab = 'relative influence', horiz = TRUE, las = 2, names = fpnc1[10:1, 'var'], main = 'Variable importance - Final price df 1')
-barplot(fpnc2[10:1, 'rel.inf'], col = 'green', xlab = 'relative influence', horiz = TRUE, las = 2, names = fpnc2[10:1, 'var'], main = 'Variable importance - Final price df 2')
-barplot(fpnc3[10:1, 'rel.inf'], col = 'green', xlab = 'relative influence', horiz = TRUE, las = 2, names = fpnc3[10:1, 'var'], main = 'Variable importance - List price df 3')
-barplot(fpnc4[10:1, 'rel.inf'], col = 'green', xlab = 'relative influence', horiz = TRUE, las = 2, names = fpnc4[10:1, 'var'], main = 'Variable importance - List price df 4')
-barplot(fpnc5[10:1, 'rel.inf'], col = 'green', xlab = 'relative influence', horiz = TRUE, las = 2, names = fpnc5[10:1, 'var'], main = 'Variable importance - List price df 5')
-
-#with city district: sqft, mean income, bathrooms, long, typeDetached, lat, parking, bedrooms, city_districtAnnex, city_districtBedford Park-Nortown
-#without city district: sqft, mean district income, bathrooms, long, typeDetached, lat, parking, bedrooms, typeTownhouse, typePlex
-#other plots:
+# Plotting importance of model 3:
 par(mfrow=c(1,1))
-print(gbm.perf(pred_final_price[[1]]$finalModel,plot.it = TRUE))
-print(gbm.perf(pred_final_price_nocity[[1]]$finalModel,plot.it = TRUE))
-print(gbm.perf(pred_list_price[[1]]$finalModel,plot.it = TRUE))
+model_importance <- summary(gbm3$finalModel)
+barplot(model_importance[9:1, 'rel.inf'], col = 'blue', xlab = 'relative influence', horiz = TRUE, las = 2, names = model_importance[9:1, 'var'], main = 'Relative Importance of Variables')
 
+#optimal number of iterations = 51
+gbm.perf(gbm3$finalModel)
 
-#train without imputation
-train_no_imp_lp <- df[, !names(df) %in% c('final_price', 'district_code', 'city_district')]
-pred_no_imp_lp <- train(list_price ~.,data = train_no_imp_lp,trControl = trainControl('cv', number=10, savePredictions = 'all'), method='gbm', na.action = na.pass)
-saveRDS(pred_no_imp_lp, 'pred_no_imp_lp.rds')
+#model 3 had the best accuracy in turns of RMSE, Rsquared, and MAE
 
-train_no_imp_fp <- df[, !names(df) %in% c('list_price', 'district_code', 'city_district')]
-pred_no_imp_fp <- train(final_price ~.,data = train_no_imp_fp,trControl = trainControl('cv', number=10, savePredictions = 'all'), method='gbm', na.action = na.pass)
-saveRDS(pred_no_imp_fp, 'pred_no_imp_fp.rds')
+#increasing shrinkage played a large role in lowering RMSE
+par(mfrow=c(2,2))
+boxplot(RMSE~shrinkage, data = gbm3$results, col = 'blue')
+boxplot(RMSE~interaction.depth, data = gbm3$results, col = 'blue')
+boxplot(RMSE~n.minobsinnode, data = gbm3$results, col = 'blue')
+boxplot(RMSE~n.trees, data = gbm3$results, col = 'blue')
 
-nilp <- summary(pred_no_imp_lp$finalModel)
-nifp <-summary(pred_no_imp_fp$finalModel)
+#both shrinkage and interaction depth played a role in increasing R2
+par(mfrow=c(2,2))
+boxplot(Rsquared~shrinkage, data = gbm3$results, col = 'red')
+boxplot(Rsquared~interaction.depth, data = gbm3$results, col = 'red')
+boxplot(Rsquared~n.minobsinnode, data = gbm3$results, col = 'red')
+boxplot(Rsquared~n.trees, data = gbm3$results, col = 'red')
 
-par(mfrow=c(1,2))
-barplot(nilp[10:1, 'rel.inf'], col = 'red', xlab = 'relative influence', horiz = TRUE, las = 2, names = nilp[10:1, 'var'], main = 'Variable importance - List price no imp')
-barplot(nifp[10:1, 'rel.inf'], col = 'red', xlab = 'relative influence', horiz = TRUE, las = 2, names = nifp[10:1, 'var'], main = 'Variable importance - Final price no imp')
-#without imputation: bathrooms, mean district income, sqft, long, typeDetached, lat, parking, bedrooms, typeTownhouse, typePlex
+#shrinkage played a role in lowering MAE
+par(mfrow=c(2,2))
+boxplot(MAE~shrinkage, data = gbm3$results, col = 'green')
+boxplot(MAE~interaction.depth, data = gbm3$results, col = 'green')
+boxplot(MAE~n.minobsinnode, data = gbm3$results, col = 'green')
+boxplot(MAE~n.trees, data = gbm3$results, col = 'green')
 
-#Overall model accuracy
-pred_list_price[[1]] #RMSE: 233066.6, R2: 0.8531249, MAE: 131277.3
-pred_list_price[[2]] #233732.7  0.8511510  130870.6
-pred_list_price[[3]] #235154.9  0.8505187  131784.2
-pred_list_price[[4]] #234800.6  0.8503774  132111.5
-pred_list_price[[5]] #234867.3  0.8510420  132023.5
-pred_final_price[[1]] #RMSE: 221545.5, R2: 0.8621175, MAE: 126529.9 
-pred_list_price_nocity[[1]] #RMSE: 233454.2, R2: 0.8522975, MAE: 131180.7
-pred_final_price_nocity[[1]]  #RMSE: 222611.5, R2: 0.8593473, MAE: 126701.0
-pred_no_imp_lp #RMSE: 243366.2, R2: 0.8388627, MAE: 134214.2
-pred_no_imp_fp  #RMSE: 234262.4, R2:  0.8436058, MAE: 130088.2
-
-#overall finding: removing city district didn't actually change error that much but greatly cut down time on training 
-#no imputation resulted in slight increase in error but also reduces time imputing data
-
-#Will try training model on fewer categories, or perhaps use PCA first then train again, or train on bedrooms above ground?
-
+#Note that shrinkage and more trees play a similar role in tuning the model. Smaller shrinkage = finer tuning, but more trees. Large shrinkage = larger jumps and higher potential for overfitting 
+# but also correcting. Typically leads to higher accuracy
 
 
 
