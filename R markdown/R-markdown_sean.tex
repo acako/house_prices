@@ -155,15 +155,16 @@
 
     \vskip 8.5pt % \small 
 
-\noindent Lorem Ipsum is simply dummy text of the printing and typesetting
-industry. Lorem Ipsum has been the industry's standard dummy text ever
-since the 1500s, when an unknown printer took a galley of type and
-scrambled it to make a type specimen book. It has survived not only five
-centuries, but also the leap into electronic typesetting, remaining
-essentially unchanged. It was popularised in the 1960s with the release
-of Letraset sheets containing Lorem Ipsum passages, and more recently
-with desktop publishing software like Aldus PageMaker including versions
-of Lorem Ipsum.
+\noindent The project focus on building a machine learning model for predicting
+house price in Toronto. Although House Price Index (HPI) is commonly
+used for estimating the changes in housing price but it is not perfect
+for individual housing price prediction due to high correlation of
+housing price and other factors such as house location, income
+distribution, area, and etc. This project evaluates four different model
+and chooses the best one for deployment with ShinyApp. The app created
+for both buyer and seller to have an estimated house price due the
+location and different attributes of the house, and help users to make
+decisions.
 
 
 \vskip 8.5pt \noindent \emph{Keywords}: house prices, machine learning, caret, shiny \par
@@ -200,14 +201,29 @@ combinations. This project will comprehensively validate four different
 models: decision tree, random forest, K nearest neighbors, and gradient
 boosting machine. This report will go through data analysis, modeling
 implementation and provide an optimistic result for housing price
+<<<<<<< HEAD
+prediction.
+
+\hypertarget{objective}{%
+\subsection{Objective}\label{objective}}
+
+The objective of this project was to evaluate the application of machine
+learning algorithms to predict house prices in the Greater Toronto Area,
+and apply
+=======
 prediction. \#\# Objective The objective of this project was to evaluate
 the application of machine learning algorithms to predict house prices
 in the Greater Toronto Area, and apply
+>>>>>>> d08b2e2b5dc0105ca12693f3a21d3a5c2c36646b
 
 \hypertarget{background}{%
 \subsection{Background}\label{background}}
 
+<<<<<<< HEAD
+Purchasing a house is a big life decision for every individual and needs
+=======
 Purchasing a house if a big life decision for every individual and needs
+>>>>>>> d08b2e2b5dc0105ca12693f3a21d3a5c2c36646b
 a considerable amount of research. Everyone has different purpose of
 buying houses, someone would prefer by the house at the best rate for
 living now, someone would buy houses for future investment. Selling the
@@ -262,6 +278,8 @@ observations; 3) random forest, which applies a random forest algorithm;
 and 4) CART, which imputes by classification and regression trees. The
 distribution of the imputed data were evaluated with a density plot and
 an imputed dataset was chosen based on best fit.
+<<<<<<< HEAD
+=======
 
 \hypertarget{assessing-parametric-fit}{%
 \subsection{Assessing Parametric Fit}\label{assessing-parametric-fit}}
@@ -272,6 +290,7 @@ Inter-Quartile Range. Normality of the distribution of variables were
 visualized with density plots. A correlogram with Pearson's R determined
 collinearity. Linear relationship between outcome variable and
 predictors was tested via scatterplots.
+>>>>>>> d08b2e2b5dc0105ca12693f3a21d3a5c2c36646b
 
 \hypertarget{data-curation}{%
 \subsection{Data Curation}\label{data-curation}}
@@ -330,6 +349,23 @@ searches to improve the accuracy. The final model was chosen based on
 three metrics: Root Mean-Squared Error (RMSE), Pearson correlation
 (R\^{}2), and Mean Average Error (MAE).
 
+<<<<<<< HEAD
+\hypertarget{decision-tree-model}{%
+\subsubsection{\texorpdfstring{\textbf{Decision Tree Model}\\
+}{Decision Tree Model }}\label{decision-tree-model}}
+
+\hypertarget{random-forest-model}{%
+\subsubsection{\texorpdfstring{\textbf{Random Forest Model}\\
+}{Random Forest Model }}\label{random-forest-model}}
+
+\hypertarget{decision-tree-model-1}{%
+\subsubsection{\texorpdfstring{\textbf{Decision Tree Model}\\
+}{Decision Tree Model }}\label{decision-tree-model-1}}
+
+\hypertarget{gradient-boosting-model}{%
+\subsubsection{\texorpdfstring{\textbf{Gradient Boosting Model}\\
+}{Gradient Boosting Model }}\label{gradient-boosting-model}}
+=======
 \hypertarget{deployment}{%
 \subsection{Deployment}\label{deployment}}
 
@@ -341,6 +377,7 @@ interest from the front end, the back end links the district chosen with
 income and uses mean\_district\_income as the model input instead. We
 chose INSERT\_MODEL HERE, since it was the most accurate model as the
 back-end for our application.
+>>>>>>> d08b2e2b5dc0105ca12693f3a21d3a5c2c36646b
 
 \hypertarget{results}{%
 \section{Results}\label{results}}
@@ -388,6 +425,74 @@ bedrooms\_bg & & Number of bedrooms below ground\tabularnewline
 \hypertarget{data-exploration}{%
 \subsection{Data Exploration}\label{data-exploration}}
 
+<<<<<<< HEAD
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{'houses_edited.csv'}\NormalTok{)}
+\NormalTok{numeric_cols <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\StringTok{'final_price'}\NormalTok{, }\StringTok{'list_price'}\NormalTok{, }\StringTok{'bathrooms'}\NormalTok{, }\StringTok{'sqft'}\NormalTok{, }\StringTok{'parking'}\NormalTok{, }\StringTok{'lat'}\NormalTok{, }\StringTok{'long'}\NormalTok{, }\StringTok{'mean_district_income'}\NormalTok{, }\StringTok{'bedrooms_ag'}\NormalTok{, }\StringTok{'bedrooms_bg'}\NormalTok{)}
+\NormalTok{predictor_cols <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\StringTok{'bathrooms'}\NormalTok{, }\StringTok{'sqft'}\NormalTok{, }\StringTok{'parking'}\NormalTok{, }\StringTok{'lat'}\NormalTok{, }\StringTok{'long'}\NormalTok{, }\StringTok{'mean_district_income'}\NormalTok{, }\StringTok{'bedrooms_ag'}\NormalTok{, }\StringTok{'bedrooms_bg'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+index Min. 1st Qu. Median Mean 3rd Qu. Max. 0 5678 9804 9520 13668 17543
+
+title Length Class Mode 15234 character character
+
+final\_price Min. 1st Qu. Median Mean 3rd Qu. Max. 103000 535000 715000
+882714 989000 13180000
+
+list\_price Min. 1st Qu. Median Mean 3rd Qu. Max. 104900 529000 699900
+875093 969900 13180000
+
+bedrooms Length Class Mode 15234 character character
+
+bathrooms Min. 1st Qu. Median Mean 3rd Qu. Max. 1.000 1.000 2.000 2.122
+3.000 14.000
+
+sqft Min. 1st Qu. Median Mean 3rd Qu. Max. NA's 250 650 900 1116 1300
+4374 4521
+
+parking Min. 1st Qu. Median Mean 3rd Qu. Max. 0.000 1.000 1.000 1.559
+2.000 11.000
+
+description Length Class Mode 15234 character character
+
+mls Length Class Mode 15234 character character
+
+type Length Class Mode 15234 character character
+
+full\_link Length Class Mode 15234 character character
+
+full\_address Length Class Mode 15234 character character
+
+lat Min. 1st Qu. Median Mean 3rd Qu. Max. 43.59 43.65 43.69 43.70 43.76
+43.84
+
+long Min. 1st Qu. Median Mean 3rd Qu. Max. -79.62 -79.45 -79.40 -79.39
+-79.34 -79.12
+
+city\_district Length Class Mode 15234 character character
+
+mean\_district\_income Min. 1st Qu. Median Mean 3rd Qu. Max. 25989 34904
+50580 56066 67757 308010
+
+district\_code Min. 1st Qu. Median Mean 3rd Qu. Max. 1.0 39.0 76.0 71.3
+101.0 140.0
+
+final\_price\_transformed Min. 1st Qu. Median Mean 3rd Qu. Max. 2.380
+2.390 2.391 2.391 2.392 2.397
+
+final\_price\_log Min. 1st Qu. Median Mean 3rd Qu. Max. 11.54 13.19
+13.48 13.54 13.80 16.39
+
+bedrooms\_ag Min. 1st Qu. Median Mean 3rd Qu. Max. 0.000 1.000 2.000
+2.336 3.000 9.000
+
+bedrooms\_bg Min. 1st Qu. Median Mean 3rd Qu. Max. 0.0000 0.0000 0.0000
+0.5396 1.0000 6.0000
+
+=======
+>>>>>>> d08b2e2b5dc0105ca12693f3a21d3a5c2c36646b
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}
 
