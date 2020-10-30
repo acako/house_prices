@@ -62,7 +62,7 @@ shinyServer(function(input, output) {
         focus <- district_data %>% filter(district_data$district == input$district)
     })
 
-    observe({
+    observeEvent(input$district,{
         district <- district_change()
         if (nrow(district) > 0){
             map <- leafletProxy("map")

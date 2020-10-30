@@ -12,7 +12,7 @@ library(shinythemes)
 library(readr)
 library(leaflet)
 #read in the district data
-district_data <- read.csv('districts_data.csv')
+district_data <- read.csv('districts.csv')
 types <- list("Condo"=1, "Detached"=2, "Semi-Detached"=3, "Multiplex"=4, "Townhouse"=5)
 districts <- as.list(district_data$district)
 # Define UI for application that shows house prices
@@ -24,6 +24,9 @@ shinyUI(fluidPage(
     # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
+            selectInput("district",
+                        "District",
+                        districts,),
             radioButtons("type",
                         "Type",
                         types),
@@ -48,9 +51,6 @@ shinyUI(fluidPage(
                          max = 4400,
                          step = 100,
                          value = 1000),
-            selectInput("district",
-                        "District",
-                        districts,),
             actionButton('predict',
                          'Predict',
                          class='btn btn-primary')
