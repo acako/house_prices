@@ -35,7 +35,7 @@ ggplot(df, aes(x=list_price,y=final_price)) + geom_point() + geom_smooth(method 
 df <- subset(df, df$final_price < 9000000)
 price_lm <- lm(final_price ~ list_price, df)
 ggplot(df, aes(x=list_price,y=final_price)) + geom_point() + geom_smooth(method = 'lm') + annotate('text', label = paste('R-sqr = ', round(summary(price_lm)$adj.r.squared, 2)), x = 0.8*max(df$list_price), y= max(df$final_price))
-
+price_lm$coefficients
 
 #imputing missing df
 set.seed(123)

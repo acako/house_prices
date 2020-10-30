@@ -1,0 +1,53 @@
+---
+output: 
+  pdf_document:
+    keep_tex: true
+    fig_caption: true
+    latex_engine: pdflatex
+    template: svm-latex-ms.tex
+title: "Predicting House Prices in Toronto: A Machine Learning Approach"
+author:
+- name: Albina Cako, BSc
+  affiliation: York University, Certificate in Machine Learning
+- name: Colin Green, BSc
+  affiliation: York University, Certificate in Machine Learning
+- name: Lucy Zhang, BSc
+  affiliation: York University, Certificate in Machine Learning
+- name: Sean X. Zhang, MSc
+  affiliation: York University, Certificate in Machine Learning
+abstract: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+keywords: "house prices, machine learning, caret, shiny"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 11pt
+# spacing: double
+bibliography: References_house_prices.bib
+csl: cell-numeric.csl
+---
+
+# Introduction
+
+## Objective
+The objective of this project was to evaluate the application of machine learning algorithms to predict house prices in the Greater Toronto Area, and apply 
+
+## Background
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+
+# Methodology
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+
+## Data Preprocessing
+The dataset was originally gathered from Zoocasa API. 
+
+
+# Results
+
+# Discussion
+
+# Acknowledgements
+
+The authors would like to thank Hashmat Rohian, adjunct faculty at York University for supervision of the project. We also thank Slava Spirin for the original extraction of the Toronto Housing dataset [@spirin_slavaspirintoronto-housing-price-prediction_2020]. Finally, we thank Steve V. Miller for creation of the manuscript template in R Markdown [@miller_r_nodate].
+
+# References
+\noindent
