@@ -35,13 +35,70 @@ The objective of this project was to evaluate the application of machine learnin
 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 
 # Methodology
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 
 ## Data Preprocessing
-The dataset was originally gathered from Zoocasa API. 
+The housing dataset, originally shared on Github[@spirin_slavaspirintoronto-housing-price-prediction_2020], was extracted from Zoocasa.com in the summer of 2019. The dataset contained all completed property sales in the city of Toronto within an approximately 1-year span. We performed several data exploration and cleaning steps to prepare this data for modeling.
 
+## Missingness
+We assessed the dataset for missing values. Many parametric machine learning models do not accept missing data, and the accuracy of even non-parametric models are often negatively impacted by missingness. Thus, missing values ought to be either imputed or removed before data modeling. We then determined whether missing data was Missing Completely at Random (MCAR), Missing at Random (MAR), or Missing Not at Random (MNAR). Should the data be MCAR, then it is acceptable to simply remove each observation that is missing, as doing so would not introduce bias to the remaining observations. However, if there was a correlation between missingness and other data features, then imputation must be performed. Missingness correlation was assessed using the missing_compare() function from the finalfit library, which applies the Kruskal Wallis correlation test for numerical variables and chi-squared correlation test for categorical variables to determine correlation. Using the MICE package in R, we then applied the following imputation methods: 1) simple, which imputes a value from a simple random sample from the rest of the data;
+2) mean, which imputes the average of all observations; 3) random forest, which applies a random forest algorithm; and 4) CART, which  imputes by classification and regression trees. The distribution of the imputed data were then evaluated with a density plot and chosen based on best fit.
+
+## Data Curation
+
+## Modeling
+As the data contained a mix of categorical and numerical variables and did not satisfy many requirements of parametric models, such as variable independence, and normally distributed data. Thus, several parametric models were used. We trained four different non-parametric models using k-fold cross validation. The models were then tuned using various grid searches to improve the accuracy. The final model was chosen based on three metrics: Root Mean-Squared Error (RMSE), Pearson correlation (R^2), and Mean Average Error (MAE).
+
+```{r load packages, include=FALSE}
+# load the packages
+library(dplyr)
+library(ggplot2)
+library(readr)
+library('plot.matrix')
+library(caret)
+library(gbm)
+library(car)
+library(pscl)
+library(ROCR)
+library(grid)
+library(gridExtra)
+library(ggcorrplot)
+library(knitr)
+library(VIM)
+library(gbm)
+library(qwraps2)
+
+```
 
 # Results
+The original housing dataset contained 21 variables and 15234 observations. Table 1 defines each variable of the dataset.
+
+```{r create a table describing the columns and rows, echo=FALSE}
+data_description <- c('Title of the listing', 'Final price of the property', 'Listing price of the property', 'Number of bedrooms','Number of bathrooms','Area of property in square feet',
+                      'Number of parking spaces', 'Verbatim text description of the property', 'MLS ID', 'Property type', 'URL to listing', 'Full address of the property', 'Latitude', 'Longitude','Toronto district to which property belonged to', 'Average household income of district', 'Numerical code of the district', 'Box-Cox transformation of final price', 'Log transformation of final price', 'Number of bedrooms above ground', 'Number of bedrooms below ground' )
+
+data <- c("title", "final_price", "list_price", "bedrooms", "bathrooms", "sqft", "parking", "description", "mls", "type", "full_link", "full_address", "lat", "long", "city_district", "mean_district_income", "district_code", "final_price_transformed", "final_price_log", "bedrooms_ag", "bedrooms_bg")
+
+datadictionary <- data.frame(matrix(unlist(data), nrow=21, byrow=TRUE), stringsAsFactors = FALSE)
+datadictionary <- datadictionary %>% mutate(blank = c(" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "),Description = data_description)
+colnames(datadictionary) <- c("Label", "             ", "Description")
+kable(datadictionary, format='pipe', caption = 'Data Dictionary')
+
+```
+
+## Data Exploration
+
+```{r load data, message=FALSE}
+data <- read.csv('houses_edited.csv')
+numeric_cols <- list('final_price', 'list_price', 'bathrooms', 'sqft', 'parking', 'lat', 'long', 'mean_district_income', 'bedrooms_ag', 'bedrooms_bg')
+predictor_cols <- list('bathrooms', 'sqft', 'parking', 'lat', 'long', 'mean_district_income', 'bedrooms_ag', 'bedrooms_bg')
+
+```
+
+
+```{r, results = "asis", echo=FALSE}
+summary(data)
+```
+
 
 # Discussion
 
