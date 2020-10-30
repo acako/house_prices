@@ -66,6 +66,7 @@ library(knitr)
 library(VIM)
 library(gbm)
 library(qwraps2)
+library(knitr)
 
 ```
 
@@ -96,9 +97,19 @@ predictor_cols <- list('bathrooms', 'sqft', 'parking', 'lat', 'long', 'mean_dist
 
 
 ```{r, results = "asis", echo=FALSE}
-summary(data)
+predictors_list <- list('')
+
+```
+## Data Curation
+
+The following variables were removed as they did not have any data utility or had free-text, which would have necessitated additional parsing: title, description, mls, type, full_link, full_address. A numeric 'bedrooms' column was created by combining bedrooms_ag and bedrooms_bg. We also removed district_code and city_district; both were a categorical variable with number of factors = 140 - keeping it would significantly increase model training time. Longitude and latitude were also removed to accommodate model deployment, as including these variables in training sets would have required geocoding and assignment of latitude and longitude inputs to districts - tasks which were outside our scope for this application. Mean_district_income was left as an approximation of the effect of districts on the house price. Thus, the predictors chosen were:
+
+```{r predictor variable summary}
+
+
 ```
 
+The target variable chosen was final_price. Rather than training two models to predict on both list and final price, the approximate predicted list price was instead generated from a linear regression between list and final price in the training data.
 
 # Discussion
 
