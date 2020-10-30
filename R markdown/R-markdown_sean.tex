@@ -39,6 +39,47 @@
 
 \setcounter{secnumdepth}{0}
 
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs}
 
 
 
@@ -207,23 +248,156 @@ of Lorem Ipsum.
 \hypertarget{methodology}{%
 \section{Methodology}\label{methodology}}
 
-Lorem Ipsum is simply dummy text of the printing and typesetting
-industry. Lorem Ipsum has been the industry's standard dummy text ever
-since the 1500s, when an unknown printer took a galley of type and
-scrambled it to make a type specimen book. It has survived not only five
-centuries, but also the leap into electronic typesetting, remaining
-essentially unchanged. It was popularised in the 1960s with the release
-of Letraset sheets containing Lorem Ipsum passages, and more recently
-with desktop publishing software like Aldus PageMaker including versions
-of Lorem Ipsum.
-
 \hypertarget{data-preprocessing}{%
 \subsection{Data Preprocessing}\label{data-preprocessing}}
 
-The dataset was originally gathered from Zoocasa API.
+The housing dataset, originally shared on Github{[}1{]}, was extracted
+from Zoocasa.com in the summer of 2019. The dataset contained all
+completed property sales in the city of Toronto within an approximately
+1-year span. We performed several data exploration and cleaning steps to
+prepare this data for modeling.
+
+\hypertarget{missingness}{%
+\subsection{Missingness}\label{missingness}}
+
+We assessed the dataset for missing values. Many parametric machine
+learning models do not accept missing data, and the accuracy of even
+non-parametric models are often negatively impacted by missingness.
+Thus, missing values ought to be either imputed or removed before data
+modeling. We then determined whether missing data was Missing Completely
+at Random (MCAR), Missing at Random (MAR), or Missing Not at Random
+(MNAR). Should the data be MCAR, then it is acceptable to simply remove
+each observation that is missing, as doing so would not introduce bias
+to the remaining observations. However, if there was a correlation
+between missingness and other data features, then imputation must be
+performed. Missingness correlation was assessed using the
+missing\_compare() function from the finalfit library, which applies the
+Kruskal Wallis correlation test for numerical variables and chi-squared
+correlation test for categorical variables to determine correlation.
+Using the MICE package in R, we then applied the following imputation
+methods: 1) simple, which imputes a value from a simple random sample
+from the rest of the data; 2) mean, which imputes the average of all
+observations; 3) random forest, which applies a random forest algorithm;
+and 4) CART, which imputes by classification and regression trees. The
+distribution of the imputed data were then evaluated with a density plot
+and chosen based on best fit.
+
+\hypertarget{data-curation}{%
+\subsection{Data Curation}\label{data-curation}}
+
+\hypertarget{modeling}{%
+\subsection{Modeling}\label{modeling}}
+
+As the data contained a mix of categorical and numerical variables and
+did not satisfy many requirements of parametric models, such as variable
+independence, and normally distributed data. Thus, several parametric
+models were used. We trained four different non-parametric models using
+k-fold cross validation. The models were then tuned using various grid
+searches to improve the accuracy. The final model was chosen based on
+three metrics: Root Mean-Squared Error (RMSE), Pearson correlation
+(R\^{}2), and Mean Average Error (MAE).
 
 \hypertarget{results}{%
 \section{Results}\label{results}}
+
+The original housing dataset contained 21 variables and 15234
+observations. Table 1 defines each variable of the dataset.
+
+\begin{longtable}[]{@{}lll@{}}
+\caption{Data Dictionary}\tabularnewline
+\toprule
+Label & & Description\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Label & & Description\tabularnewline
+\midrule
+\endhead
+title & & Title of the listing\tabularnewline
+final\_price & & Final price of the property\tabularnewline
+list\_price & & Listing price of the property\tabularnewline
+bedrooms & & Number of bedrooms\tabularnewline
+bathrooms & & Number of bathrooms\tabularnewline
+sqft & & Area of property in square feet\tabularnewline
+parking & & Number of parking spaces\tabularnewline
+description & & Verbatim text description of the property\tabularnewline
+mls & & MLS ID\tabularnewline
+type & & Property type\tabularnewline
+full\_link & & URL to listing\tabularnewline
+full\_address & & Full address of the property\tabularnewline
+lat & & Latitude\tabularnewline
+long & & Longitude\tabularnewline
+city\_district & & Toronto district to which property belonged
+to\tabularnewline
+mean\_district\_income & & Average household income of
+district\tabularnewline
+district\_code & & Numerical code of the district\tabularnewline
+final\_price\_transformed & & Box-Cox transformation of final
+price\tabularnewline
+final\_price\_log & & Log transformation of final price\tabularnewline
+bedrooms\_ag & & Number of bedrooms above ground\tabularnewline
+bedrooms\_bg & & Number of bedrooms below ground\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{data-exploration}{%
+\subsection{Data Exploration}\label{data-exploration}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{'houses_edited.csv'}\NormalTok{)}
+\NormalTok{numeric_cols <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\StringTok{'final_price'}\NormalTok{, }\StringTok{'list_price'}\NormalTok{, }\StringTok{'bathrooms'}\NormalTok{, }\StringTok{'sqft'}\NormalTok{, }\StringTok{'parking'}\NormalTok{, }\StringTok{'lat'}\NormalTok{, }\StringTok{'long'}\NormalTok{, }\StringTok{'mean_district_income'}\NormalTok{, }\StringTok{'bedrooms_ag'}\NormalTok{, }\StringTok{'bedrooms_bg'}\NormalTok{)}
+\NormalTok{predictor_cols <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\StringTok{'bathrooms'}\NormalTok{, }\StringTok{'sqft'}\NormalTok{, }\StringTok{'parking'}\NormalTok{, }\StringTok{'lat'}\NormalTok{, }\StringTok{'long'}\NormalTok{, }\StringTok{'mean_district_income'}\NormalTok{, }\StringTok{'bedrooms_ag'}\NormalTok{, }\StringTok{'bedrooms_bg'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+ index          title            final_price         list_price      
+\end{verbatim}
+
+Min. : 0 Length:15234 Min. : 103000 Min. : 104900\\
+1st Qu.: 5678 Class :character 1st Qu.: 535000 1st Qu.: 529000\\
+Median : 9804 Mode :character Median : 715000 Median : 699900\\
+Mean : 9520 Mean : 882714 Mean : 875093\\
+3rd Qu.:13668 3rd Qu.: 989000 3rd Qu.: 969900\\
+Max. :17543 Max. :13180000 Max. :13180000
+
+bedrooms bathrooms sqft parking\\
+Length:15234 Min. : 1.000 Min. : 250 Min. : 0.000\\
+Class :character 1st Qu.: 1.000 1st Qu.: 650 1st Qu.: 1.000\\
+Mode :character Median : 2.000 Median : 900 Median : 1.000\\
+Mean : 2.122 Mean :1116 Mean : 1.559\\
+3rd Qu.: 3.000 3rd Qu.:1300 3rd Qu.: 2.000\\
+Max. :14.000 Max. :4374 Max. :11.000\\
+NA's :4521\\
+description mls type full\_link\\
+Length:15234 Length:15234 Length:15234 Length:15234\\
+Class :character Class :character Class :character Class :character\\
+Mode :character Mode :character Mode :character Mode :character
+
+full\_address lat long city\_district\\
+Length:15234 Min. :43.59 Min. :-79.62 Length:15234\\
+Class :character 1st Qu.:43.65 1st Qu.:-79.45 Class :character\\
+Mode :character Median :43.69 Median :-79.40 Mode :character\\
+Mean :43.70 Mean :-79.39\\
+3rd Qu.:43.76 3rd Qu.:-79.34\\
+Max. :43.84 Max. :-79.12
+
+mean\_district\_income district\_code final\_price\_transformed
+final\_price\_log Min. : 25989 Min. : 1.0 Min. :2.380 Min. :11.54\\
+1st Qu.: 34904 1st Qu.: 39.0 1st Qu.:2.390 1st Qu.:13.19\\
+Median : 50580 Median : 76.0 Median :2.391 Median :13.48\\
+Mean : 56066 Mean : 71.3 Mean :2.391 Mean :13.54\\
+3rd Qu.: 67757 3rd Qu.:101.0 3rd Qu.:2.392 3rd Qu.:13.80\\
+Max. :308010 Max. :140.0 Max. :2.397 Max. :16.39
+
+bedrooms\_ag bedrooms\_bg\\
+Min. :0.000 Min. :0.0000\\
+1st Qu.:1.000 1st Qu.:0.0000\\
+Median :2.000 Median :0.0000\\
+Mean :2.336 Mean :0.5396\\
+3rd Qu.:3.000 3rd Qu.:1.0000\\
+Max. :9.000 Max. :6.0000
 
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}
