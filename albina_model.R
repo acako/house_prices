@@ -42,5 +42,9 @@ max(model_final_price_1$resuls$MAE)
 #test_data1 <- 
 #predict(model_final_price, new_data = test_data1, type='prob')
 
+#Min RMSE: 220850.4
+#Min MAE: 116308.5
+#Max Rsquared: 0.861169
+
 
 
