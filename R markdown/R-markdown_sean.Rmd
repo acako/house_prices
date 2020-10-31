@@ -176,43 +176,45 @@ ggcorrplot(cor$r, type = 'upper', p.mat = p.mat, sig.level = 0.05, lab = TRUE)
   The k-fold cross-validation method evaluates the model performance on different subset of the training data and then calculate the average prediction error rate. we use k = 10 for our project,and this method was used instead of the simple train-test-split as it gives a more valid estimation of model effectiveness.
 
 #### **Decision Tree Model**\
+The decision tree model was tuned with different value of cp, 0.001 is used for best model performance after tuning.
+
 ``````{r Decision Tree Model, echo=FALSE}
 decision_tree_model <- readRDS("decision_tree_model.rds")
-
 summary(decision_tree_model$finalModel)
-
 ```
-
 #### **Random Forest Model**\
+The Random Forest was original trained with ntree = 300 and mtry = 8, after tuning the model, ntree = 150 and mtry = 6 are used for better model performance.
 ``````{r Random Forest Model, echo=FALSE}
 Random_Forest_model <- readRDS("randomForests.rds")
-
 #check the performance of the model
-RMSE(p1, test$final_price)#RMSE
-R2(p1, test$final_price)#R2
-MAE(p1, test$final_price)#MAE
 print(Random_Forest_model)
 ```
-
 #### **Gradient Boosting Model**\
+The model of gradient boosting was tuned by several different parameters and the best model used n.trees = 200, interaction.depth = 9, shrinkage = 0.1 and n.minobsinnode = 20.
 ```````{r Gradient Boosting Model, echo=FALSE}
 Gradient_Boosting_model <- readRDS("gbm3.rds")
-
 summary(Gradient_Boosting_model$finalModel)
-
 ```
-
 #### **Extreme Gradient Boosting Model**\
+The best model has parameters nrounds = 200, max_depth = 6, eta = 0.1, gamma = 0, colsample_bytree = 0.8, min_child_weight = 5 and subsample = 0.8 after tuning.
 ```````{r Extreme Gradient Boosting Model, echo=FALSE}
 Extreme_Gradient_Boosting_model <- readRDS("albina_model.rds")
-
 summary(Extreme_Gradient_Boosting_model$finalModel)
+attributes(Extreme_Gradient_Boosting_model)
+Extreme_Gradient_Boosting_model
 ```
-
 ### **Model Selection**\
-  For the four models, we chooses the extreme gradient boosting model as our final model for deployment. As you can see, the extreme gradient boosting model has the highest R-Squared and the lowest Mean Absolute value.
-
-
+  For the four models, we chooses the extreme gradient boosting model as our final model for deployment. Mean Absolute Error (MAE) tells the average error of the variable we want to predict. Root Mean-Squared Error (RMSE) is similar with MAE but it is more useful when we want fewer larger errors more than a lot of small errors, we want the model be more stable thus we take RMSE as one of the evaluation matrix. R-Squared (R2) computes how much better the regression line fits the data than the mean line which can give us a overall score for the model.As you can see from the table below, all the models has similar RMSE, MAE and R2. For predicting house price, we want a model with lowest RMSE and MAE to keep the high accuracy of prediction. The extreme gradient boosting model has the highest R-Squared and the lowest Mean Absolute value, Root Mean-Squared Error.
+```{r create dataframe of model performance, echo=FALSE}
+models <- c("decision_tree","random_forest","gradient_boosting", "extreme_gradient_boosting")
+model_performance <- data.frame(matrix(unlist(models), nrow=4, byrow=TRUE), stringsAsFactors = FALSE)
+colnames(model_performance) <- c("model")
+RMSE<- c(296103,233734.1,257316.5,220850.4)
+R2 <- c(0.786,0.846707,0.8282601,0.861169)
+MAE <- c(141375,119745.2,134117.1,116308.5)
+model_performance <- model_performance %>% mutate(RMSE = round(RMSE,2), R2=round(R2,2), MAE=round(MAE,2))
+kable(model_performance, format = 'pipe')
+```
 
 
 
