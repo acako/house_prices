@@ -49,25 +49,25 @@ shinyServer(function(input, output) {
             
         isolate(local(HTML(paste(text))))
     })
-
+    
     output$map <- renderLeaflet({
         leaflet() %>%
             setView(lng=-79.39, lat=43.7, zoom= 5) %>%
             fitBounds(-79.6,43.59,-79.15,43.83) %>%
-            addTiles() %>% addCircleMarkers(data=district_data, popup = ~as.character(district))
+            addTiles() %>% addCircleMarkers(lng=district_data$long, lat=district_data$lat, label=(district_data$district), labelOptions(noHide=T), color='#2A81CB', radius = 10)
     })
     
     #change map focus
     district_change <- reactive({
         focus <- district_data %>% filter(district_data$district == input$district)
     })
-
+    
     observe({
         district <- district_change()
         if (district$district == "Please select a district"){
             map <- leafletProxy("map")
             map %>% fitBounds(-79.6,43.59,-79.15,43.83) %>%
-                addTiles() %>% addCircleMarkers(data=district_data, popup = ~as.character(district))
+                addTiles() %>% addCircleMarkers(lng=district_data$long, lat=district_data$lat, label=(district_data$district), labelOptions(noHide=T), color='#2A81CB', radius = 10)
         } else {
             map <- leafletProxy("map")
             dist <- 0.02
@@ -75,7 +75,8 @@ shinyServer(function(input, output) {
             lng <- district$long[1]
             nm <- district$district[1]
             map %>% fitBounds(lng-dist, lat-dist, lng+dist, lat+dist) %>%
-                addTiles() %>% addCircleMarkers(data=district_data, popup = ~as.character(district))
+                addTiles() %>% addCircleMarkers(lng=district_data$long, lat=district_data$lat, label=(district$district), labelOptions(noHide=T), color='#2A81CB', radius = 10)%>%
+                addCircleMarkers(lng=lng, lat=lat, label=nm, labelOptions(noHide=T), color='#9C2BCB', radius = 30)
         }
     })
 })
