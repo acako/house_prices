@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.10.30)  30 OCT 2020 22:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.10.31)  31 OCT 2020 16:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -75,76 +75,45 @@ Package: abstract 2009/06/08 v1.2a configurable abstracts
 \absparindent=\skip52
 \absparsep=\skip53
 )
-(c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/color.sty
-Package: color 2020/02/24 v1.2b Standard LaTeX Color (DPC)
-
-(c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color
-.cfg
-File: color.cfg 2016/01/02 v1.6 sample color configuration
-)
-Package color Info: Driver file: pdftex.def on input line 147.
-
-(c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-def/pdfte
-x.def
-File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
-))
-(c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fancyvrb/fancyvrb.
-sty
-Package: fancyvrb 2020/05/03 v3.6 verbatim text (tvz,hv)
-\FV@CodeLineNo=\count186
-\FV@InFile=\read2
-\FV@TabBox=\box47
-\c@FancyVerbLine=\count187
-\FV@StepNumber=\count188
-\FV@OutFile=\write3
-) (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/framed/framed.st
-y
-Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
-\OuterFrameSep=\skip54
-\fb@frw=\dimen147
-\fb@frh=\dimen148
-\FrameRule=\dimen149
-\FrameSep=\dimen150
-)
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/longtable.st
 y
 Package: longtable 2020/01/07 v4.13 Multi-page Table package (DPC)
-\LTleft=\skip55
-\LTright=\skip56
-\LTpre=\skip57
-\LTpost=\skip58
-\LTchunksize=\count189
-\LTcapwidth=\dimen151
-\LT@head=\box48
-\LT@firsthead=\box49
-\LT@foot=\box50
-\LT@lastfoot=\box51
-\LT@cols=\count190
-\LT@rows=\count191
-\c@LT@tables=\count192
-\c@LT@chunks=\count193
+\LTleft=\skip54
+\LTright=\skip55
+\LTpre=\skip56
+\LTpost=\skip57
+\LTchunksize=\count186
+\LTcapwidth=\dimen147
+\LT@head=\box47
+\LT@firsthead=\box48
+\LT@foot=\box49
+\LT@lastfoot=\box50
+\LT@cols=\count187
+\LT@rows=\count188
+\c@LT@tables=\count189
+\c@LT@chunks=\count190
 \LT@p@ftn=\toks19
 )
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.
 sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
-\heavyrulewidth=\dimen152
-\lightrulewidth=\dimen153
-\cmidrulewidth=\dimen154
-\belowrulesep=\dimen155
-\belowbottomsep=\dimen156
-\aboverulesep=\dimen157
-\abovetopsep=\dimen158
-\cmidrulesep=\dimen159
-\cmidrulekern=\dimen160
-\defaultaddspace=\dimen161
-\@cmidla=\count194
-\@cmidlb=\count195
-\@aboverulesep=\dimen162
-\@belowrulesep=\dimen163
-\@thisruleclass=\count196
-\@lastruleclass=\count197
-\@thisrulewidth=\dimen164
+\heavyrulewidth=\dimen148
+\lightrulewidth=\dimen149
+\cmidrulewidth=\dimen150
+\belowrulesep=\dimen151
+\belowbottomsep=\dimen152
+\aboverulesep=\dimen153
+\abovetopsep=\dimen154
+\cmidrulesep=\dimen155
+\cmidrulekern=\dimen156
+\defaultaddspace=\dimen157
+\@cmidla=\count191
+\@cmidlb=\count192
+\@aboverulesep=\dimen158
+\@belowrulesep=\dimen159
+\@thisruleclass=\count193
+\@lastruleclass=\count194
+\@thisrulewidth=\dimen160
 )
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphicx.
 sty
@@ -161,9 +130,13 @@ ics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: pdftex.def on input line 105.
-)
-\Gin@req@height=\dimen165
-\Gin@req@width=\dimen166
+
+(c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-def/pdfte
+x.def
+File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen161
+\Gin@req@width=\dimen162
 )
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/grffile/grffile.st
 y
@@ -175,60 +148,111 @@ line 40.
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/titlesec/titlesec.
 sty
 Package: titlesec 2019/10/16 v2.13 Sectioning titles
-\ttl@box=\box52
-\beforetitleunit=\skip59
-\aftertitleunit=\skip60
-\ttl@plus=\dimen167
-\ttl@minus=\dimen168
+\ttl@box=\box51
+\beforetitleunit=\skip58
+\aftertitleunit=\skip59
+\ttl@plus=\dimen163
+\ttl@minus=\dimen164
 \ttl@toksa=\toks20
-\titlewidth=\dimen169
-\titlewidthlast=\dimen170
-\titlewidthfirst=\dimen171
+\titlewidth=\dimen165
+\titlewidthlast=\dimen166
+\titlewidthfirst=\dimen167
 )
-\c@hypothesis=\count198
+\c@hypothesis=\count195
 
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/setspace/setspace.
 sty
 Package: setspace 2011/12/19 v6.7a set line spacing
+) (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/subfig/subfig.st
+y
+Package: subfig 2005/06/28 ver: 1.3 subfig package
+
+(c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption.st
+y
+Package: caption 2020/10/26 v3.5g Customizing captions (AR)
+
+(c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption3.s
+ty
+Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
+\captionmargin=\dimen168
+\captionmargin@=\dimen169
+\captionwidth=\dimen170
+\caption@tempdima=\dimen171
+\caption@indent=\dimen172
+\caption@parindent=\dimen173
+\caption@hangindent=\dimen174
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count196
+\c@continuedfloat=\count197
+Package caption Info: longtable package is loaded.
+
+(c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/ltcaption.
+sty
+Package: ltcaption 2020/05/30 v1.4b longtable captions (AR)
+))
+\c@KVtest=\count198
+\sf@farskip=\skip60
+\sf@captopadj=\dimen175
+\sf@capskip=\skip61
+\sf@nearskip=\skip62
+\c@subfigure=\count199
+\c@subfigure@save=\count266
+\c@lofdepth=\count267
+\c@subtable=\count268
+\c@subtable@save=\count269
+\c@lotdepth=\count270
+\sf@top=\skip63
+\sf@bottom=\skip64
 ) (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/array.sty
 Package: array 2020/10/01 v2.5c Tabular extension package (FMi)
-\col@sep=\dimen172
-\ar@mcellbox=\box53
-\extrarowheight=\dimen173
+\col@sep=\dimen176
+\ar@mcellbox=\box52
+\extrarowheight=\dimen177
 \NC@list=\toks21
-\extratabsurround=\skip61
-\backup@length=\skip62
-\ar@cellbox=\box54
+\extratabsurround=\skip65
+\backup@length=\skip66
+\ar@cellbox=\box53
 )
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/multirow/multirow.
 sty
 Package: multirow 2019/05/31 v2.5 Span multiple rows of a table
-\multirow@colwidth=\skip63
-\multirow@cntb=\count199
-\multirow@dima=\skip64
-\bigstrutjot=\dimen174
+\multirow@colwidth=\skip67
+\multirow@cntb=\count271
+\multirow@dima=\skip68
+\bigstrutjot=\dimen178
 )
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/wrapfig/wrapfig.st
 y
-\wrapoverhang=\dimen175
-\WF@size=\dimen176
-\c@WF@wrappedlines=\count266
-\WF@box=\box55
+\wrapoverhang=\dimen179
+\WF@size=\dimen180
+\c@WF@wrappedlines=\count272
+\WF@box=\box54
 \WF@everypar=\toks22
 Package: wrapfig 2003/01/31  v 3.6
 ) (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count267
+\c@float@type=\count273
 \float@exts=\toks23
-\float@box=\box56
+\float@box=\box55
 \@float@everytoks=\toks24
-\@floatcapt=\box57
+\@floatcapt=\box56
 )
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/colortbl/colortbl.
 sty
 Package: colortbl 2020/01/04 v1.0e Color table columns (DPC)
+
+(c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2020/02/24 v1.2b Standard LaTeX Color (DPC)
+
+(c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color
+.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: pdftex.def on input line 147.
+)
 \everycr=\toks25
-\minrowclearance=\skip65
+\minrowclearance=\skip69
 )
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pdflscape/pdflscap
 e.sty
@@ -245,38 +269,38 @@ Package: tabu 2019/01/11 v2.9 - flexible LaTeX tabulars (FC+tabu-fixed)
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/varwidth/varwidth.
 sty
 Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
-\@vwid@box=\box58
-\sift@deathcycles=\count268
-\@vwid@loff=\dimen177
-\@vwid@roff=\dimen178
+\@vwid@box=\box57
+\sift@deathcycles=\count274
+\@vwid@loff=\dimen181
+\@vwid@roff=\dimen182
 )
-\c@taburow=\count269
-\tabu@nbcols=\count270
-\tabu@cnt=\count271
-\tabu@Xcol=\count272
-\tabu@alloc=\count273
-\tabu@nested=\count274
-\tabu@target=\dimen179
-\tabu@spreadtarget=\dimen180
-\tabu@naturalX=\dimen181
-\tabucolX=\dimen182
-\tabu@Xsum=\dimen183
-\extrarowdepth=\dimen184
-\abovetabulinesep=\dimen185
-\belowtabulinesep=\dimen186
-\tabustrutrule=\dimen187
+\c@taburow=\count275
+\tabu@nbcols=\count276
+\tabu@cnt=\count277
+\tabu@Xcol=\count278
+\tabu@alloc=\count279
+\tabu@nested=\count280
+\tabu@target=\dimen183
+\tabu@spreadtarget=\dimen184
+\tabu@naturalX=\dimen185
+\tabucolX=\dimen186
+\tabu@Xsum=\dimen187
+\extrarowdepth=\dimen188
+\abovetabulinesep=\dimen189
+\belowtabulinesep=\dimen190
+\tabustrutrule=\dimen191
 \tabu@thebody=\toks26
 \tabu@footnotes=\toks27
-\tabu@box=\box59
-\tabu@arstrutbox=\box60
-\tabu@hleads=\box61
-\tabu@vleads=\box62
-\tabu@cellskip=\skip66
+\tabu@box=\box58
+\tabu@arstrutbox=\box59
+\tabu@hleads=\box60
+\tabu@vleads=\box61
+\tabu@cellskip=\skip70
 )
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/threeparttable/thr
 eeparttable.sty
 Package: threeparttable 2003/06/13  v 3.0
-\@tempboxb=\box63
+\@tempboxb=\box62
 )
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/threeparttablex/th
 reeparttablex.sty
@@ -292,24 +316,24 @@ Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 )
 \@envbody=\toks28
 )
-\TPTL@width=\skip67
+\TPTL@width=\skip71
 ) (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ulem/ulem.sty
-\UL@box=\box64
-\UL@hyphenbox=\box65
-\UL@skip=\skip68
+\UL@box=\box63
+\UL@hyphenbox=\box64
+\UL@skip=\skip72
 \UL@hook=\toks29
-\UL@height=\dimen188
-\UL@pe=\count275
-\UL@pixel=\dimen189
-\ULC@box=\box66
+\UL@height=\dimen192
+\UL@pe=\count281
+\UL@pixel=\dimen193
+\ULC@box=\box65
 Package: ulem 2019/11/18
-\ULdepth=\dimen190
+\ULdepth=\dimen194
 )
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/makecell/makecell.
 sty
 Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
-\rotheadsize=\dimen191
-\c@nlinenum=\count276
+\rotheadsize=\dimen195
+\c@nlinenum=\count282
 \TeXr@lab=\toks30
 ) (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xcolor/xcolor.st
 y
@@ -380,9 +404,9 @@ Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
 s.sty
 Package: kvoptions 2020-10-07 v3.14 Key value format for package options (HO)
 )
-\@linkdim=\dimen192
-\Hy@linkcounter=\count277
-\Hy@pagecounter=\count278
+\@linkdim=\dimen196
+\Hy@linkcounter=\count283
+\Hy@pagecounter=\count284
 
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.de
 f
@@ -398,7 +422,7 @@ Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 s.sty
 Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
 )
-\Hy@SavedSpaceFactor=\count279
+\Hy@SavedSpaceFactor=\count285
 Package hyperref Info: Option `draft' set `true' on input line 4338.
 Package hyperref Info: Option `unicode' set `true' on input line 4338.
 
@@ -414,13 +438,13 @@ Package hyperref Info: Plain pages OFF on input line 4479.
 Package hyperref Info: Backreferencing OFF on input line 4484.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4717.
-\c@Hy@tempcnt=\count280
+\c@Hy@tempcnt=\count286
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip16
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 5076.
-\XeTeXLinkMargin=\dimen193
+\XeTeXLinkMargin=\dimen197
 
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bitset/bitset.st
 y
@@ -431,9 +455,9 @@ tcalc.sty
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
 ))
-\Fld@menulength=\count281
-\Field@Width=\dimen194
-\Fld@charsize=\dimen195
+\Fld@menulength=\count287
+\Field@Width=\dimen198
+\Fld@charsize=\dimen199
 Package hyperref Info: Hyper figures OFF on input line 6347.
 Package hyperref Info: Link nesting OFF on input line 6352.
 Package hyperref Info: Hyper index ON on input line 6355.
@@ -450,9 +474,9 @@ Package: atbegshi-ltx 2020/08/17 v1.0a Emulation of the original atbegshi packa
 ge
 with kernel methods
 )
-\Hy@abspage=\count282
-\c@Item=\count283
-\c@Hfootnote=\count284
+\Hy@abspage=\count288
+\c@Item=\count289
+\c@Hfootnote=\count290
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 
@@ -466,8 +490,8 @@ Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atvery packag
 e
 with kernel methods
 )
-\Fld@listcount=\count285
-\c@bookmark@seq@number=\count286
+\Fld@listcount=\count291
+\c@bookmark@seq@number=\count292
 
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rer
 unfilecheck.sty
@@ -480,14 +504,14 @@ Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 86.
 )
-\Hy@SectionHShift=\skip69
+\Hy@SectionHShift=\skip73
 )
-Package hyperref Info: Option `breaklinks' set `true' on input line 168.
+Package hyperref Info: Option `breaklinks' set `true' on input line 129.
 
 Package hyperref Warning: Option `bookmarks' has already been used,
-(hyperref)                setting the option has no effect on input line 168.
+(hyperref)                setting the option has no effect on input line 129.
 
-Package hyperref Info: Option `colorlinks' set `true' on input line 168.
+Package hyperref Info: Option `colorlinks' set `true' on input line 129.
 
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/placeins/placeins.
 sty
@@ -496,29 +520,30 @@ Package: placeins 2005/04/18  v 2.2
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backen
 d-pdftex.def
 File: l3backend-pdftex.def 2020-09-24 L3 backend support: PDF output (pdfTeX)
-\l__kernel_color_stack_int=\count287
-\l__pdf_internal_box=\box67
-) (./R-markdown_sean.aux)
+\l__kernel_color_stack_int=\count293
+\l__pdf_internal_box=\box66
+)
+No file R-markdown_sean.aux.
 \openout1 = `R-markdown_sean.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 186.
-LaTeX Font Info:    ... okay on input line 186.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 186.
-LaTeX Font Info:    ... okay on input line 186.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 186.
-LaTeX Font Info:    ... okay on input line 186.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 186.
-LaTeX Font Info:    ... okay on input line 186.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 186.
-LaTeX Font Info:    ... okay on input line 186.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 186.
-LaTeX Font Info:    ... okay on input line 186.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 186.
-LaTeX Font Info:    ... okay on input line 186.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 186.
-LaTeX Font Info:    ... okay on input line 186.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 186.
-LaTeX Font Info:    ... okay on input line 186.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 147.
+LaTeX Font Info:    ... okay on input line 147.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 147.
+LaTeX Font Info:    ... okay on input line 147.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 147.
+LaTeX Font Info:    ... okay on input line 147.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 147.
+LaTeX Font Info:    ... okay on input line 147.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 147.
+LaTeX Font Info:    ... okay on input line 147.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 147.
+LaTeX Font Info:    ... okay on input line 147.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 147.
+LaTeX Font Info:    ... okay on input line 147.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 147.
+LaTeX Font Info:    ... okay on input line 147.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 147.
+LaTeX Font Info:    ... okay on input line 147.
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -553,7 +578,7 @@ LaTeX Font Info:    ... okay on input line 186.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\big@size=\dimen196
+\big@size=\dimen256
 
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epsto
 pdf-base.sty
@@ -573,10 +598,17 @@ df-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: subfig package v1.3 is loaded.
+Package caption Info: float package is loaded.
+Package caption Info: hyperref package is loaded.
+Package caption Info: threeparttable package is loaded.
+Package caption Info: wrapfig package is loaded.
+Package caption Info: End \AtBeginDocument code.
 
 Package hyperref Warning: Draft mode on.
 
-Package hyperref Info: Link coloring ON on input line 186.
+Package hyperref Info: Link coloring ON on input line 147.
 
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.s
 ty
@@ -590,216 +622,133 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count288
+\c@section@level=\count294
 )
-LaTeX Info: Redefining \ref on input line 186.
-LaTeX Info: Redefining \pageref on input line 186.
-LaTeX Info: Redefining \nameref on input line 186.
-LaTeX Font Info:    Trying to load font information for T1+phv on input line 20
-2.
+LaTeX Info: Redefining \ref on input line 147.
+LaTeX Info: Redefining \pageref on input line 147.
+LaTeX Info: Redefining \nameref on input line 147.
+LaTeX Font Info:    Trying to load font information for T1+phv on input line 16
+3.
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
 ) [1
 
 {c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdfte
-x.map}] [2] [3]
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 4
-54.
+x.map}] [2]
+
+Package longtable Warning: Column widths have changed
+(longtable)                in table 1 on input line 343.
+
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 3
+64.
 (c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-Overfull \hbox (7.96983pt too wide) in paragraph at lines 464--465
+Overfull \hbox (7.96983pt too wide) in paragraph at lines 374--375
 []\T1/ppl/m/n/10.95 Model|  
  []
 
 
-Overfull \hbox (7.96983pt too wide) in paragraph at lines 474--475
+Overfull \hbox (7.96983pt too wide) in paragraph at lines 384--385
 []\T1/ppl/m/n/10.95 Model|  
  []
 
 
-Overfull \hbox (18.45972pt too wide) in paragraph at lines 483--484
+Overfull \hbox (18.45972pt too wide) in paragraph at lines 393--394
 []\T1/ppl/m/n/10.95 Decision|  
  []
 
 
-Overfull \hbox (18.01102pt too wide) in paragraph at lines 500--501
+Overfull \hbox (18.01102pt too wide) in paragraph at lines 410--411
 []\T1/ppl/m/n/10.95 Random|  
  []
 
 
-Overfull \hbox (6.16302pt too wide) in paragraph at lines 507--508
+Overfull \hbox (6.16302pt too wide) in paragraph at lines 417--418
 []\T1/ppl/m/n/10.95 Forest|  
  []
 
 
-Overfull \hbox (19.72983pt too wide) in paragraph at lines 519--520
+Overfull \hbox (19.72983pt too wide) in paragraph at lines 429--430
 []\T1/ppl/m/n/10.95 Gradient|  
  []
 
 
-Overfull \hbox (19.01816pt too wide) in paragraph at lines 526--527
+Overfull \hbox (19.01816pt too wide) in paragraph at lines 436--437
 []\T1/ppl/m/n/10.95 Boosting 
  []
 
 
-Overfull \hbox (23.02592pt too wide) in paragraph at lines 526--527
+Overfull \hbox (23.02592pt too wide) in paragraph at lines 436--437
 \T1/ppl/m/n/10.95 Machines|  
  []
 
 
-Overfull \hbox (22.43332pt too wide) in paragraph at lines 534--535
+Overfull \hbox (22.43332pt too wide) in paragraph at lines 444--445
 \T1/ppl/m/n/10.95 n.minobssinnode|  
  []
 
 
-Overfull \hbox (19.02913pt too wide) in paragraph at lines 537--538
+Overfull \hbox (19.02913pt too wide) in paragraph at lines 447--448
 []\T1/ppl/m/n/10.95 XGBoost|  
  []
 
 
-Overfull \hbox (29.73674pt too wide) in paragraph at lines 547--549
+Overfull \hbox (29.73674pt too wide) in paragraph at lines 457--459
 \T1/ppl/m/n/10.95 min_child_weight, 
  []
 
-[4]
-Overfull \hbox (19.06335pt too wide) in paragraph at lines 560--561
-[]\T1/ppl/m/n/10.95 830e5f4958932cc5f824272359d6ab041ceff57f 
- []
+[3] [4]
 
-
-Overfull \hbox (29.31244pt too wide) in paragraph at lines 591--592
-[]\T1/ppl/m/n/10.95 44c2ed0c3345e5e8d262ee90e1917aa199875ab4 
- []
+Package longtable Warning: Column widths have changed
+(longtable)                in table 3 on input line 517.
 
 [5]
+<R-markdown_sean_files/figure-latex/CART imputation-1.pdf, id=23, 289.08pt x 21
+6.81pt>
+File: R-markdown_sean_files/figure-latex/CART imputation-1.pdf Graphic file (ty
+pe pdf)
+<use R-markdown_sean_files/figure-latex/CART imputation-1.pdf>
+Package pdftex.def Info: R-markdown_sean_files/figure-latex/CART imputation-1.p
+df  used on input line 573.
+(pdftex.def)             Requested size: 289.09251pt x 216.81938pt.
+<R-markdown_sean_files/figure-latex/corrplot-1.pdf, id=24, 361.35pt x 361.35pt>
 
-Package xcolor Warning: Incompatible color definition on input line 646.
+File: R-markdown_sean_files/figure-latex/corrplot-1.pdf Graphic file (type pdf)
 
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <10.95> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 648.
-
-Package xcolor Warning: Incompatible color definition on input line 652.
-
-
-Package xcolor Warning: Incompatible color definition on input line 652.
-
-
-Package xcolor Warning: Incompatible color definition on input line 714.
-
-[6]
-
-Package xcolor Warning: Incompatible color definition on input line 728.
-
-
-Package xcolor Warning: Incompatible color definition on input line 728.
-
-<R-markdown_sean_files/figure-latex/skew and correlation plots-1.pdf, id=26, 46
-9.755pt x 325.215pt>
-File: R-markdown_sean_files/figure-latex/skew and correlation plots-1.pdf Graph
-ic file (type pdf)
-<use R-markdown_sean_files/figure-latex/skew and correlation plots-1.pdf>
-Package pdftex.def Info: R-markdown_sean_files/figure-latex/skew and correlatio
-n plots-1.pdf  used on input line 730.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-Overfull \hbox (16.99884pt too wide) in paragraph at lines 730--731
-[][] 
- []
-
-
-Package xcolor Warning: Incompatible color definition on input line 732.
-
-
-Package xcolor Warning: Incompatible color definition on input line 740.
-
-
-Package xcolor Warning: Incompatible color definition on input line 740.
-
-<R-markdown_sean_files/figure-latex/skew and correlation plots-2.pdf, id=27, 46
-9.755pt x 325.215pt>
-File: R-markdown_sean_files/figure-latex/skew and correlation plots-2.pdf Graph
-ic file (type pdf)
-<use R-markdown_sean_files/figure-latex/skew and correlation plots-2.pdf>
-Package pdftex.def Info: R-markdown_sean_files/figure-latex/skew and correlatio
-n plots-2.pdf  used on input line 742.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-Overfull \hbox (16.99884pt too wide) in paragraph at lines 742--743
-[][] 
- []
-
-
-Package xcolor Warning: Incompatible color definition on input line 744.
-
-[7 <./R-markdown_sean_files/figure-latex/skew and correlation plots-1.pdf>]
-
-Package xcolor Warning: Incompatible color definition on input line 752.
-
-
-Package xcolor Warning: Incompatible color definition on input line 752.
-
-<R-markdown_sean_files/figure-latex/skew and correlation plots-3.pdf, id=39, 46
-9.755pt x 325.215pt>
-File: R-markdown_sean_files/figure-latex/skew and correlation plots-3.pdf Graph
-ic file (type pdf)
-<use R-markdown_sean_files/figure-latex/skew and correlation plots-3.pdf>
-Package pdftex.def Info: R-markdown_sean_files/figure-latex/skew and correlatio
-n plots-3.pdf  used on input line 754.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-Overfull \hbox (16.99884pt too wide) in paragraph at lines 754--755
-[][] 
- []
-
-[8 <./R-markdown_sean_files/figure-latex/skew and correlation plots-2.pdf>]
-LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 7
-77.
-(c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1ppl.fd
-File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
+<use R-markdown_sean_files/figure-latex/corrplot-1.pdf>
+Package pdftex.def Info: R-markdown_sean_files/figure-latex/corrplot-1.pdf  use
+d on input line 594.
+(pdftex.def)             Requested size: 361.34912pt x 361.34912pt.
+<R-markdown_sean_files/figure-latex/histogram-1.pdf, id=25, 433.62pt x 578.16pt
+>
+File: R-markdown_sean_files/figure-latex/histogram-1.pdf Graphic file (type pdf
 )
-LaTeX Font Info:    Trying to load font information for OML+zplm on input line 
-777.
-(c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omlzplm.fd
-File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
-)
-LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 
-777.
-(c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omszplm.fd
-File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
-)
-LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 
-777.
-(c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omxzplm.fd
-File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
-)
-LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 
-777.
-(c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1zplm.fd
-File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
-) [9 <./R-markdown_sean_files/figure-latex/skew and correlation plots-3.pdf>] (
-./R-markdown_sean.aux) ) 
+<use R-markdown_sean_files/figure-latex/histogram-1.pdf>
+Package pdftex.def Info: R-markdown_sean_files/figure-latex/histogram-1.pdf  us
+ed on input line 602.
+(pdftex.def)             Requested size: 433.63878pt x 578.18504pt.
+<R-markdown_sean_files/figure-latex/barplot-1.pdf, id=26, 216.81pt x 216.81pt>
+File: R-markdown_sean_files/figure-latex/barplot-1.pdf Graphic file (type pdf)
+<use R-markdown_sean_files/figure-latex/barplot-1.pdf>
+Package pdftex.def Info: R-markdown_sean_files/figure-latex/barplot-1.pdf  used
+ on input line 610.
+(pdftex.def)             Requested size: 216.81938pt x 216.81938pt.
+[6 <./R-markdown_sean_files/figure-latex/CART imputation-1.pdf>] [7 <./R-markdo
+wn_sean_files/figure-latex/corrplot-1.pdf>] [8 <./R-markdown_sean_files/figure-
+latex/histogram-1.pdf>]
+Runaway argument?
+^^M## $call^^M## randomForest(formula = final_price ~ ., data = train\ETC.
+! TeX capacity exceeded, sorry [main memory size=5000000].
+l.58533 ... 4800000.0 3213874.5 2952682.0 4921000.
+                                                  0  554955.7 3800000.0 
 Here is how much of TeX's memory you used:
- 11756 strings out of 481445
- 174894 string characters out of 5919274
- 481290 words of memory out of 5000000
- 28284 multiletter control sequences out of 15000+600000
- 554028 words of font info for 62 fonts, out of 8000000 for 9000
+ 12564 strings out of 481433
+ 192085 string characters out of 5918819
+ 5000001 words of memory out of 5000000
+ 29122 multiletter control sequences out of 15000+600000
+ 549638 words of font info for 48 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 66i,7n,72p,1786b,421s stack positions out of 5000i,500n,10000p,200000b,80000s
- <c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-var/font
-s/pk/ljfour/jknappen/ec/ecit1095.600pk> <c:/Users/seanx/AppData/Roaming/TinyTeX
-/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1095.600pk>{c:/Users/seanx/AppData/R
-oaming/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}<c:/Users/seanx/AppData/R
-oaming/TinyTeX/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb><c:/Users/seanx/A
-ppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/Users
-/seanx/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><
-c:/Users/seanx/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr
-i8a.pfb>
-Output written on R-markdown_sean.pdf (9 pages, 157757 bytes).
-PDF statistics:
- 162 PDF objects out of 1000 (max. 8388607)
- 57 compressed objects within 1 object stream
- 0 named destinations out of 1000 (max. 500000)
- 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 68i,10n,76p,571b,442s stack positions out of 5000i,500n,10000p,200000b,80000s
 
+!  ==> Fatal error occurred, no output PDF file produced!

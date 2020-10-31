@@ -5,6 +5,7 @@ output:
     fig_caption: true
     latex_engine: pdflatex
     template: svm-latex-ms.tex
+    extra_dependencies: "subfig"
 title: "Predicting House Prices in Toronto: A Machine Learning Approach"
 author:
 - name: Albina Cako, BSc
@@ -58,6 +59,7 @@ library(descr)
 library(kableExtra)
 library(Hmisc)
 library(corrplot)
+library(mice)
 ```
 ## Data Preprocessing
 The housing dataset, originally shared on Github[@spirin_slavaspirintoronto-housing-price-prediction_2020], was extracted from Zoocasa.com in the summer of 2019. The dataset contained all completed property sales in the city of Toronto within a 1-year span. We performed several data exploration and cleaning steps to prepare this data for modeling.
@@ -85,9 +87,7 @@ We chose final_price as the target variable. While the dataset also contained a 
 
 ## Modeling
 The data contained a mix of categorical and numerical variables. These variables did not satisfy the many requirements of parametric models, such as variable independence, normally distributed data, and linear relationship with outcome. Thus, several non-parametric models were used instead. We trained four different models using k-fold cross validation. The models were then tuned using various grid searches to improve the accuracy. The final model was then chosen based on three accuracy metrics: Root Mean-Squared Error (RMSE), Pearson correlation (R^2), and Mean Average Error (MAE).
-
-
-```{r model table, echo=FALSE, message=FALSE}
+```{r model table, echo=FALSE, message=FALSE, warning=FALSE}
 models_list <- list('Decision
 Tree','Random
 Forest','Gradient 
@@ -98,16 +98,14 @@ models_table <- data.frame(unlist(models_list), unlist(models_description), unli
 colnames(models_table) <- c('Model', 'Description', 'Tuning parameters')
 mtable <- kbl(models_table, caption = 'Non-parametric Models Used', format = 'pipe')
 kable_styling(mtable, font_size = 10)
-
-
 ```
 ## Deployment
 The application was created using R shiny and hosted on the Shinyapps.io cloud. EDIT : this could probably all go to results section --> The user interface (UI) contains a map of Toronto for geographic navigation and also allows the user to select various inputs to predict property price. While the user would choose a district of interest from the front end, the back end links the district chosen with income and uses mean_district_income as the model input instead. We chose INSERT_MODEL HERE, since it was the most accurate model as the back-end for our application.
 
 # Results
-The original housing dataset contained 21 variables and 15234 observations. Table 1 defines each variable of the dataset.
+The original housing dataset contained 21 variables and 15234 observations. Table 1 defines each variable of the dataset. Figure 1 plots the geographic distribution of properties based on longitude and latitude.
 
-```{r create a table describing the columns and rows, echo=FALSE}
+```{r create a table describing the columns and rows, echo=FALSE, message=FALSE}
 data_description <- c('Title of the listing', 'Final price of the property', 'Listing price of the property', 'Number of bedrooms','Number of bathrooms','Area of property in square feet',
                       'Number of parking spaces', 'Verbatim text description of the property', 'MLS Listing ID', 'Property type', 'URL to listing', 'Full address of the property', 'Latitude', 'Longitude','Toronto district to which property belonged to', 'Average household income of district', 'Numerical code of the district', 'Box-Cox transformation of final price', 'Log transformation of final price', 'Number of bedrooms above ground', 'Number of bedrooms below ground' )
 
@@ -120,10 +118,9 @@ kable(datadictionary, format='pipe', caption = 'Data Dictionary')
 
 ```
 ## Data Exploration
-
-We found that the 'sqft' variable was missing approximately 30% of its values.  To test whether the missing data was MCAR, we compared whether certainother variables were associated with the missing sqft values. Using Chi-squared and Kruskal Wallis tests for categorical and numerical variables, respectively, we determined that all variables had significantly correlation (p<0.01) with sqft missingness. Thus, the data is not MCAR, and we cannot simply remove observations where sqft is missing without introducing bias. 
-
-```{r missingness missingness correlation missingness imputation, echo=FALSE}
+The mean final price property price in Toronto between 2018 and 2019 was $715,000, with a median number of 3 bedrooms and 2 bathrooms. The most common properties types were condo (58.2%), detached (28.8%), and semi-detached (9.4%). 
+```{r text summary, echo=FALSE}
+#text summary
 df <- read.csv('houses_edited.csv')
 df$bedrooms <- df$bedrooms_bg + df$bedrooms_ag
 df <-  df[, !names(df) %in% c('index', 'title', 'full_link', 'mls', 'description', 'full_address', 'final_price_transformed', 'final_price_log')]
@@ -137,83 +134,52 @@ df$type[df$type=='Condo Apt'] <- 'Condo'
 df$type[df$type=='Condo Townhouse'] <- 'Condo'
 df$type[df$type=='Link'] <- 'Detached'
 df$type[df$type=='Store W/Apt/Offc'] <- 'Condo'
+summary(df[, names(df) %in% numeric_cols])
+table(df$type)
 ```
-We chose to use the CART (Classification and Regression Trees) method of imputation (Figure 1). Blue represents the distribution of the original data, while red represents the distribution of imputed data.
+```{r map, echo=FALSE, message=FALSE, fig.align='center', fig.cap='Latitude and Longitude distribution of Property Data'}
+df %>% ggplot(aes(x=lat, y=long)) + geom_point(aes(colour=city_district)) + theme(legend.position = 'none')
+```
+The 'sqft' variable was missing 1435 observations (approx. 30%).  To test whether the missing data was MCAR, we compared whether other variables were associated with missingness. Using Chi-squared and Kruskal Wallis tests for categorical and numerical variables, respectively, we determined that housing and price had significant correlation (p<0.01) with sqft missingness, where properties missing sqft trended towards higher prices. Thus,we conclude that sqft is not MCAR, so we cannot simply remove observations where sqft is missing without introducing bias. 
+To account for missing values, we chose to use the CART (Classification and Regression Trees) method of imputation (Figure 1). Blue represents the distribution of the original data, while red represents the distribution of imputed data. The mean sqft increased from 1116 to 1311 as a result of the imputation.
 
 ```{r CART imputation, echo=FALSE, fig.align='center', fig.height=3, fig.width=4, fig.cap = 'CART-imputed values for sqft'}
 cart <- readRDS('imputed_df_cart.rds')
+summary(complete(cart)$sqft)
 densityplot(cart)
 ```
-Below, we summarize the distribution of predictor and target variables (Figure 2 and Figure 3). Note the significant right skew within each variable. Additionally, each variable also contained many outliers. The data is therefore unlikely to be fit for any sort of parametric machine-learning algorithm without performing significant transformations.
 
-```{r histogram, echo=FALSE, fig.align='center', fig.height=4, fig.width=4, fig.cap = 'Distribution of predictor and target variables'}
-#histograms - note skew in prices
-par(mfrow=c(2, 3))
-for (i in numeric_cols) {
-  hist(df[[i]], main = paste(i), xlab = '', col = 4)
-}
-#boxplot and outliers
-par(mfrow=c(2, 3))
-for (i in numeric_cols) {
-  boxplot(df[[i]], main = paste(i), xlab = '', col = 4)
-}
-
-ggplot(df, aes(type)) + geom_bar(fill = 'red') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-```
 ```{r corrplot, echo=FALSE, fig.align='center', fig.height=5, fig.width=5, fig.cap='Correlogram'}
 #corrplot for numerical
 cor <- rcorr(as.matrix(df[, names(df) %in% numeric_cols]))
 p.mat <- cor_pmat(as.matrix(df[, names(df) %in% numeric_cols]))
 par(mfrow=c(1,1))
 ggcorrplot(cor$r, type = 'upper', p.mat = p.mat, sig.level = 0.05, lab = TRUE)
+```
+We then performed a correlation analysis based on Pearson's coefficient between each numeric predictor. We considered a correlation > 0.5, with p < 0.05 as a significant correlation. Figure 2 demonstrates significant correlation between many of our predictor variables. 
 
+We also summarize the distribution of predictor and target variables (Figure 3). Note the right skew in each predictor variable as well as amount of outliers in each of our predictor variables. Finally, we checked for whether a linear relationship existed between each predictor variables and the target variable (Figure 4). Overall, the data is unlikely to be well-fit for parametric machine-learning algorithms such as generalized linear regression. The data does not satisfy the assumptions of variable independence, normal distribution, nor a linear relationship between predictors and target variable. Thus, we chose to use non-parametric algorithms to model our data instead. 
+```{r histogram, echo=FALSE, fig.align='center', fig.height=8, fig.width=6, fig.cap = 'Distribution of predictor and target variables'}
+#histograms - note skew in prices
+par(mfrow=c(4, 3))
+for (i in numeric_cols) {
+  hist(df[[i]], main = paste(i), xlab = '', col = 4)
+}
+#boxplot and outliers
+for (i in numeric_cols) {
+  boxplot(df[[i]], main = paste(i), xlab = '', col = 4)
+}
 ```
-
-##Modeling and Evaluation
-  After data mining and data exploration, the next step is to create the prediction models. There are four models we have decided to use, and we evaluate each model to choose the model has the best performance based on R-Squared , Root Mean Square Error and  Mean Absolute Error.
-  
-#### **Cross Validation**\
-  The k-fold cross-validation method evaluates the model performance on different subset of the training data and then calculate the average prediction error rate. we use k = 10 for our project,and this method was used instead of the simple train-test-split as it gives a more valid estimation of model effectiveness.
-
-#### **Decision Tree Model**\
-The decision tree model was tuned with different value of cp, 0.001 is used for best model performance after tuning.
-
-``````{r Decision Tree Model, echo=FALSE}
-decision_tree_model <- readRDS("decision_tree_model.rds")
-summary(decision_tree_model$finalModel)
+```{r linear correlation, echo=FALSE, message=FALSE, fig.cap='Scatterplot of Predictors vs. Final Price', fig.align='center',fig.height=4}
+par(mfrow=c(2,3))
+for (i in numeric_cols[2:6]) {
+  plot(df[[i]], df$final_price, main = paste(i), xlab = '', col = 4, ylab = 'final_price')
+}
 ```
-#### **Random Forest Model**\
-The Random Forest was original trained with ntree = 300 and mtry = 8, after tuning the model, ntree = 150 and mtry = 6 are used for better model performance.
-``````{r Random Forest Model, echo=FALSE}
-Random_Forest_model <- readRDS("randomForests.rds")
-#check the performance of the model
-print(Random_Forest_model)
-```
-#### **Gradient Boosting Model**\
-The model of gradient boosting was tuned by several different parameters and the best model used n.trees = 200, interaction.depth = 9, shrinkage = 0.1 and n.minobsinnode = 20.
-```````{r Gradient Boosting Model, echo=FALSE}
-Gradient_Boosting_model <- readRDS("gbm3.rds")
-summary(Gradient_Boosting_model$finalModel)
-```
-#### **Extreme Gradient Boosting Model**\
-The best model has parameters nrounds = 200, max_depth = 6, eta = 0.1, gamma = 0, colsample_bytree = 0.8, min_child_weight = 5 and subsample = 0.8 after tuning.
-```````{r Extreme Gradient Boosting Model, echo=FALSE}
-Extreme_Gradient_Boosting_model <- readRDS("albina_model.rds")
-summary(Extreme_Gradient_Boosting_model$finalModel)
-attributes(Extreme_Gradient_Boosting_model)
-Extreme_Gradient_Boosting_model
-```
-### **Model Selection**\
-  For the four models, we chooses the extreme gradient boosting model as our final model for deployment. Mean Absolute Error (MAE) tells the average error of the variable we want to predict. Root Mean-Squared Error (RMSE) is similar with MAE but it is more useful when we want fewer larger errors more than a lot of small errors, we want the model be more stable thus we take RMSE as one of the evaluation matrix. R-Squared (R2) computes how much better the regression line fits the data than the mean line which can give us a overall score for the model.As you can see from the table below, all the models has similar RMSE, MAE and R2. For predicting house price, we want a model with lowest RMSE and MAE to keep the high accuracy of prediction. The extreme gradient boosting model has the highest R-Squared and the lowest Mean Absolute value, Root Mean-Squared Error.
-```{r create dataframe of model performance, echo=FALSE}
-models <- c("decision_tree","random_forest","gradient_boosting", "extreme_gradient_boosting")
-model_performance <- data.frame(matrix(unlist(models), nrow=4, byrow=TRUE), stringsAsFactors = FALSE)
-colnames(model_performance) <- c("model")
-RMSE<- c(296103,233734.1,257316.5,220850.4)
-R2 <- c(0.786,0.846707,0.8282601,0.861169)
-MAE <- c(141375,119745.2,134117.1,116308.5)
-model_performance <- model_performance %>% mutate(RMSE = round(RMSE,2), R2=round(R2,2), MAE=round(MAE,2))
-kable(model_performance, format = 'pipe')
+We chose final_price as our target variable, but still wished to include list_price in the deployment of our application. Therefore, the list price is predicted via the following linear regression: list_price = 1.03 * final_price - 36525.78.
+```{r final list, echo=FALSE, fig.align='center',fig.cap='Final Price vs. List Price', message=FALSE, fig.width=3,fig.height=3}
+price_lm <- lm(list_price ~ final_price, df)
+ggplot(df, aes(x=final_price,y=list_price)) + geom_point() + geom_smooth(method = 'lm') + annotate('text', label = paste('R-sqr = ', round(summary(price_lm)$adj.r.squared, 2)), x = 0.6*max(df$list_price), y= max(df$final_price))
 ```
 
 
