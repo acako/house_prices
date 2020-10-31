@@ -141,35 +141,45 @@ colnames(datadictionary) <- c("Variable", "             ", "Type")
 kable(datadictionary, format='pipe', caption = 'Data Dictionary')
 
 ```
-
 ## Data Exploration
 
 ```{r load data, message=FALSE}
-data <- read.csv('houses_edited.csv')
-numeric_cols <- list('final_price', 'list_price', 'bathrooms', 'sqft', 'parking', 'lat', 'long', 'mean_district_income', 'bedrooms_ag', 'bedrooms_bg')
-predictor_cols <- list('bathrooms', 'sqft', 'parking', 'lat', 'long', 'mean_district_income', 'bedrooms_ag', 'bedrooms_bg')
-
-```
-
-
-```{r, results = "asis", echo=FALSE}
-#<<<<<<< HEAD
-#descr(data, style = 'rmarkdown')
-#=======
-descr(data)
-#>>>>>>> 07b4634c471db3a1b80f2f862f0ee014176e645d
-#summary(data)
-```
-
-
-###
-
-```{r skew and correlation plots}
 df <- read.csv('houses_edited.csv')
 df$bedrooms <- df$bedrooms_bg + df$bedrooms_ag
 df <-  df[, !names(df) %in% c('index', 'title', 'full_link', 'mls', 'description', 'full_address', 'final_price_transformed', 'final_price_log')]
 numeric_cols <- list('final_price', 'bathrooms', 'sqft', 'parking', 'mean_district_income', 'bedrooms')
 predictor_cols <- list('bathrooms', 'sqft', 'parking', 'mean_district_income', 'bedrooms', 'type')
+
+df$type[df$type=='Att/Row/Twnhouse'] <- 'Townhouse'
+df$type[df$type=='Co-Op Apt'] <- 'Condo'
+df$type[df$type=='Co-Ownership Apt'] <- 'Condo'
+df$type[df$type=='Comm Element Condo'] <- 'Condo'
+df$type[df$type=='Condo Apt'] <- 'Condo'
+df$type[df$type=='Condo Townhouse'] <- 'Condo'
+df$type[df$type=='Link'] <- 'Detached'
+df$type[df$type=='Store W/Apt/Offc'] <- 'Condo'
+
+```
+
+```{r, results = "asis", echo=FALSE}
+#<<<<<<< HEAD
+#descr(data, style = 'rmarkdown')
+#=======
+#descr(data)
+#>>>>>>> 07b4634c471db3a1b80f2f862f0ee014176e645d
+#summary(data)
+```
+```{r missingness and missingness correlation, echo=FALSE}
+
+
+complete <- names(select(data, 3:6,8,11,14,15,17:19,23))
+missing <- names(select(data,7))
+
+for (i in c(1:length(complete))) {
+  print(data %>% missing_compare(missing, complete[i]))
+}
+```
+```{r skew and correlation plots, echo=FALSE}
 
 #histograms - note skew in prices
 par(mfrow=c(2, 3))
@@ -182,12 +192,13 @@ par(mfrow=c(2, 3))
 for (i in numeric_cols) {
   boxplot(df[[i]], main = paste(i), xlab = '', col = 4)
 }
+ggplot(df, aes(type)) + geom_bar(fill = 'red') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 #corrplot for numerical
 cor <- rcorr(as.matrix(df[, names(df) %in% numeric_cols]))
 p.mat <- cor_pmat(as.matrix(df[, names(df) %in% numeric_cols]))
 par(mfrow=c(1,1))
-ggcorrplot(cor$r, type = 'upper', p.mat = p.mat, sig.level = 1, insig = 'pch')
+ggcorrplot(cor$r, type = 'upper', p.mat = p.mat, sig.level = 1, lab = TRUE)
 
 ```
 
