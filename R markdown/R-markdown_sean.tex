@@ -39,8 +39,57 @@
 
 \setcounter{secnumdepth}{0}
 
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{longtable,booktabs}
 
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 
 
 \title{Predicting House Prices in Toronto: A Machine Learning Approach  }
@@ -73,6 +122,20 @@
 \def\fps@figure{htbp}
 \makeatother
 
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
 
 % move the hyperref stuff down here, after header-includes, to allow for - \usepackage{hyperref}
 
@@ -201,7 +264,6 @@ combinations. This project will comprehensively validate four different
 models: decision tree, random forest, K nearest neighbors, and gradient
 boosting machine. This report will go through data analysis, modeling
 implementation and provide an optimistic result for housing price
-<<<<<<< HEAD
 prediction.
 
 \hypertarget{objective}{%
@@ -210,20 +272,11 @@ prediction.
 The objective of this project was to evaluate the application of machine
 learning algorithms to predict house prices in the Greater Toronto Area,
 and apply
-=======
-prediction. \#\# Objective The objective of this project was to evaluate
-the application of machine learning algorithms to predict house prices
-in the Greater Toronto Area, and apply
->>>>>>> d08b2e2b5dc0105ca12693f3a21d3a5c2c36646b
 
 \hypertarget{background}{%
 \subsection{Background}\label{background}}
 
-<<<<<<< HEAD
 Purchasing a house is a big life decision for every individual and needs
-=======
-Purchasing a house if a big life decision for every individual and needs
->>>>>>> d08b2e2b5dc0105ca12693f3a21d3a5c2c36646b
 a considerable amount of research. Everyone has different purpose of
 buying houses, someone would prefer by the house at the best rate for
 living now, someone would buy houses for future investment. Selling the
@@ -250,9 +303,9 @@ locations, square foot, number of bedrooms, etc.
 
 The housing dataset, originally shared on Github{[}1{]}, was extracted
 from Zoocasa.com in the summer of 2019. The dataset contained all
-completed property sales in the city of Toronto within a 1-year span. We
-performed several data exploration and cleaning steps to prepare this
-data for modeling.
+completed property sales in the city of Toronto within an approximately
+1-year span. We performed several data exploration and cleaning steps to
+prepare this data for modeling.
 
 \hypertarget{missingness}{%
 \subsection{Missingness}\label{missingness}}
@@ -278,40 +331,87 @@ observations; 3) random forest, which applies a random forest algorithm;
 and 4) CART, which imputes by classification and regression trees. The
 distribution of the imputed data were evaluated with a density plot and
 an imputed dataset was chosen based on best fit.
-<<<<<<< HEAD
-=======
-
-\hypertarget{assessing-parametric-fit}{%
-\subsection{Assessing Parametric Fit}\label{assessing-parametric-fit}}
-
-Outliers were visualized with the boxplot() function, with outliers
-falling outside Q1 - 1.5 X Inter-Quartile Range and Q3 + 1.5 X
-Inter-Quartile Range. Normality of the distribution of variables were
-visualized with density plots. A correlogram with Pearson's R determined
-collinearity. Linear relationship between outcome variable and
-predictors was tested via scatterplots.
->>>>>>> d08b2e2b5dc0105ca12693f3a21d3a5c2c36646b
 
 \hypertarget{data-curation}{%
 \subsection{Data Curation}\label{data-curation}}
 
-The following variables were removed as they did not have any data
-utility or had free-text, which would have necessitated additional
-cleaning: title, description, mls, type, full\_link, full\_address. A
-numeric `bedrooms' column was created by combining bedrooms\_ag and
-bedrooms\_bg. We also removed district\_code and city\_district; both
-were a categorical variables with number of factors = 140; keeping it
-would significantly increase model training time. Longitude and latitude
-were also not considered to accommodate model deployment, as including
-these variables in training sets would have required geocoding and
-assignment of latitude and longitude inputs to districts; tasks which
-were outside our scope for this application. Mean\_district\_income was
-left as an approximation of the effect of districts on the house price.
-After consultation with a real-estate expert, we decreased the number of
-property types by generalizing from 10 different types to: Townhouse,
-Condo, Detached, Semi-Detached, and Plex
+\hypertarget{modeling}{%
+\subsection{Modeling}\label{modeling}}
 
-Thus, the predictors chosen were:
+As the data contained a mix of categorical and numerical variables and
+did not satisfy many requirements of parametric models, such as variable
+independence, and normally distributed data. Thus, several parametric
+models were used. We trained four different non-parametric models using
+k-fold cross validation. The models were then tuned using various grid
+searches to improve the accuracy. The final model was chosen based on
+three metrics: Root Mean-Squared Error (RMSE), Pearson correlation
+(R\^{}2), and Mean Average Error (MAE).
+
+\hypertarget{head}{%
+\section{\textless\textless\textless\textless\textless\textless\textless{}
+HEAD}\label{head}}
+
+\textless\textless\textless\textless\textless\textless\textless{} HEAD
+\#\# Data Preprocessing The housing dataset, originally shared on
+Github{[}1{]}, was extracted from Zoocasa.com in the summer of 2019. The
+dataset contained all completed property sales in the city of Toronto
+within a 1-year span. We performed several data exploration and cleaning
+steps to prepare this data for modeling.
+
+\hypertarget{missingness-1}{%
+\subsection{Missingness}\label{missingness-1}}
+
+We assessed the dataset for missing values. Many parametric machine
+learning models do not accept missing data, and the accuracy of even
+non-parametric models are often negatively impacted by missingness.
+Thus, missing values ought to be either imputed or removed before data
+modeling. We then determined whether missing data was Missing Completely
+at Random (MCAR), Missing at Random (MAR), or Missing Not at Random
+(MNAR). Should the data be MCAR, then it is acceptable to simply remove
+each observation that is missing, as doing so would not introduce bias
+to the remaining observations. However, if there was a correlation
+between missingness and other data features, then imputation must be
+performed. Missingness correlation was assessed using the
+missing\_compare() function from the finalfit library, which applies the
+Kruskal Wallis correlation test for numerical variables and chi-squared
+correlation test for categorical variables to determine correlation.
+Using the MICE package in R, we then applied the following imputation
+methods: 1) simple, which imputes a value from a simple random sample
+from the rest of the data; 2) mean, which imputes the average of all
+observations; 3) random forest, which applies a random forest algorithm;
+and 4) CART, which imputes by classification and regression trees. The
+distribution of the imputed data were evaluated with a density plot and
+an imputed dataset was chosen based on best fit.
+
+\hypertarget{assessing-parametric-fit}{%
+\subsection{Assessing Parametric Fit}\label{assessing-parametric-fit}}
+
+Outliers were visualized with the boxplot() function. Data were
+considered outliers if they were less than Q1 - 1.5 X Inter-Quartile
+Range and greater Q3 + 1.5 X Inter-Quartile Range. Normality of the
+distribution of variables were visualized with density plots. A
+correlogram with Pearson's R determined collinearity. Linear
+relationship between outcome variable and predictors was tested via
+scatterplots.
+
+\hypertarget{data-curation-1}{%
+\subsection{Data Curation}\label{data-curation-1}}
+
+The following variables were removed as they did not have any data
+utility or were not easily parseable (i.e.~free text): title,
+description, mls, type, full\_link, full\_address. A numeric `bedrooms'
+column was created by combining bedrooms\_ag and bedrooms\_bg. We also
+removed district\_code and city\_district. Both were categorical
+variables with number of factors = 140; keeping these would
+significantly increase model training time. We also did not consider
+longitude and latitude, as including these variables in training sets
+would have required geocoding and district clustering; complexities
+which were outside our scope for this application.
+Mean\_district\_income was left as an approximation of the effect of
+districts on property price. After consultation with a real-estate
+expert, we decreased the number of property types by generalizing types
+to: Townhouse, Condo, Detached, Semi-Detached, and Plex. Thus, the
+predictors chosen were:
 
 \begin{longtable}[]{@{}lll@{}}
 \caption{Predictor variables}\tabularnewline
@@ -332,52 +432,170 @@ type & & categorical\tabularnewline
 \bottomrule
 \end{longtable}
 
-The target variable chosen was final\_price. Rather than training two
-models to predict on both list and final price, the predicted list price
-was instead approximated by a linear equation between list and final
-price in the training data.
+The target variable chosen was final\_price. The dataset also contained
+a list\_price variable. Rather than training two models to predict on
+both list and final price, the predicted list price was instead
+approximated by a linear equation between list and final price from the
+original dataset.
 
-\hypertarget{modeling}{%
-\subsection{Modeling}\label{modeling}}
+\hypertarget{modeling-1}{%
+\subsection{Modeling}\label{modeling-1}}
 
-The data contained a mix of categorical and numerical variables and did
-not satisfy many requirements of parametric models, such as variable
-independence, and normally distributed data. Thus, several parametric
-models were used. We trained four different non-parametric models using
-k-fold cross validation. The models were then tuned using various grid
-searches to improve the accuracy. The final model was chosen based on
-three metrics: Root Mean-Squared Error (RMSE), Pearson correlation
-(R\^{}2), and Mean Average Error (MAE).
+The data contained a mix of categorical and numerical variables. These
+variables did not satisfy the many requirements of parametric models,
+such as variable independence, normally distributed data, and linear
+relationship with outcome. Thus, several non-parametric models were used
+instead. We trained four different models using k-fold cross validation.
+The models were then tuned using various grid searches to improve the
+accuracy. The final model was then chosen based on three accuracy
+metrics: Root Mean-Squared Error (RMSE), Pearson correlation (R\^{}2),
+and Mean Average Error (MAE).
 
-<<<<<<< HEAD
-\hypertarget{decision-tree-model}{%
-\subsubsection{\texorpdfstring{\textbf{Decision Tree Model}\\
-}{Decision Tree Model }}\label{decision-tree-model}}
+\begin{verbatim}
+## Warning in kable_styling(mtable, font_size = 10): Please specify format in
+## kable. kableExtra can customize either HTML or LaTeX outputs. See https://
+## haozhu233.github.io/kableExtra/ for details.
+\end{verbatim}
 
-\hypertarget{random-forest-model}{%
-\subsubsection{\texorpdfstring{\textbf{Random Forest Model}\\
-}{Random Forest Model }}\label{random-forest-model}}
+\begin{longtable}[]{@{}lll@{}}
+\caption{Non-parametric Models Used}\tabularnewline
+\toprule
+\begin{minipage}[b]{0.05\columnwidth}\raggedright
+Model\strut
+\end{minipage} & \begin{minipage}[b]{0.73\columnwidth}\raggedright
+Description\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\raggedright
+Tuning parameters\strut
+\end{minipage}\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+\begin{minipage}[b]{0.05\columnwidth}\raggedright
+Model\strut
+\end{minipage} & \begin{minipage}[b]{0.73\columnwidth}\raggedright
+Description\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\raggedright
+Tuning parameters\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.05\columnwidth}\raggedright
+Decision\strut
+\end{minipage} & \begin{minipage}[t]{0.73\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.05\columnwidth}\raggedright
+Tree\strut
+\end{minipage} & \begin{minipage}[t]{0.73\columnwidth}\raggedright
+Decision trees repeatedly partition data at specific nodes until the
+data at the bottom of each branch (known as a leaf) is as homogenous as
+possible. The model increases in complexity with each additional
+partition and subsequently becomes more accurate.\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+cp (complexity)\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.05\columnwidth}\raggedright
+Random\strut
+\end{minipage} & \begin{minipage}[t]{0.73\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.05\columnwidth}\raggedright
+Forest\strut
+\end{minipage} & \begin{minipage}[t]{0.73\columnwidth}\raggedright
+Random Forest Model Random Forests are an ensemble learning method for
+classification and regression. This method will construct a multitude of
+decision trees and output the mean/average prediction problem for
+regression or the classes for classification problem. The algorithm can
+control the number of variable available for splitting at each tree or
+the number of trees to get a higher accuracy.\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+ntree, mtry\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.05\columnwidth}\raggedright
+Gradient\strut
+\end{minipage} & \begin{minipage}[t]{0.73\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.05\columnwidth}\raggedright
+Boosting Machines\strut
+\end{minipage} & \begin{minipage}[t]{0.73\columnwidth}\raggedright
+Gradient Boosting Machines (gbm) begin with creating a preliminary `weak
+learner' decision tree, then sequentially grows more trees that aim to
+reduce the error of the last one. The algorithm optimizes the loss
+function by minimizing the residuals at each iteration (difference
+between predicted and actual value).\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+n.trees, shrinkage, interaction.depth, n.minobssinnode\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.05\columnwidth}\raggedright
+XGBoost\strut
+\end{minipage} & \begin{minipage}[t]{0.73\columnwidth}\raggedright
+XGBoost uses ensemble learning, which is a systematic solution that
+combines the predictive power of multiple learners. It outputs a single
+model that gives the combined output from many models. This allows the
+opportunity to not rely on the results of a single machine learning
+model. In this particular model, the trees are built sequentially, such
+that the next tree focuses on reducing the errors of the previous
+tree.\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+nrounds, max\_depth, eta, gamma, colsample\_bytree, min\_child\_weight,
+subsample\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
 
-\hypertarget{decision-tree-model-1}{%
-\subsubsection{\texorpdfstring{\textbf{Decision Tree Model}\\
-}{Decision Tree Model }}\label{decision-tree-model-1}}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+830e5f4958932cc5f824272359d6ab041ceff57f
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
 
-\hypertarget{gradient-boosting-model}{%
-\subsubsection{\texorpdfstring{\textbf{Gradient Boosting Model}\\
-}{Gradient Boosting Model }}\label{gradient-boosting-model}}
-=======
 \hypertarget{deployment}{%
 \subsection{Deployment}\label{deployment}}
 
-The application was created using R shiny. The user interface (UI)
-contains a map of Toronto generated by the leaflet library for
-geographic navigation, and allows the user to select various inputs to
-predict property price. While the user would choose a district of
+\hypertarget{the-application-was-created-using-r-shiny-and-hosted-on-the-shinyapps.io-cloud.-edit-this-could-probably-all-go-to-results-section-the-user-interface-ui-contains-a-map-of-toronto-for-geographic-navigation-and-also-allows-the-user-to-select-various-inputs-to-predict-property-price.-while-the-user-would-choose-a-district-of-interest-from-the-front-end-the-back-end-links-the-district-chosen-with-income-and-uses-mean_district_income-as-the-model-input-instead.-we-chose-insert_model-here-since-it-was-the-most-accurate-model-as-the-back-end-for-our-application.}{%
+\section{The application was created using R shiny and hosted on the
+Shinyapps.io cloud. EDIT : this could probably all go to results section
+--\textgreater{} The user interface (UI) contains a map of Toronto for
+geographic navigation and also allows the user to select various inputs
+to predict property price. While the user would choose a district of
 interest from the front end, the back end links the district chosen with
 income and uses mean\_district\_income as the model input instead. We
 chose INSERT\_MODEL HERE, since it was the most accurate model as the
-back-end for our application.
->>>>>>> d08b2e2b5dc0105ca12693f3a21d3a5c2c36646b
+back-end for our
+application.}\label{the-application-was-created-using-r-shiny-and-hosted-on-the-shinyapps.io-cloud.-edit-this-could-probably-all-go-to-results-section-the-user-interface-ui-contains-a-map-of-toronto-for-geographic-navigation-and-also-allows-the-user-to-select-various-inputs-to-predict-property-price.-while-the-user-would-choose-a-district-of-interest-from-the-front-end-the-back-end-links-the-district-chosen-with-income-and-uses-mean_district_income-as-the-model-input-instead.-we-chose-insert_model-here-since-it-was-the-most-accurate-model-as-the-back-end-for-our-application.}}
+
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+44c2ed0c3345e5e8d262ee90e1917aa199875ab4
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
 
 \hypertarget{results}{%
 \section{Results}\label{results}}
@@ -388,11 +606,11 @@ observations. Table 1 defines each variable of the dataset.
 \begin{longtable}[]{@{}lll@{}}
 \caption{Data Dictionary}\tabularnewline
 \toprule
-Label & & Description\tabularnewline
+Variable & & Type\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Label & & Description\tabularnewline
+Variable & & Type\tabularnewline
 \midrule
 \endhead
 title & & Title of the listing\tabularnewline
@@ -403,7 +621,7 @@ bathrooms & & Number of bathrooms\tabularnewline
 sqft & & Area of property in square feet\tabularnewline
 parking & & Number of parking spaces\tabularnewline
 description & & Verbatim text description of the property\tabularnewline
-mls & & MLS ID\tabularnewline
+mls & & MLS Listing ID\tabularnewline
 type & & Property type\tabularnewline
 full\_link & & URL to listing\tabularnewline
 full\_address & & Full address of the property\tabularnewline
@@ -425,7 +643,6 @@ bedrooms\_bg & & Number of bedrooms below ground\tabularnewline
 \hypertarget{data-exploration}{%
 \subsection{Data Exploration}\label{data-exploration}}
 
-<<<<<<< HEAD
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{data <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{'houses_edited.csv'}\NormalTok{)}
@@ -491,8 +708,51 @@ bedrooms\_ag Min. 1st Qu. Median Mean 3rd Qu. Max. 0.000 1.000 2.000
 bedrooms\_bg Min. 1st Qu. Median Mean 3rd Qu. Max. 0.0000 0.0000 0.0000
 0.5396 1.0000 6.0000
 
-=======
->>>>>>> d08b2e2b5dc0105ca12693f3a21d3a5c2c36646b
+\hypertarget{section}{%
+\subsubsection{}\label{section}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{'houses_edited.csv'}\NormalTok{)}
+\NormalTok{df}\OperatorTok{$}\NormalTok{bedrooms <-}\StringTok{ }\NormalTok{df}\OperatorTok{$}\NormalTok{bedrooms_bg }\OperatorTok{+}\StringTok{ }\NormalTok{df}\OperatorTok{$}\NormalTok{bedrooms_ag}
+\NormalTok{df <-}\StringTok{  }\NormalTok{df[, }\OperatorTok{!}\KeywordTok{names}\NormalTok{(df) }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'index'}\NormalTok{, }\StringTok{'title'}\NormalTok{, }\StringTok{'full_link'}\NormalTok{, }\StringTok{'mls'}\NormalTok{, }\StringTok{'description'}\NormalTok{, }\StringTok{'full_address'}\NormalTok{, }\StringTok{'final_price_transformed'}\NormalTok{, }\StringTok{'final_price_log'}\NormalTok{)]}
+\NormalTok{numeric_cols <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\StringTok{'final_price'}\NormalTok{, }\StringTok{'bathrooms'}\NormalTok{, }\StringTok{'sqft'}\NormalTok{, }\StringTok{'parking'}\NormalTok{, }\StringTok{'mean_district_income'}\NormalTok{, }\StringTok{'bedrooms'}\NormalTok{)}
+\NormalTok{predictor_cols <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\StringTok{'bathrooms'}\NormalTok{, }\StringTok{'sqft'}\NormalTok{, }\StringTok{'parking'}\NormalTok{, }\StringTok{'mean_district_income'}\NormalTok{, }\StringTok{'bedrooms'}\NormalTok{, }\StringTok{'type'}\NormalTok{)}
+
+\CommentTok{#histograms - note skew in prices}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{))}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in}\NormalTok{ numeric_cols) \{}
+  \KeywordTok{hist}\NormalTok{(df[[i]], }\DataTypeTok{main =} \KeywordTok{paste}\NormalTok{(i), }\DataTypeTok{xlab =} \StringTok{''}\NormalTok{, }\DataTypeTok{col =} \DecValTok{4}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{R-markdown_sean_files/figure-latex/skew and correlation plots-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#boxplot and outliers}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{))}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in}\NormalTok{ numeric_cols) \{}
+  \KeywordTok{boxplot}\NormalTok{(df[[i]], }\DataTypeTok{main =} \KeywordTok{paste}\NormalTok{(i), }\DataTypeTok{xlab =} \StringTok{''}\NormalTok{, }\DataTypeTok{col =} \DecValTok{4}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{R-markdown_sean_files/figure-latex/skew and correlation plots-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#corrplot for numerical}
+\NormalTok{cor <-}\StringTok{ }\KeywordTok{rcorr}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(df[, }\KeywordTok{names}\NormalTok{(df) }\OperatorTok{%in%}\StringTok{ }\NormalTok{numeric_cols]))}
+\NormalTok{p.mat <-}\StringTok{ }\KeywordTok{cor_pmat}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(df[, }\KeywordTok{names}\NormalTok{(df) }\OperatorTok{%in%}\StringTok{ }\NormalTok{numeric_cols]))}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\KeywordTok{ggcorrplot}\NormalTok{(cor}\OperatorTok{$}\NormalTok{r, }\DataTypeTok{type =} \StringTok{'upper'}\NormalTok{, }\DataTypeTok{p.mat =}\NormalTok{ p.mat, }\DataTypeTok{sig.level =} \DecValTok{1}\NormalTok{, }\DataTypeTok{insig =} \StringTok{'pch'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{R-markdown_sean_files/figure-latex/skew and correlation plots-3.pdf}
+
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}
 
