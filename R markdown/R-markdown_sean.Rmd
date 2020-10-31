@@ -182,30 +182,34 @@ for (i in numeric_cols) {
 ``````{r Decision Tree Model, echo=FALSE}
 decision_tree_model <- readRDS("decision_tree_model.rds")
 
-decision_tree_model$final_model
+summary(decision_tree_model$finalModel)
 
 ```
 
 #### **Random Forest Model**\
 ``````{r Random Forest Model, echo=FALSE}
-decision_tree_model <- readRDS("randomForests.rds")
+Random_Forest_model <- readRDS("randomForests.rds")
 
-print(randomForests)
+#check the performance of the model
+RMSE(p1, test$final_price)#RMSE
+R2(p1, test$final_price)#R2
+MAE(p1, test$final_price)#MAE
+print(Random_Forest_model)
 ```
 
 #### **Gradient Boosting Model**\
 ```````{r Gradient Boosting Model, echo=FALSE}
-decision_tree_model <- readRDS("gbm3.rds")
+Gradient_Boosting_model <- readRDS("gbm3.rds")
 
-gbm3$final_model
+summary(Gradient_Boosting_model$finalModel)
 
 ```
 
 #### **Extreme Gradient Boosting Model**\
 ```````{r Extreme Gradient Boosting Model, echo=FALSE}
-decision_tree_model <- readRDS("albina_model.rds")
+Extreme_Gradient_Boosting_model <- readRDS("albina_model.rds")
 
-albina_model$final_model
+summary(Extreme_Gradient_Boosting_model$finalModel)
 ```
 
 ### **Model Selection**\
