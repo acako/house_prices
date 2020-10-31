@@ -17,7 +17,7 @@ types <- list("Condo"=1, "Detached"=2, "Semi-Detached"=3, "Multiplex"=4, "Townho
 districts <- as.list(district_data$district)
 # Define UI for application that shows house prices
 shinyUI(fluidPage(
-    theme = shinytheme("darkly"),
+    theme = shinytheme("sandstone"),
 
     # Application title
     titlePanel("Toronto House Price Estimator"),
