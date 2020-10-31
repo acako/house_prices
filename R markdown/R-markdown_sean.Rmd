@@ -71,8 +71,9 @@ library(descr)
 library(kableExtra)
 
 ```
-### **Decision Tree Model**\
 
+<<<<<<< HEAD
+=======
 <<<<<<< HEAD
 ## Data Preprocessing
 The housing dataset, originally shared on Github[@spirin_slavaspirintoronto-housing-price-prediction_2020], was extracted from Zoocasa.com in the summer of 2019. The dataset contained all completed property sales in the city of Toronto within a 1-year span. We performed several data exploration and cleaning steps to prepare this data for modeling.
@@ -117,6 +118,7 @@ kable_styling(mtable, font_size = 10)
 
 
 ```
+>>>>>>> 830e5f4958932cc5f824272359d6ab041ceff57f
 
 ## Deployment
 The application was created using R shiny and hosted on the Shinyapps.io cloud. EDIT : this could probably all go to results section --> The user interface (UI) contains a map of Toronto for geographic navigation and also allows the user to select various inputs to predict property price. While the user would choose a district of interest from the front end, the back end links the district chosen with income and uses mean_district_income as the model input instead. We chose INSERT_MODEL HERE, since it was the most accurate model as the back-end for our application.
@@ -150,7 +152,11 @@ predictor_cols <- list('bathrooms', 'sqft', 'parking', 'lat', 'long', 'mean_dist
 
 
 ```{r, results = "asis", echo=FALSE}
+<<<<<<< HEAD
 #descr(data, style = 'rmarkdown')
+=======
+descr(data)
+>>>>>>> 07b4634c471db3a1b80f2f862f0ee014176e645d
 #summary(data)
 ```
 
@@ -165,6 +171,46 @@ for (i in numeric_cols) {
 }
 
 ```
+
+##Modeling and Evaluation
+  After data mining and data exploration, the next step is to create the prediction models. There are four models we have decided to use, and we evaluate each model to choose the model has the best performance based on R-Squared , Root Mean Square Error and  Mean Absolute Error.
+  
+#### **Cross Validation**\
+  The k-fold cross-validation method evaluates the model performance on different subset of the training data and then calculate the average prediction error rate. we use k = 10 for our project,and this method was used instead of the simple train-test-split as it gives a more valid estimation of model effectiveness.
+
+#### **Decision Tree Model**\
+``````{r Decision Tree Model, echo=FALSE}
+decision_tree_model <- readRDS("decision_tree_model.rds")
+
+decision_tree_model$final_model
+
+```
+
+#### **Random Forest Model**\
+``````{r Random Forest Model, echo=FALSE}
+decision_tree_model <- readRDS("randomForests.rds")
+```
+
+#### **Gradient Boosting Model**\
+```````{r Gradient Boosting Model, echo=FALSE}
+decision_tree_model <- readRDS("gbm3.rds")
+
+gbm3$final_model
+
+```
+
+#### **Extreme Gradient Boosting Model**\
+```````{r Extreme Gradient Boosting Model, echo=FALSE}
+decision_tree_model <- readRDS("albina_model.rds")
+
+albina_model$final_model
+```
+
+### **Model Selection**\
+  For the four models, we chooses the extreme gradient boosting model as our final model for deployment. As you can see, the extreme gradient boosting model has the highest R-Squared and the lowest Mean Absolute value.
+
+
+
 
 
 # Discussion
