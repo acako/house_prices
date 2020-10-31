@@ -108,9 +108,23 @@ install.packages("xgboost")
 library(xgboost)
 install.packages("tidyverse")
 library(tidyverse)
+
+#run xgbtree on first data 
 model_final_price <- train(final_price ~.,data=complete_d_1,trControl = trainControl("cv",number=10,savePredictions = 'all'),
                                    method='xgbTree')
+#model statistics
+summary(model_final_price)
+print(model_final_price)
 
+plot(model_final_price)
+
+attributes(model_final_price)
+library(ggplot2)
+
+min(model_final_price$results$RMSE)
+max(model_final_price$results$RMSE)
+min(model_final_price$results$Rsquared)
+max(model_final_price$results$Rsquared)
 
 
 
