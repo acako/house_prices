@@ -189,6 +189,8 @@ decision_tree_model$final_model
 #### **Random Forest Model**\
 ``````{r Random Forest Model, echo=FALSE}
 decision_tree_model <- readRDS("randomForests.rds")
+
+print(randomForests)
 ```
 
 #### **Gradient Boosting Model**\
