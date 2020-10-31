@@ -12,10 +12,11 @@ library(leaflet)
 library(dplyr)
 library(tidyr)
 library(caret)
+library(xgboost)
 # load district data
 district_data <- read.csv('districts.csv')
 # load model
-model <- readRDS("decision_tree_model.rds")
+model <- readRDS("xgboost_model.rds")
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
     
@@ -24,13 +25,9 @@ shinyServer(function(input, output) {
             'bathrooms'=as.integer(input$baths),
             'sqft'=as.integer(input$sqft),
             'parking'=as.integer(input$parking),
-            'typeCondo'=as.integer(ifelse(input$type==1,1,0)),
-            'typeDetached'=as.integer(ifelse(input$type==2,1,0)),
-            'typePlex'=as.integer(ifelse(input$type==3,1,0)),
-            'typeSemiDetached'=as.integer(ifelse(input$type==4,1,0)),
-            'typeTownhouse'=as.integer(ifelse(input$type==5,1,0)),
+            'type'=as.factor(input$type),
             'mean_district_income'=as.integer(district_data$income[which(district_data$district==input$district)]),
-            'beds'=as.integer(input$beds))
+            'bedrooms_total'=as.integer(input$beds))
     })
     
     output$prediction <- renderText({
@@ -39,7 +36,7 @@ shinyServer(function(input, output) {
             return()
         }
         data <- inputData()
-        list_pred <- isolate(round(as.numeric(predict(model, newdata=data, type='vector')), -3))
+        list_pred <- isolate(round(as.numeric(predict(model, newdata=data)), -3))
         final_pred <- isolate(round(as.numeric(35372.83 + 0.9684345*list_pred), -3))
         text <- isolate(local(paste(
             'The predicted list price is: $',
@@ -76,7 +73,7 @@ shinyServer(function(input, output) {
             nm <- district$district[1]
             map %>% fitBounds(lng-dist, lat-dist, lng+dist, lat+dist) %>%
                 addTiles() %>% addCircleMarkers(lng=district_data$long, lat=district_data$lat, label=(district$district), labelOptions(noHide=T), color='#2A81CB', radius = 10)%>%
-                addCircleMarkers(lng=lng, lat=lat, label=nm, labelOptions(noHide=T), color='#9C2BCB', radius = 30)
+                addCircleMarkers(lng=lng, lat=lat, label=nm, labelOptions(noHide=T, textOnly = F), color='#9C2BCB', radius = 30)
         }
     })
 })

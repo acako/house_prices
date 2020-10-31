@@ -13,7 +13,7 @@ library(readr)
 library(leaflet)
 #read in the district data
 district_data <- read.csv('districts.csv')
-types <- list("Condo"=1, "Detached"=2, "Semi-Detached"=3, "Multiplex"=4, "Townhouse"=5)
+types <- list("Condo", "Detached", "Semi-Detached", "Plex", "Townhouse")
 districts <- as.list(district_data$district)
 # Define UI for application that shows house prices
 shinyUI(fluidPage(
@@ -27,7 +27,7 @@ shinyUI(fluidPage(
             selectInput("district",
                         "District",
                         districts,),
-            radioButtons("type",
+            selectInput("type",
                         "Type",
                         types),
             numericInput("beds",
