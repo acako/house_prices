@@ -81,25 +81,37 @@ We assessed the dataset for missing values. Many parametric machine learning mod
 2) mean, which imputes the average of all observations; 3) random forest, which applies a random forest algorithm; and 4) CART, which  imputes by classification and regression trees. The distribution of the imputed data were evaluated with a density plot and an imputed dataset was chosen based on best fit.
 
 ## Assessing Parametric Fit
-Outliers were visualized with the boxplot() function, with outliers falling outside Q1 - 1.5 X Inter-Quartile Range and Q3 + 1.5 X Inter-Quartile Range. Normality of the distribution of variables were visualized with density plots. A correlogram with Pearson's R determined collinearity. Linear relationship between outcome variable and predictors was tested via scatterplots.
+Outliers were visualized with the boxplot() function. Data were considered outliers if they were less than Q1 - 1.5 X Inter-Quartile Range and greater Q3 + 1.5 X Inter-Quartile Range. Normality of the distribution of variables were visualized with density plots. A correlogram with Pearson's R determined collinearity. Linear relationship between outcome variable and predictors was tested via scatterplots.
 
 ## Data Curation
 The following variables were removed as they did not have any data utility or were not easily parseable (i.e. free text): title, description, mls, type, full_link, full_address. A numeric 'bedrooms' column was created by combining bedrooms_ag and bedrooms_bg. We also removed district_code and city_district. Both were categorical variables with number of factors = 140; keeping these would significantly increase model training time. We also did not consider longitude and latitude, as including these variables in training sets would have required geocoding and district clustering; complexities which were outside our scope for this application. Mean_district_income was left as an approximation of the effect of districts on property price. After consultation with a real-estate expert, we decreased the number of property types by generalizing types to: Townhouse, Condo, Detached, Semi-Detached, and Plex. Thus, the predictors chosen were:
-=======
-### **Random Forest Model**\
 
-### **Decision Tree Model**\
->>>>>>> 44c2ed0c3345e5e8d262ee90e1917aa199875ab4
+```{r predictor table, echo=FALSE, message=FALSE}
+predictors_list <- list('sqft', 'beds', 'bathrooms', 'parking','mean_district_income','type')
+predictors_type <- list('numeric', 'numeric', 'numeric', 'numeric', 'numeric', 'categorical')
+predictors_df <- data.frame(matrix(unlist(predictors_list), nrow=6, byrow=TRUE), stringsAsFactors = FALSE)
+predictors_df <- predictors_df %>% mutate(blank = c(" "," "," "," "," "," "),Description = predictors_type)
+colnames(predictors_df) <- c("Label", "             ", "Description")
+kable(predictors_df, format='pipe', caption = 'Predictor variables')
 
-### **Gradient Boosting Model**\
-
-<<<<<<< HEAD
 ```
 
-The target variable chosen was final_price. The dataset also contained a list_price variable. Rather than training two models to predict on both list and final price, the predicted list price was instead approximated by a linear equation between list and final price in the training data.
+The target variable chosen was final_price. The dataset also contained a list_price variable. Rather than training two models to predict on both list and final price, the predicted list price was instead approximated by a linear equation between list and final price from the original dataset.
 
 ## Modeling
 The data contained a mix of categorical and numerical variables. These variables did not satisfy the many requirements of parametric models, such as variable independence, normally distributed data, and linear relationship with outcome. Thus, several non-parametric models were used instead. We trained four different models using k-fold cross validation. The models were then tuned using various grid searches to improve the accuracy. The final model was then chosen based on three accuracy metrics: Root Mean-Squared Error (RMSE), Pearson correlation (R^2), and Mean Average Error (MAE).
+
+
+```{r model table, echo=FALSE, message=FALSE}
+models_list <- list('Decision Tree','Random Forest','Gradient Boosting Machines','XGBoost')
+models_description <- list('Decision trees repeatedly partition data at specific nodes until the data at the bottom of each branch (known as a leaf) is as homogenous as possible. The model increases in complexity with each additional partition and subsequently becomes more accurate.','Random Forest Model Random Forests are an ensemble learning method for classification and regression. This method will construct a multitude of decision trees and output the mean/average prediction problem for regression or the classes for classification problem. The algorithm can control the number of variable available for splitting at each tree or the number of trees to get a higher accuracy. ',' Gradient Boosting Machines (gbm) begin with creating a preliminary \'weak learner\' decision tree, then sequentially grows more trees that aim to reduce the error of the last one. The algorithm optimizes the loss function by minimizing the residuals at each iteration (difference between predicted and actual value).','sdfsdfgfsdgfdsgsdfgsdfgfsdgsdfgsdfgsdfgsdfgsdfgsdfgsdgsdfdf')
+models_params <- list('cp (complexity)','ntree, mtry','n.trees, shrinkage, interaction.depth, n.minobssinnode','4')
+models_table <- data.frame(unlist(models_list), unlist(models_description), unlist(models_params))
+colnames(models_table) <- c('Model', 'Description', 'Tuning parameters')
+kable(models_table, format='pipe', caption = 'Non-parametric Models Used')
+
+
+```
 
 ## Deployment
 The application was created using R shiny and hosted on the Shinyapps.io cloud. EDIT : this could probably all go to results section --> The user interface (UI) contains a map of Toronto for geographic navigation and also allows the user to select various inputs to predict property price. While the user would choose a district of interest from the front end, the back end links the district chosen with income and uses mean_district_income as the model input instead. We chose INSERT_MODEL HERE, since it was the most accurate model as the back-end for our application.
