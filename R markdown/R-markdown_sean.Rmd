@@ -138,32 +138,29 @@ df$type[df$type=='Condo Townhouse'] <- 'Condo'
 df$type[df$type=='Link'] <- 'Detached'
 df$type[df$type=='Store W/Apt/Offc'] <- 'Condo'
 ```
-We chose to use the CART (Classification and Regression Trees) method of imputation. Blue represents the distribution of the original data, while red represents the distribution of imputed data.
+We chose to use the CART (Classification and Regression Trees) method of imputation (Figure 1). Blue represents the distribution of the original data, while red represents the distribution of imputed data.
 
-```{r CART imputation, echo=FALSE, fig.align='center', fig.height=3, fig.width=4, fig.gap = 'CART-imputed values for sqft'}
+```{r CART imputation, echo=FALSE, fig.align='center', fig.height=3, fig.width=4, fig.cap = 'CART-imputed values for sqft'}
 cart <- readRDS('imputed_df_cart.rds')
 densityplot(cart)
 ```
-Below we also summarize 
-```{r histogram, echo=FALSE, fig.align='center', fig.height=5, fig.width=5}
+Below, we summarize the distribution of predictor and target variables (Figure 2 and Figure 3). Note the significant right skew within each variable. Additionally, each variable also contained many outliers. The data is therefore unlikely to be fit for any sort of parametric machine-learning algorithm without performing significant transformations.
+
+```{r histogram, echo=FALSE, fig.align='center', fig.height=4, fig.width=4, fig.cap = 'Distribution of predictor and target variables'}
 #histograms - note skew in prices
 par(mfrow=c(2, 3))
 for (i in numeric_cols) {
   hist(df[[i]], main = paste(i), xlab = '', col = 4)
 }
-```
-```{r boxplot, echo=FALSE, fig.align='center', fig.height=5, fig.width=5}
 #boxplot and outliers
 par(mfrow=c(2, 3))
 for (i in numeric_cols) {
   boxplot(df[[i]], main = paste(i), xlab = '', col = 4)
 }
-```
-```{r ggplot,echo=FALSE, fig.align='center', fig.height=3, fig.width=4}
-par(mfrow=c(1,1))
+
 ggplot(df, aes(type)) + geom_bar(fill = 'red') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
-```{r corrplot, echo=FALSE, fig.align='center', fig.height=5, fig.width=5}
+```{r corrplot, echo=FALSE, fig.align='center', fig.height=5, fig.width=5, fig.cap='Correlogram'}
 #corrplot for numerical
 cor <- rcorr(as.matrix(df[, names(df) %in% numeric_cols]))
 p.mat <- cor_pmat(as.matrix(df[, names(df) %in% numeric_cols]))
