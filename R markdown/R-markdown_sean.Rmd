@@ -164,10 +164,22 @@ descr(data)
 ###
 
 ```{r}
+df <- read.csv('houses_edited.csv')
+#Getting rid of variables without data utility or repeats:
+df <-  df[, !names(df) %in% c('index', 'title', 'full_link', 'mls', 'bedrooms', 'description', 'full_address', 'final_price_transformed', 'final_price_log')]
+numeric_cols <- list('final_price', 'list_price', 'bathrooms', 'sqft', 'parking', 'lat', 'long', 'mean_district_income', 'bedrooms_ag', 'bedrooms_bg')
+predictor_cols <- list('bathrooms', 'sqft', 'parking', 'lat', 'long', 'mean_district_income', 'bedrooms_ag', 'bedrooms_bg')
+
 #histograms - note skew in prices
 par(mfrow=c(2, 5))
 for (i in numeric_cols) {
-  hist(data[[i]], main = paste(i), xlab = '', col = 4)
+  hist(df[[i]], main = paste(i), xlab = '', col = 4)
+}
+
+#boxplot and outliers
+par(mfrow=c(2, 5))
+for (i in numeric_cols) {
+  boxplot(df[[i]], main = paste(i), xlab = '', col = 4)
 }
 
 ```
