@@ -36,19 +36,6 @@ The objective of this project was to evaluate the application of machine learnin
 Purchasing a house is a big life decision for every individual and needs a considerable amount of research. Everyone has different purpose of buying houses, someone would prefer by the house at the best rate for living now, someone would buy houses for future investment. Selling the houses is also very important and needs to do research and decide what is the best leasing price. Commonly, people will ask advise from various websites, real estate agents or realtors before purchasing or leasing; However, due to the trend towards big data, house pricing prediction can be done by using machine learning strategies base on large amount of data from previous years more correctly. House Price Index (HPI) can measure the price changes of residential housing as a percentage change, In Canada the new Housing Price Index is calculated monthly by Statistics Canada. HPI is useful but because it is a rough indicator calculated from all transactions, it is inefficient for predicting a specific house with its attributes. The purpose of this project is to create an app for both buyers and sellers can easily check the predicted list price or final price based on the attributes of the house such as locations, square foot, number of bedrooms, etc.  
 
 # Methodology
-
-## Data Preprocessing
-The housing dataset, originally shared on Github[@spirin_slavaspirintoronto-housing-price-prediction_2020], was extracted from Zoocasa.com in the summer of 2019. The dataset contained all completed property sales in the city of Toronto within an approximately 1-year span. We performed several data exploration and cleaning steps to prepare this data for modeling.
-
-## Missingness
-We assessed the dataset for missing values. Many parametric machine learning models do not accept missing data, and the accuracy of even non-parametric models are often negatively impacted by missingness. Thus, missing values ought to be either imputed or removed before data modeling. We then determined whether missing data was Missing Completely at Random (MCAR), Missing at Random (MAR), or Missing Not at Random (MNAR). Should the data be MCAR, then it is acceptable to simply remove each observation that is missing, as doing so would not introduce bias to the remaining observations. However, if there was a correlation between missingness and other data features, then imputation must be performed. Missingness correlation was assessed using the missing_compare() function from the finalfit library, which applies the Kruskal Wallis correlation test for numerical variables and chi-squared correlation test for categorical variables to determine correlation. Using the MICE package in R, we then applied the following imputation methods: 1) simple, which imputes a value from a simple random sample from the rest of the data;
-2) mean, which imputes the average of all observations; 3) random forest, which applies a random forest algorithm; and 4) CART, which  imputes by classification and regression trees. The distribution of the imputed data were evaluated with a density plot and an imputed dataset was chosen based on best fit.
-
-## Data Curation
-
-## Modeling
-As the data contained a mix of categorical and numerical variables and did not satisfy many requirements of parametric models, such as variable independence, and normally distributed data. Thus, several parametric models were used. We trained four different non-parametric models using k-fold cross validation. The models were then tuned using various grid searches to improve the accuracy. The final model was chosen based on three metrics: Root Mean-Squared Error (RMSE), Pearson correlation (R^2), and Mean Average Error (MAE).
-
 ```{r load packages, include=FALSE}
 # load the packages
 library(dplyr)
@@ -58,8 +45,8 @@ library('plot.matrix')
 library(caret)
 library(gbm)
 library(car)
+library(finalfit)
 library(pscl)
-library(ROCR)
 library(grid)
 library(gridExtra)
 library(ggcorrplot)
@@ -72,15 +59,11 @@ library(kableExtra)
 library(Hmisc)
 library(corrplot)
 ```
-
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 ## Data Preprocessing
 The housing dataset, originally shared on Github[@spirin_slavaspirintoronto-housing-price-prediction_2020], was extracted from Zoocasa.com in the summer of 2019. The dataset contained all completed property sales in the city of Toronto within a 1-year span. We performed several data exploration and cleaning steps to prepare this data for modeling.
 
 ## Missingness
-We assessed the dataset for missing values. Many parametric machine learning models do not accept missing data, and the accuracy of even non-parametric models are often negatively impacted by missingness. Thus, missing values ought to be either imputed or removed before data modeling. We then determined whether missing data was Missing Completely at Random (MCAR), Missing at Random (MAR), or Missing Not at Random (MNAR). Should the data be MCAR, then it is acceptable to simply remove each observation that is missing, as doing so would not introduce bias to the remaining observations. However, if there was a correlation between missingness and other data features, then imputation must be performed. Missingness correlation was assessed using the missing_compare() function from the finalfit library, which applies the Kruskal Wallis correlation test for numerical variables and chi-squared correlation test for categorical variables to determine correlation. Using the MICE package in R, we then applied the following imputation methods: 1) simple, which imputes a value from a simple random sample from the rest of the data;
+We assessed the dataset for missing values. Many parametric machine learning models do not accept missing data, and the accuracy of even non-parametric models are often negatively impacted by missingness. Thus, missing values ought to be either imputed or removed before data modeling. We then determined whether missing data was Missing Completely at Random (MCAR), Missing at Random (MAR), or Missing Not at Random (MNAR). Should the data be MCAR, then it is acceptable to simply remove each observation that is missing, as doing so would not introduce bias to the remaining observations. However, if there was a correlation between missingness and other data features, then imputation must be performed. Missingness correlation was assessed using the missing_compare() function from the finalfit library, which applies the Kruskal Wallis correlation test for numerical variables and Chi-squared correlation test for categorical variables to determine correlation. Using the MICE package in R, we then applied the following imputation methods: 1) simple, which imputes a value from a simple random sample from the rest of the data;
 2) mean, which imputes the average of all observations; 3) random forest, which applies a random forest algorithm; and 4) CART, which  imputes by classification and regression trees. The distribution of the imputed data were evaluated with a density plot and an imputed dataset was chosen based on best fit.
 
 ## Assessing Parametric Fit
@@ -98,8 +81,7 @@ colnames(predictors_df) <- c("Label", "             ", "Description")
 kable(predictors_df, format='pipe', caption = 'Predictor variables')
 
 ```
-
-The target variable chosen was final_price. The dataset also contained a list_price variable. Rather than training two models to predict on both list and final price, the predicted list price was instead approximated by a linear equation between list and final price from the original dataset.
+We chose final_price as the target variable. While the dataset also contained a list_price variable. rather than training two models to predict on both list and final price, the predicted list price was instead approximated by a linear equation between list and final price from the original dataset.
 
 ## Modeling
 The data contained a mix of categorical and numerical variables. These variables did not satisfy the many requirements of parametric models, such as variable independence, normally distributed data, and linear relationship with outcome. Thus, several non-parametric models were used instead. We trained four different models using k-fold cross validation. The models were then tuned using various grid searches to improve the accuracy. The final model was then chosen based on three accuracy metrics: Root Mean-Squared Error (RMSE), Pearson correlation (R^2), and Mean Average Error (MAE).
@@ -119,12 +101,8 @@ kable_styling(mtable, font_size = 10)
 
 
 ```
->>>>>>> 830e5f4958932cc5f824272359d6ab041ceff57f
-
 ## Deployment
 The application was created using R shiny and hosted on the Shinyapps.io cloud. EDIT : this could probably all go to results section --> The user interface (UI) contains a map of Toronto for geographic navigation and also allows the user to select various inputs to predict property price. While the user would choose a district of interest from the front end, the back end links the district chosen with income and uses mean_district_income as the model input instead. We chose INSERT_MODEL HERE, since it was the most accurate model as the back-end for our application.
-=======
->>>>>>> 44c2ed0c3345e5e8d262ee90e1917aa199875ab4
 
 # Results
 The original housing dataset contained 21 variables and 15234 observations. Table 1 defines each variable of the dataset.
@@ -143,13 +121,14 @@ kable(datadictionary, format='pipe', caption = 'Data Dictionary')
 ```
 ## Data Exploration
 
-```{r load data, message=FALSE}
+We found that the 'sqft' variable was missing approximately 30% of its values.  To test whether the missing data was MCAR, we compared whether certainother variables were associated with the missing sqft values. Using Chi-squared and Kruskal Wallis tests for categorical and numerical variables, respectively, we determined that all variables had significantly correlation (p<0.01) with sqft missingness. Thus, the data is not MCAR, and we cannot simply remove observations where sqft is missing without introducing bias. 
+
+```{r missingness missingness correlation missingness imputation, echo=FALSE}
 df <- read.csv('houses_edited.csv')
 df$bedrooms <- df$bedrooms_bg + df$bedrooms_ag
 df <-  df[, !names(df) %in% c('index', 'title', 'full_link', 'mls', 'description', 'full_address', 'final_price_transformed', 'final_price_log')]
 numeric_cols <- list('final_price', 'bathrooms', 'sqft', 'parking', 'mean_district_income', 'bedrooms')
 predictor_cols <- list('bathrooms', 'sqft', 'parking', 'mean_district_income', 'bedrooms', 'type')
-
 df$type[df$type=='Att/Row/Twnhouse'] <- 'Townhouse'
 df$type[df$type=='Co-Op Apt'] <- 'Condo'
 df$type[df$type=='Co-Ownership Apt'] <- 'Condo'
@@ -158,47 +137,35 @@ df$type[df$type=='Condo Apt'] <- 'Condo'
 df$type[df$type=='Condo Townhouse'] <- 'Condo'
 df$type[df$type=='Link'] <- 'Detached'
 df$type[df$type=='Store W/Apt/Offc'] <- 'Condo'
-
 ```
+We chose to use the CART (Classification and Regression Trees) method of imputation (Figure 1). Blue represents the distribution of the original data, while red represents the distribution of imputed data.
 
-```{r, results = "asis", echo=FALSE}
-#<<<<<<< HEAD
-#descr(data, style = 'rmarkdown')
-#=======
-#descr(data)
-#>>>>>>> 07b4634c471db3a1b80f2f862f0ee014176e645d
-#summary(data)
+```{r CART imputation, echo=FALSE, fig.align='center', fig.height=3, fig.width=4, fig.cap = 'CART-imputed values for sqft'}
+cart <- readRDS('imputed_df_cart.rds')
+densityplot(cart)
 ```
-```{r missingness and missingness correlation, echo=FALSE}
+Below, we summarize the distribution of predictor and target variables (Figure 2 and Figure 3). Note the significant right skew within each variable. Additionally, each variable also contained many outliers. The data is therefore unlikely to be fit for any sort of parametric machine-learning algorithm without performing significant transformations.
 
-
-complete <- names(select(data, 3:6,8,11,14,15,17:19,23))
-missing <- names(select(data,7))
-
-for (i in c(1:length(complete))) {
-  print(data %>% missing_compare(missing, complete[i]))
-}
-```
-```{r skew and correlation plots, echo=FALSE}
-
+```{r histogram, echo=FALSE, fig.align='center', fig.height=4, fig.width=4, fig.cap = 'Distribution of predictor and target variables'}
 #histograms - note skew in prices
 par(mfrow=c(2, 3))
 for (i in numeric_cols) {
   hist(df[[i]], main = paste(i), xlab = '', col = 4)
 }
-
 #boxplot and outliers
 par(mfrow=c(2, 3))
 for (i in numeric_cols) {
   boxplot(df[[i]], main = paste(i), xlab = '', col = 4)
 }
-ggplot(df, aes(type)) + geom_bar(fill = 'red') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
+ggplot(df, aes(type)) + geom_bar(fill = 'red') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+```{r corrplot, echo=FALSE, fig.align='center', fig.height=5, fig.width=5, fig.cap='Correlogram'}
 #corrplot for numerical
 cor <- rcorr(as.matrix(df[, names(df) %in% numeric_cols]))
 p.mat <- cor_pmat(as.matrix(df[, names(df) %in% numeric_cols]))
 par(mfrow=c(1,1))
-ggcorrplot(cor$r, type = 'upper', p.mat = p.mat, sig.level = 1, lab = TRUE)
+ggcorrplot(cor$r, type = 'upper', p.mat = p.mat, sig.level = 0.05, lab = TRUE)
 
 ```
 
@@ -209,43 +176,45 @@ ggcorrplot(cor$r, type = 'upper', p.mat = p.mat, sig.level = 1, lab = TRUE)
   The k-fold cross-validation method evaluates the model performance on different subset of the training data and then calculate the average prediction error rate. we use k = 10 for our project,and this method was used instead of the simple train-test-split as it gives a more valid estimation of model effectiveness.
 
 #### **Decision Tree Model**\
+The decision tree model was tuned with different value of cp, 0.001 is used for best model performance after tuning.
+
 ``````{r Decision Tree Model, echo=FALSE}
 decision_tree_model <- readRDS("decision_tree_model.rds")
-
 summary(decision_tree_model$finalModel)
-
 ```
-
 #### **Random Forest Model**\
+The Random Forest was original trained with ntree = 300 and mtry = 8, after tuning the model, ntree = 150 and mtry = 6 are used for better model performance.
 ``````{r Random Forest Model, echo=FALSE}
 Random_Forest_model <- readRDS("randomForests.rds")
-
 #check the performance of the model
-RMSE(p1, test$final_price)#RMSE
-R2(p1, test$final_price)#R2
-MAE(p1, test$final_price)#MAE
 print(Random_Forest_model)
 ```
-
 #### **Gradient Boosting Model**\
+The model of gradient boosting was tuned by several different parameters and the best model used n.trees = 200, interaction.depth = 9, shrinkage = 0.1 and n.minobsinnode = 20.
 ```````{r Gradient Boosting Model, echo=FALSE}
 Gradient_Boosting_model <- readRDS("gbm3.rds")
-
 summary(Gradient_Boosting_model$finalModel)
-
 ```
-
 #### **Extreme Gradient Boosting Model**\
+The best model has parameters nrounds = 200, max_depth = 6, eta = 0.1, gamma = 0, colsample_bytree = 0.8, min_child_weight = 5 and subsample = 0.8 after tuning.
 ```````{r Extreme Gradient Boosting Model, echo=FALSE}
 Extreme_Gradient_Boosting_model <- readRDS("albina_model.rds")
-
 summary(Extreme_Gradient_Boosting_model$finalModel)
+attributes(Extreme_Gradient_Boosting_model)
+Extreme_Gradient_Boosting_model
 ```
-
 ### **Model Selection**\
-  For the four models, we chooses the extreme gradient boosting model as our final model for deployment. As you can see, the extreme gradient boosting model has the highest R-Squared and the lowest Mean Absolute value.
-
-
+  For the four models, we chooses the extreme gradient boosting model as our final model for deployment. Mean Absolute Error (MAE) tells the average error of the variable we want to predict. Root Mean-Squared Error (RMSE) is similar with MAE but it is more useful when we want fewer larger errors more than a lot of small errors, we want the model be more stable thus we take RMSE as one of the evaluation matrix. R-Squared (R2) computes how much better the regression line fits the data than the mean line which can give us a overall score for the model.As you can see from the table below, all the models has similar RMSE, MAE and R2. For predicting house price, we want a model with lowest RMSE and MAE to keep the high accuracy of prediction. The extreme gradient boosting model has the highest R-Squared and the lowest Mean Absolute value, Root Mean-Squared Error.
+```{r create dataframe of model performance, echo=FALSE}
+models <- c("decision_tree","random_forest","gradient_boosting", "extreme_gradient_boosting")
+model_performance <- data.frame(matrix(unlist(models), nrow=4, byrow=TRUE), stringsAsFactors = FALSE)
+colnames(model_performance) <- c("model")
+RMSE<- c(296103,233734.1,257316.5,220850.4)
+R2 <- c(0.786,0.846707,0.8282601,0.861169)
+MAE <- c(141375,119745.2,134117.1,116308.5)
+model_performance <- model_performance %>% mutate(RMSE = round(RMSE,2), R2=round(R2,2), MAE=round(MAE,2))
+kable(model_performance, format = 'pipe')
+```
 
 
 
