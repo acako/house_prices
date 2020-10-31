@@ -36,8 +36,8 @@ shinyServer(function(input, output) {
             return()
         }
         data <- inputData()
-        list_pred <- isolate(round(as.numeric(predict(model, newdata=data)), -3))
-        final_pred <- isolate(round(as.numeric(35372.83 + 0.9684345*list_pred), -3))
+        final_pred <- isolate(round(as.numeric(predict(model, newdata=data)), -3))
+        list_pred <- isolate(round(as.numeric(-35372.83/0.9684345 + (1/0.9684345)*final_pred), -3))
         text <- isolate(local(paste(
             'The predicted list price is: $',
             list_pred,
