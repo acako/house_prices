@@ -347,9 +347,9 @@ searches to improve the accuracy. The final model was chosen based on
 three metrics: Root Mean-Squared Error (RMSE), Pearson correlation
 (R\^{}2), and Mean Average Error (MAE).
 
-\hypertarget{decision-tree-model}{%
-\subsubsection{\texorpdfstring{\textbf{Decision Tree Model}\\
-}{Decision Tree Model }}\label{decision-tree-model}}
+\hypertarget{head}{%
+\section{\textless\textless\textless\textless\textless\textless\textless{}
+HEAD}\label{head}}
 
 \textless\textless\textless\textless\textless\textless\textless{} HEAD
 \#\# Data Preprocessing The housing dataset, originally shared on
@@ -516,14 +516,14 @@ the number of trees to get a higher accuracy.\strut
 ntree, mtry\strut
 \end{minipage}\tabularnewline
 \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Gradient Boosting\strut
+Gradient\strut
 \end{minipage} & \begin{minipage}[t]{0.73\columnwidth}\raggedright
 \strut
 \end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
 \strut
 \end{minipage}\tabularnewline
 \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Machines\strut
+Boosting Machines\strut
 \end{minipage} & \begin{minipage}[t]{0.73\columnwidth}\raggedright
 Gradient Boosting Machines (gbm) begin with creating a preliminary `weak
 learner' decision tree, then sequentially grows more trees that aim to
@@ -549,6 +549,22 @@ subsample\strut
 \end{minipage}\tabularnewline
 \bottomrule
 \end{longtable}
+
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+830e5f4958932cc5f824272359d6ab041ceff57f
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
 
 \hypertarget{deployment}{%
 \subsection{Deployment}\label{deployment}}
@@ -635,20 +651,107 @@ bedrooms\_bg & & Number of bedrooms below ground\tabularnewline
 \end{Highlighting}
 \end{Shaded}
 
+index Min. 1st Qu. Median Mean 3rd Qu. Max. 0 5678 9804 9520 13668 17543
+
+title Length Class Mode 15234 character character
+
+final\_price Min. 1st Qu. Median Mean 3rd Qu. Max. 103000 535000 715000
+882714 989000 13180000
+
+list\_price Min. 1st Qu. Median Mean 3rd Qu. Max. 104900 529000 699900
+875093 969900 13180000
+
+bedrooms Length Class Mode 15234 character character
+
+bathrooms Min. 1st Qu. Median Mean 3rd Qu. Max. 1.000 1.000 2.000 2.122
+3.000 14.000
+
+sqft Min. 1st Qu. Median Mean 3rd Qu. Max. NA's 250 650 900 1116 1300
+4374 4521
+
+parking Min. 1st Qu. Median Mean 3rd Qu. Max. 0.000 1.000 1.000 1.559
+2.000 11.000
+
+description Length Class Mode 15234 character character
+
+mls Length Class Mode 15234 character character
+
+type Length Class Mode 15234 character character
+
+full\_link Length Class Mode 15234 character character
+
+full\_address Length Class Mode 15234 character character
+
+lat Min. 1st Qu. Median Mean 3rd Qu. Max. 43.59 43.65 43.69 43.70 43.76
+43.84
+
+long Min. 1st Qu. Median Mean 3rd Qu. Max. -79.62 -79.45 -79.40 -79.39
+-79.34 -79.12
+
+city\_district Length Class Mode 15234 character character
+
+mean\_district\_income Min. 1st Qu. Median Mean 3rd Qu. Max. 25989 34904
+50580 56066 67757 308010
+
+district\_code Min. 1st Qu. Median Mean 3rd Qu. Max. 1.0 39.0 76.0 71.3
+101.0 140.0
+
+final\_price\_transformed Min. 1st Qu. Median Mean 3rd Qu. Max. 2.380
+2.390 2.391 2.391 2.392 2.397
+
+final\_price\_log Min. 1st Qu. Median Mean 3rd Qu. Max. 11.54 13.19
+13.48 13.54 13.80 16.39
+
+bedrooms\_ag Min. 1st Qu. Median Mean 3rd Qu. Max. 0.000 1.000 2.000
+2.336 3.000 9.000
+
+bedrooms\_bg Min. 1st Qu. Median Mean 3rd Qu. Max. 0.0000 0.0000 0.0000
+0.5396 1.0000 6.0000
+
 \hypertarget{section}{%
 \subsubsection{}\label{section}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\NormalTok{df <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{'houses_edited.csv'}\NormalTok{)}
+\NormalTok{df}\OperatorTok{$}\NormalTok{bedrooms <-}\StringTok{ }\NormalTok{df}\OperatorTok{$}\NormalTok{bedrooms_bg }\OperatorTok{+}\StringTok{ }\NormalTok{df}\OperatorTok{$}\NormalTok{bedrooms_ag}
+\NormalTok{df <-}\StringTok{  }\NormalTok{df[, }\OperatorTok{!}\KeywordTok{names}\NormalTok{(df) }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'index'}\NormalTok{, }\StringTok{'title'}\NormalTok{, }\StringTok{'full_link'}\NormalTok{, }\StringTok{'mls'}\NormalTok{, }\StringTok{'description'}\NormalTok{, }\StringTok{'full_address'}\NormalTok{, }\StringTok{'final_price_transformed'}\NormalTok{, }\StringTok{'final_price_log'}\NormalTok{)]}
+\NormalTok{numeric_cols <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\StringTok{'final_price'}\NormalTok{, }\StringTok{'bathrooms'}\NormalTok{, }\StringTok{'sqft'}\NormalTok{, }\StringTok{'parking'}\NormalTok{, }\StringTok{'mean_district_income'}\NormalTok{, }\StringTok{'bedrooms'}\NormalTok{)}
+\NormalTok{predictor_cols <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\StringTok{'bathrooms'}\NormalTok{, }\StringTok{'sqft'}\NormalTok{, }\StringTok{'parking'}\NormalTok{, }\StringTok{'mean_district_income'}\NormalTok{, }\StringTok{'bedrooms'}\NormalTok{, }\StringTok{'type'}\NormalTok{)}
+
 \CommentTok{#histograms - note skew in prices}
-\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{5}\NormalTok{))}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{))}
 \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in}\NormalTok{ numeric_cols) \{}
-  \KeywordTok{hist}\NormalTok{(data[[i]], }\DataTypeTok{main =} \KeywordTok{paste}\NormalTok{(i), }\DataTypeTok{xlab =} \StringTok{''}\NormalTok{, }\DataTypeTok{col =} \DecValTok{4}\NormalTok{)}
+  \KeywordTok{hist}\NormalTok{(df[[i]], }\DataTypeTok{main =} \KeywordTok{paste}\NormalTok{(i), }\DataTypeTok{xlab =} \StringTok{''}\NormalTok{, }\DataTypeTok{col =} \DecValTok{4}\NormalTok{)}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R-markdown_sean_files/figure-latex/unnamed-chunk-2-1.pdf}
+\includegraphics{R-markdown_sean_files/figure-latex/skew and correlation plots-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#boxplot and outliers}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{))}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in}\NormalTok{ numeric_cols) \{}
+  \KeywordTok{boxplot}\NormalTok{(df[[i]], }\DataTypeTok{main =} \KeywordTok{paste}\NormalTok{(i), }\DataTypeTok{xlab =} \StringTok{''}\NormalTok{, }\DataTypeTok{col =} \DecValTok{4}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{R-markdown_sean_files/figure-latex/skew and correlation plots-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#corrplot for numerical}
+\NormalTok{cor <-}\StringTok{ }\KeywordTok{rcorr}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(df[, }\KeywordTok{names}\NormalTok{(df) }\OperatorTok{%in%}\StringTok{ }\NormalTok{numeric_cols]))}
+\NormalTok{p.mat <-}\StringTok{ }\KeywordTok{cor_pmat}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(df[, }\KeywordTok{names}\NormalTok{(df) }\OperatorTok{%in%}\StringTok{ }\NormalTok{numeric_cols]))}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\KeywordTok{ggcorrplot}\NormalTok{(cor}\OperatorTok{$}\NormalTok{r, }\DataTypeTok{type =} \StringTok{'upper'}\NormalTok{, }\DataTypeTok{p.mat =}\NormalTok{ p.mat, }\DataTypeTok{sig.level =} \DecValTok{1}\NormalTok{, }\DataTypeTok{insig =} \StringTok{'pch'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{R-markdown_sean_files/figure-latex/skew and correlation plots-3.pdf}
 
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}

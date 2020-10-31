@@ -69,7 +69,8 @@ library(gbm)
 library(qwraps2)
 library(descr)
 library(kableExtra)
-
+library(Hmisc)
+library(corrplot)
 ```
 
 <<<<<<< HEAD
@@ -152,35 +153,41 @@ predictor_cols <- list('bathrooms', 'sqft', 'parking', 'lat', 'long', 'mean_dist
 
 
 ```{r, results = "asis", echo=FALSE}
-<<<<<<< HEAD
+#<<<<<<< HEAD
 #descr(data, style = 'rmarkdown')
-=======
+#=======
 descr(data)
->>>>>>> 07b4634c471db3a1b80f2f862f0ee014176e645d
+#>>>>>>> 07b4634c471db3a1b80f2f862f0ee014176e645d
 #summary(data)
 ```
 
 
 ###
 
-```{r}
+```{r skew and correlation plots}
 df <- read.csv('houses_edited.csv')
-#Getting rid of variables without data utility or repeats:
-df <-  df[, !names(df) %in% c('index', 'title', 'full_link', 'mls', 'bedrooms', 'description', 'full_address', 'final_price_transformed', 'final_price_log')]
-numeric_cols <- list('final_price', 'list_price', 'bathrooms', 'sqft', 'parking', 'lat', 'long', 'mean_district_income', 'bedrooms_ag', 'bedrooms_bg')
-predictor_cols <- list('bathrooms', 'sqft', 'parking', 'lat', 'long', 'mean_district_income', 'bedrooms_ag', 'bedrooms_bg')
+df$bedrooms <- df$bedrooms_bg + df$bedrooms_ag
+df <-  df[, !names(df) %in% c('index', 'title', 'full_link', 'mls', 'description', 'full_address', 'final_price_transformed', 'final_price_log')]
+numeric_cols <- list('final_price', 'bathrooms', 'sqft', 'parking', 'mean_district_income', 'bedrooms')
+predictor_cols <- list('bathrooms', 'sqft', 'parking', 'mean_district_income', 'bedrooms', 'type')
 
 #histograms - note skew in prices
-par(mfrow=c(2, 5))
+par(mfrow=c(2, 3))
 for (i in numeric_cols) {
   hist(df[[i]], main = paste(i), xlab = '', col = 4)
 }
 
 #boxplot and outliers
-par(mfrow=c(2, 5))
+par(mfrow=c(2, 3))
 for (i in numeric_cols) {
   boxplot(df[[i]], main = paste(i), xlab = '', col = 4)
 }
+
+#corrplot for numerical
+cor <- rcorr(as.matrix(df[, names(df) %in% numeric_cols]))
+p.mat <- cor_pmat(as.matrix(df[, names(df) %in% numeric_cols]))
+par(mfrow=c(1,1))
+ggcorrplot(cor$r, type = 'upper', p.mat = p.mat, sig.level = 1, insig = 'pch')
 
 ```
 
