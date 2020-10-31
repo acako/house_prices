@@ -46,8 +46,8 @@ data_cart_5 <- complete(imputed_data_cart,5)
 #}
 
 #creat data sets used for modeling
-df_final <- data_cart_1 %>% select(3,6:8,11,14,15,17,23)
-df_list <- data_cart_1 %>% select(2,6:8,11,14,15,17,23)
+df_final <- data_cart_1 %>% select(3,6:8,11,17,23)
+df_list <- data_cart_1 %>% select(2,6:8,11,17,23)
 
 #Split the training data and test data
 set.seed(123)
@@ -99,6 +99,7 @@ varImpPlot(models_rf,
 importance(models_rf)
 varUsed(models_rf)
 
+saveRDS(models_rf, file = "randomForests.rds")
 #create the model using caret package
 #Specify the tuning grid for different parameters
 rf_grid <- expand.grid(mtry = c(2,4),
