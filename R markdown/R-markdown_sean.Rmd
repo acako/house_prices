@@ -68,6 +68,7 @@ library(VIM)
 library(gbm)
 library(qwraps2)
 library(descr)
+library(kableExtra)
 
 ```
 ### **Decision Tree Model**\
@@ -103,12 +104,16 @@ The data contained a mix of categorical and numerical variables. These variables
 
 
 ```{r model table, echo=FALSE, message=FALSE}
-models_list <- list('Decision Tree','Random Forest','Gradient Boosting Machines','XGBoost')
-models_description <- list('Decision trees repeatedly partition data at specific nodes until the data at the bottom of each branch (known as a leaf) is as homogenous as possible. The model increases in complexity with each additional partition and subsequently becomes more accurate.','Random Forest Model Random Forests are an ensemble learning method for classification and regression. This method will construct a multitude of decision trees and output the mean/average prediction problem for regression or the classes for classification problem. The algorithm can control the number of variable available for splitting at each tree or the number of trees to get a higher accuracy. ',' Gradient Boosting Machines (gbm) begin with creating a preliminary \'weak learner\' decision tree, then sequentially grows more trees that aim to reduce the error of the last one. The algorithm optimizes the loss function by minimizing the residuals at each iteration (difference between predicted and actual value).','sdfsdfgfsdgfdsgsdfgsdfgfsdgsdfgsdfgsdfgsdfgsdfgsdfgsdgsdfdf')
-models_params <- list('cp (complexity)','ntree, mtry','n.trees, shrinkage, interaction.depth, n.minobssinnode','4')
+models_list <- list('Decision
+Tree','Random
+Forest','Gradient 
+Boosting Machines','XGBoost')
+models_description <- list('Decision trees repeatedly partition data at specific nodes until the data at the bottom of each branch (known as a leaf) is as homogenous as possible. The model increases in complexity with each additional partition and subsequently becomes more accurate.','Random Forest Model Random Forests are an ensemble learning method for classification and regression. This method will construct a multitude of decision trees and output the mean/average prediction problem for regression or the classes for classification problem. The algorithm can control the number of variable available for splitting at each tree or the number of trees to get a higher accuracy. ',' Gradient Boosting Machines (gbm) begin with creating a preliminary \'weak learner\' decision tree, then sequentially grows more trees that aim to reduce the error of the last one. The algorithm optimizes the loss function by minimizing the residuals at each iteration (difference between predicted and actual value).','XGBoost uses ensemble learning, which is a systematic solution that combines the predictive power of multiple learners. It outputs a single model that gives the combined output from many models. This allows the opportunity to not rely on the results of a single machine learning model. In this particular model, the trees are built sequentially, such that the next tree focuses on reducing  the errors of the previous tree.')
+models_params <- list('cp (complexity)','ntree, mtry','n.trees, shrinkage, interaction.depth, n.minobssinnode','nrounds, max_depth, eta, gamma, colsample_bytree, min_child_weight, subsample')
 models_table <- data.frame(unlist(models_list), unlist(models_description), unlist(models_params))
 colnames(models_table) <- c('Model', 'Description', 'Tuning parameters')
-kable(models_table, format='pipe', caption = 'Non-parametric Models Used')
+mtable <- kbl(models_table, caption = 'Non-parametric Models Used', format = 'pipe')
+kable_styling(mtable, font_size = 10)
 
 
 ```
@@ -145,7 +150,7 @@ predictor_cols <- list('bathrooms', 'sqft', 'parking', 'lat', 'long', 'mean_dist
 
 
 ```{r, results = "asis", echo=FALSE}
-descr(data, style = 'rmarkdown')
+#descr(data, style = 'rmarkdown')
 #summary(data)
 ```
 
