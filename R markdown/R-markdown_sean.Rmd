@@ -92,7 +92,7 @@ The data contained a mix of categorical and numerical variables. These variables
 ```{r model table, echo=FALSE, message=FALSE, warning=FALSE}
 models_list <- list('Decision
 Tree','Random Forest','Gradient Boosting Machines','XGBoost')
-models_description <- list('Decision trees repeatedly partition data at specific nodes until the data at the bottom of each branch (known as a leaf) is as homogenous as possible. The model increases in complexity with each additional partition and subsequently becomes more accurate [@noauthor_rpart_nodate].','Random Forest Model Random Forests are an ensemble learning method for classification and regression. This method will construct a multitude of decision trees and output the mean/average prediction problem for regression or the classes for classification problem. The algorithm can control the number of variable available for splitting at each tree or the number of trees to get a higher accuracy. [@noauthor_randomforest_nodate]',' Gradient Boosting Machines (gbm) begin with creating a preliminary \'weak learner\' decision tree, then sequentially grows more trees that aim to reduce the error of the last one. The algorithm optimizes the loss function by minimizing the residuals at each iteration (difference between predicted and actual value) [@noauthor_gbm_nodate].','XGBoost uses ensemble learning, which is a systematic solution that combines the predictive power of multiple learners. It outputs a single model that gives the combined output from many models. This allows the opportunity to not rely on the results of a single machine learning model. In this particular model, the trees are built sequentially, such that the next tree focuses on reducing  the errors of the previous tree.  [@noauthor_xgboost_nodate]')
+models_description <- list('Decision trees repeatedly partition data at specific nodes until the data at the bottom of each branch (known as a leaf) is as homogenous as possible. The model increases in complexity with each additional partition and subsequently becomes more accurate [@noauthor_rpart_nodate].','Random Forest Model Random Forests are an ensemble learning method for classification and regression. This method will construct a multitude of decision trees and output the mean/average prediction problem for regression or the classes for classification problem. The algorithm can control the number of variable available for splitting at each tree or the number of trees to get a higher accuracy  [@noauthor_randomforest_nodate].',' Gradient Boosting Machines (gbm) begin with creating a preliminary \'weak learner\' decision tree, then sequentially grows more trees that aim to reduce the error of the last one. The algorithm optimizes the loss function by minimizing the residuals at each iteration (difference between predicted and actual value) [@noauthor_gbm_nodate].','XGBoost uses ensemble learning, which is a systematic solution that combines the predictive power of multiple learners. It outputs a single model that gives the combined output from many models. This allows the opportunity to not rely on the results of a single machine learning model. In this particular model, the trees are built sequentially, such that the next tree focuses on reducing  the errors of the previous tree [@noauthor_xgboost_nodate].') 
 models_params <- list('cp (complexity)','ntree, mtry','n.trees, shrinkage, interaction.depth, n.minobssinnode','nrounds, max_depth, eta, gamma, colsample_bytree, min_child_weight, subsample')
 models_table <- data.frame(unlist(models_list), unlist(models_description), unlist(models_params))
 colnames(models_table) <- c('Model', 'Description', 'Tuning parameters')
@@ -192,14 +192,14 @@ The k-fold cross-validation method evaluates the model performance on different 
 
 The decision tree model was tuned with different values of cp (complexity). Cp = 0.001 was found to be the optimal value.
 
-```{r Decision Tree Model, echo=FALSE, fig.align = 'center', fig.height=3, fig.width=4, warning=FALSE, message = FALSE}
+```{r Decision Tree Model, echo=FALSE, fig.align = 'center', fig.height=2.5, fig.width=4, warning=FALSE, message = FALSE}
 decision_tree_model <- readRDS("decision_tree_model.rds")
 barplot(decision_tree_model$variable.importance[9:1], horiz = TRUE, col = 'blue', las = 2, main = 'Variable Importance - Decision Tree', cex.axis = 0.6, xlab = 'Importance', cex = 0.5, cex.main = 0.8, cex.lab = 0.8)
 ```
 ### Random Forest Model
 
 The Random Forest was original trained with ntree = 300 and mtry = 8, after tuning the model, ntree = 150 and mtry = 6 are used for better model performance.
-```{r Random Forest Model, echo=FALSE,fig.align = 'center', fig.height = 3, fig.width=4, warning=FALSE, message = FALSE}
+```{r Random Forest Model, echo=FALSE,fig.align = 'center', fig.height = 2.5, fig.width=4, warning=FALSE, message = FALSE}
 Random_Forest_model <- readRDS("randomForests.rds")
 a <- data.frame(Random_Forest_model$importance)
 a<- a[order(a$IncNodePurity), ]
@@ -212,14 +212,14 @@ The model of gradient boosting was tuned by several different parameters and the
 Gradient_Boosting_model <- readRDS("gbm3.rds")
 invisible(model_importance <- summary(Gradient_Boosting_model$finalModel))
 ```
-```{r GBM importance, echo=FALSE, fig.align = 'center', fig.height=3, warning=FALSE, fig.width=4, message = FALSE}
+```{r GBM importance, echo=FALSE, fig.align = 'center', fig.height=2.5, warning=FALSE, fig.width=4, message = FALSE}
 barplot(model_importance[9:1, 'rel.inf'], col = 'blue', xlab = 'Relative Influence', horiz = TRUE, las = 2, names = model_importance[9:1, 'var'], main = 'Variable Importance - GBM', cex = 0.5, cex.main = 0.8, cex.lab = 0.8, cex.axis = 0.6)
 ```
 
 ### Extreme Gradient Boosting Model
 
 The best model has parameters nrounds = 200, max_depth = 6, eta = 0.1, gamma = 0, colsample_bytree = 0.8, min_child_weight = 5 and subsample = 0.8 after tuning.
-```{r Extreme Gradient Boosting Model, echo=FALSE, message=FALSE, fig.height=3, fig.align = 'center', warning=FALSE, fig.width=4, results='hide',fig.keep='all'}
+```{r Extreme Gradient Boosting Model, echo=FALSE, message=FALSE, fig.height=2.5, fig.align = 'center', warning=FALSE, fig.width=4, results='hide',fig.keep='all'}
 invisible(Extreme_Gradient_Boosting_model <- readRDS("albina_model.rds"))
 invisible(barplot(data.frame(xgb.importance(model = Extreme_Gradient_Boosting_model$finalModel))$Gain[9:1], horiz = TRUE, names = data.frame(xgb.importance(model = Extreme_Gradient_Boosting_model$finalModel))$Feature[9:1], las = 2, col = 'blue', main = 'Variable Importance - XGBoost', xlab = 'Gain',cex.axis=0.6 , cex = 0.5, cex.main = 0.8, cex.lab = 0.8))
 ```
