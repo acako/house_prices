@@ -19,8 +19,8 @@ districts <- as.list(district_data$district)
 # Define UI for application that shows house prices
 shinyUI(fluidPage(
     theme = shinytheme("sandstone"),
-    tags$style(HTML('body {font-family:"Times New Roman",Georgia,Serif; background-color:lightpink}')),
-    tags$style('body {color:blue;}'),
+    tags$style(HTML('body {font-family:"Times New Roman",Georgia,Serif; background-color:lightgrey}')),
+    tags$style('body {color:navy;}'),
     
     # Application title
     titlePanel("Toronto House Price Estimator"),

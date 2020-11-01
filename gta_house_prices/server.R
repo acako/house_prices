@@ -42,7 +42,7 @@ shinyServer(function(input, output) {
             'The predicted list price is: $',
             list_pred,
             '. The predicted final price is: $',
-            final_pred)))
+            final_pred, '.')))
             
         isolate(local(HTML(paste(text))))
     })
