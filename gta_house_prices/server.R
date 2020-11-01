@@ -21,16 +21,18 @@ model <- readRDS("xgboost_model.rds")
 shinyServer(function(input, output) {
     
     inputData <- reactive({
-        data.frame(
+        input$predict
+        isolate(data.frame(
             'bathrooms'=as.integer(input$baths),
             'sqft'=as.integer(input$sqft),
             'parking'=as.integer(input$parking),
             'type'=as.factor(input$type),
             'mean_district_income'=as.integer(district_data$income[which(district_data$district==input$district)]),
-            'bedrooms_total'=as.integer(input$beds))
+            'bedrooms_total'=as.integer(input$beds)))
     })
     
     output$prediction <- renderText({
+        input$predict
         if (input$predict == 0) {
             paste('Server is ready for calculation.')
             return()

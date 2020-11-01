@@ -19,7 +19,7 @@ districts <- as.list(district_data$district)
 # Define UI for application that shows house prices
 shinyUI(fluidPage(
     theme = shinytheme("sandstone"),
-    tags$style(HTML('body {font-family:"Times New Roman",Georgia,Serif; background-color:lightgrey}')),
+    tags$style(HTML('body {font-family:Arial, Helvetica,Serif; background-color:lightgray}')),
     tags$style('body {color:navy;}'),
     
     # Application title
@@ -63,7 +63,7 @@ shinyUI(fluidPage(
         mainPanel(
             leafletOutput("map"),
             textOutput("prediction"),
-            tags$style(type="text/css", "#prediction { height: 50px; width: 100%; text-align:center; font-size: 25px; display: block;}"),    
+            tags$style(type="text/css", "#prediction { height: 50px; width: 100%; font-size: 25px; display: block;}"),    
             )
     )
 ))
