@@ -1,0 +1,264 @@
+---
+output: 
+  pdf_document:
+    keep_tex: true
+    fig_caption: true
+    latex_engine: pdflatex
+    template: svm-latex-ms.tex
+    extra_dependencies: "subfig"
+title: "Predicting Property Prices: A Machine Learning Approach"
+author:
+- name: Albina Cako, BSc
+  affiliation: York University, Certificate in Machine Learning
+- name: Colin Green, BSc
+  affiliation: York University, Certificate in Machine Learning
+- name: Lucy Zhang, BSc
+  affiliation: York University, Certificate in Machine Learning
+- name: Sean X. Zhang, MSc
+  affiliation: York University, Certificate in Machine Learning
+abstract: "The project focuses on building a machine learning model to predict house prices in Toronto. The training dataset contained 15234 sold listings between 2018 and 2019. The model was based on 6 features: area (in square feet), mean distrinct income, number of bedrooms, number of  bathrooms, number of parking spaces and property type. We evaluated four different machine-learning models and chose XGBoost as the most accurate model. A Shiny app was then created to predict the estimated listing and final prices."
+keywords: "house prices, machine learning, caret, shiny"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 11pt
+# spacing: double
+bibliography: References_house_prices.bib
+csl: cell-numeric.csl
+header-includes:
+    - \usepackage{hyperref}
+---
+
+# Introduction
+
+Purchasing a property is often an important life decision for every individual and requires a considerable amount of research. Buying a home holds many different purposes, whether it is for dwelling or as a future investment. Also, selling a house requires significant research to decide the optimal listing price. Commonly, people will seek advice from various websites or real estate agents before purchasing; however, due to big data trends, house price prediction can be also done by using machine learning strategies based on large datasets from previous years. House Price Index (HPI) can measure the price changes of residential housing as a percentage change. In Canada, the new Housing Price Index is calculated monthly by Statistics Canada. HPI is useful, however, it does not give a precise estimate of any specific house with its own attributes [@noauthor_house_nodate]. The objective of this project was to evaluate the application of several machine learning algorithms to predict house prices in the City of Toronto using their attributes and location. 
+
+The House Pricing Prediction app was created to estimate both the final and list prices, so it can be used by buyers and sellers. The deployment was constructed using ShinyApp and it used the houses' locations and attributes. The app can be used for individual buyers who want to know the final price of the houses they are interested in or for individual sellers to know what the best listing price is. This project used regression and comprehensively validated four different machine learning models: decision tree, random forest, gradient boosting machine and XGBoost. The models were tuned and the XGBoost was chosen for deployment for its high accuracy. In this report we present the full process of data visualization, cleaning and manipulation, as well as feature selection, model training, model tuning and deployment on ShinyApp.
+
+# Methodology
+```{r load packages, include=FALSE}
+# load the packages
+library(dplyr)
+library(ggplot2)
+library(readr)
+library('plot.matrix')
+library(caret)
+library(gbm)
+library(car)
+library(finalfit)
+library(pscl)
+library(grid)
+library(gridExtra)
+library(ggcorrplot)
+library(knitr)
+library(VIM)
+library(qwraps2)
+library(descr)
+library(kableExtra)
+library(Hmisc)
+library(corrplot)
+library(mice)
+library(rpart)
+library(xgboost)
+library(randomForest)
+library(pander)
+```
+## Data Preprocessing
+The housing dataset, originally shared on Github [@spirin_slavaspirintoronto-housing-price-prediction_2020], was extracted from Zoocasa.com in 2019. The dataset contains all completed property sales in the city of Toronto within a 1-year span between 2018-2019. We performed several data exploration and cleaning steps to prepare the dataset for modeling.
+
+## Missingness
+We assessed the dataset for missing values, as missing data often introduce bias and reduce accuracy in machine learning models [@ayilara_impact_2019]. Thus, missing values ought to be either imputed or removed before data modeling. We then determined whether missing data was Missing Completely at Random (MCAR), Missing at Random (MAR), or Missing Not at Random (MNAR). Should the data be MCAR, then it is acceptable to simply remove each observation that is missing, as doing so would not introduce bias to the remaining observations. However, if there was a correlation between missingness and other data features, then imputation must be performed [@rubin_inference_1976]. Missingness correlation was assessed using the missing_compare() function from the finalfit library, which applies the Kruskal Wallis correlation test for numerical variables and Chi-squared correlation test for categorical variables to determine correlation [@noauthor_quickly_nodate]. Using the MICE package in R, we then applied the following imputation methods: 1) simple, which imputes a value from a simple random sample from the rest of the data;
+2) mean, which imputes the average of all observations; 3) random forest, which applies a random forest algorithm; and 4) CART, which  imputes by classification and regression trees. The distribution of the imputed data were evaluated with a density plot and an imputed dataset was chosen based on best fit [@noauthor_mice_nodate].
+
+## Assessing Parametric Fit
+Outliers were visualized with the boxplot() function. Data were considered outliers if they were less than Q1 - 1.5 X Inter-Quartile Range and greater Q3 + 1.5 X Inter-Quartile Range. Normality of the distribution of variables were visualized with density plots. A correlogram with Pearson's coefficient determined collinearity. Linear relationship between outcome variable and predictors was tested via scatterplots.
+
+## Data Curation
+The following variables were removed as they did not have any data utility or were not easily parseable (i.e. free text): title, description, mls, type, full_link, full_address. A numeric 'bedrooms' column was created by combining bedrooms_ag and bedrooms_bg. We also removed district_code and city_district. Both were categorical variables with number of factors = 140; keeping these would significantly increase model training time [@kumar_machine_2020]. We also did not consider longitude and latitude, as including these variables in training sets would have required geocoding and district clustering; complexities which were outside our scope for this application. Mean_district_income was left as an approximation of the effect of districts on property price. After consultation with a real-estate expert, we decreased the number of property types by generalizing types to: Townhouse, Condo, Detached, Semi-Detached, and Plex. Thus, the predictors chosen were:
+
+```{r predictor table, echo=FALSE, message=FALSE}
+predictors_list <- list('sqft', 'beds', 'bathrooms', 'parking','mean_district_income','type')
+predictors_type <- list('numeric', 'numeric', 'numeric', 'numeric', 'numeric', 'categorical')
+predictors_df <- data.frame(matrix(unlist(predictors_list), nrow=6, byrow=TRUE), stringsAsFactors = FALSE)
+predictors_df <- predictors_df %>% mutate(blank = c(" "," "," "," "," "," "),Description = predictors_type)
+colnames(predictors_df) <- c("Variable", "             ", "Type")
+kable(predictors_df, format='pipe', caption = 'Predictor variables')
+
+```
+We chose final_price as the target variable. While the dataset also contained a list_price variable, rather than training two models to predict on both list and final price, the predicted list price was instead approximated by a linear equation between list and final price from the original dataset.
+
+## Modeling
+The data contained a mix of categorical and numerical variables. These variables did not satisfy the many requirements of parametric models, such as variable independence, normally distributed data, and linear relationship with outcome [@casson_understanding_2014]. Thus, several non-parametric models were used instead. We trained four different models using k-fold cross validation. The models were then tuned using various grid searches to improve the accuracy. The final model was then chosen based on three accuracy metrics: Root Mean-Squared Error (RMSE), Pearson correlation ($R^2$), and Mean Average Error (MAE).
+```{r model table, echo=FALSE, message=FALSE, warning=FALSE}
+models_list <- list('Decision
+Tree','Random Forest','Gradient Boosting Machines','XGBoost')
+models_description <- list('Decision trees repeatedly partition data at specific nodes until the data at the bottom of each branch (known as a leaf) is as homogenous as possible. The model increases in complexity with each additional partition and subsequently becomes more accurate [@noauthor_rpart_nodate].','Random Forest Model Random Forests are an ensemble learning method for classification and regression. This method will construct a multitude of decision trees and output the mean/average prediction problem for regression or the classes for classification problem. The algorithm can control the number of variable available for splitting at each tree or the number of trees to get a higher accuracy  [@noauthor_randomforest_nodate].',' Gradient Boosting Machines (gbm) begin with creating a preliminary \'weak learner\' decision tree, then sequentially grows more trees that aim to reduce the error of the last one. The algorithm optimizes the loss function by minimizing the residuals at each iteration (difference between predicted and actual value) [@noauthor_gbm_nodate].','XGBoost uses ensemble learning, which is a systematic solution that combines the predictive power of multiple learners. It outputs a single model that gives the combined output from many models. This allows the opportunity to not rely on the results of a single machine learning model. In this particular model, the trees are built sequentially, such that the next tree focuses on reducing  the errors of the previous tree [@noauthor_xgboost_nodate].') 
+models_params <- list('cp (complexity)','ntree, mtry','n.trees, shrinkage, interaction.depth, n.minobssinnode','nrounds, max_depth, eta, gamma, colsample_bytree, min_child_weight, subsample')
+models_table <- data.frame(unlist(models_list), unlist(models_description), unlist(models_params))
+colnames(models_table) <- c('Model', 'Description', 'Tuning parameters')
+mtable <- kbl(models_table)
+set.alignment(default = 'left')
+pander::pander(models_table, split.cell = 240, split.table = Inf, alignment.rownames = 'left', alignment.default='left', table.style = 'rmarkdown', caption = 'Non-parametric Models Used')
+```
+
+## Deployment
+The application was created using R shiny and hosted on the Shinyapps.io cloud. Districts were plotted using mean latitude and longitude of all properties from the housing dataset. Some districts had few properties to create a centroid from; these were manually fixed using geographic data extracted from Toronto neighborhood websites  [@noauthor_explore_nodate][@noauthor_neighbourhood_2017]. 
+
+# Results
+The original housing dataset contained 21 variables and 15234 observations. Table 1 defines each variable of the dataset. \hyperref[sec:map]{Figure 1} plots the geographic distribution of properties based on long/lat.
+
+```{r create a table describing the columns and rows, echo=FALSE, message=FALSE}
+data_description <- c('Title of the listing', 'Final price of the property', 'Listing price of the property', 'Number of bedrooms','Number of bathrooms','Area of property in square feet',
+                      'Number of parking spaces', 'Verbatim text description of the property', 'MLS Listing ID', 'Property type', 'URL to listing', 'Full address of the property', 'Latitude', 'Longitude','Toronto district to which property belonged to', 'Average household income of district', 'Numerical code of the district', 'Box-Cox transformation of final price', 'Log transformation of final price', 'Number of bedrooms above ground', 'Number of bedrooms below ground' )
+
+data <- c("title", "final_price", "list_price", "bedrooms", "bathrooms", "sqft", "parking", "description", "mls", "type", "full_link", "full_address", "lat", "long", "city_district", "mean_district_income", "district_code", "final_price_transformed", "final_price_log", "bedrooms_ag", "bedrooms_bg")
+
+datadictionary <- data.frame(matrix(unlist(data), nrow=21, byrow=TRUE), stringsAsFactors = FALSE)
+datadictionary <- datadictionary %>% mutate(blank = c(" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "),Description = data_description)
+colnames(datadictionary) <- c("Variable", "             ", "Type")
+kable(datadictionary, format='pipe', caption = 'Data Dictionary')
+
+```
+
+## Data Exploration
+The mean final price property price in Toronto between 2018 and 2019 was $715,000, with a median number of 3 bedrooms and 2 bathrooms. The most common properties types were condo (58.2%), detached (28.8%), and semi-detached (9.4%). 
+```{r text summary, echo=FALSE}
+#text summary
+df <- read.csv('houses_edited.csv')
+df$bedrooms <- df$bedrooms_bg + df$bedrooms_ag
+df <-  df[, !names(df) %in% c('index', 'title', 'full_link', 'mls', 'description', 'full_address', 'final_price_transformed', 'final_price_log')]
+numeric_cols <- list('final_price', 'bathrooms', 'sqft', 'parking', 'mean_district_income', 'bedrooms')
+predictor_cols <- list('bathrooms', 'sqft', 'parking', 'mean_district_income', 'bedrooms', 'type')
+df$type[df$type=='Att/Row/Twnhouse'] <- 'Townhouse'
+df$type[df$type=='Co-Op Apt'] <- 'Condo'
+df$type[df$type=='Co-Ownership Apt'] <- 'Condo'
+df$type[df$type=='Comm Element Condo'] <- 'Condo'
+df$type[df$type=='Condo Apt'] <- 'Condo'
+df$type[df$type=='Condo Townhouse'] <- 'Condo'
+df$type[df$type=='Link'] <- 'Detached'
+df$type[df$type=='Store W/Apt/Offc'] <- 'Condo'
+summary(df[, names(df) %in% numeric_cols])
+table(df$type)
+```
+```{r map, echo=FALSE, message=FALSE, fig.align='center', fig.cap='Geographic Distribution of Property Data\\label{sec:map}'}
+df %>% ggplot(aes(x=lat, y=long)) + geom_point(aes(colour=city_district)) + theme(legend.position = 'none')
+```
+The 'sqft' variable was missing 4315 observations (30%).  To test whether the missing data was MCAR, we compared whether other variables were associated with missingness. Using Chi-squared and Kruskal Wallis tests for categorical and numerical variables, respectively, we determined that housing and price had significant correlation (p<0.01) with sqft missingness, where properties missing sqft trended towards higher prices. Thus, we conclude that sqft is not MCAR, so we cannot simply remove observations where sqft is missing without introducing bias. 
+To account for missing values, we chose to use the CART (Classification and Regression Trees) method of imputation (\hyperref[sec:fig2]{Figure 2}). Blue represents the distribution of the original data, while red represents the distribution of imputed data. The mean sqft increased from 1116 to 1311 as a result of the imputation.
+
+```{r CART imputation, echo=FALSE, fig.align='center', fig.height=3, fig.width=4, fig.cap = 'CART-imputed values for sqft\\label{sec:fig2}'}
+cart <- readRDS('imputed_df_cart.rds')
+summary(complete(cart)$sqft)
+densityplot(cart)
+```
+We then performed a correlation analysis based on Pearson's coefficient between each numeric predictor. We considered a correlation > 0.5, with p < 0.05 as a significant correlation. \hyperref[sec:fig3]{Figure 3} demonstrates significant correlation between many of our predictor variables. 
+```{r corrplot, echo=FALSE, fig.align='center', fig.height=5, fig.width=5, fig.cap='Correlogram\\label{sec:fig3}'}
+#corrplot for numerical
+cor <- rcorr(as.matrix(df[, names(df) %in% numeric_cols]))
+p.mat <- cor_pmat(as.matrix(df[, names(df) %in% numeric_cols]))
+par(mfrow=c(1,1))
+ggcorrplot(cor$r, type = 'upper', p.mat = p.mat, sig.level = 0.05, lab = TRUE)
+```
+We also summarize the distribution of predictor and target variables (\hyperref[sec:fig4]{Figure 4}). Note the right skew in each predictor variable as well as amount of outliers in each of our predictor variables. Finally, we checked for whether a linear relationship existed between each predictor variables and the target variable (\hyperref[sec:fig5]{Figure 5}). Overall, the data is unlikely to be well-fit for parametric machine-learning algorithms such as generalized linear regression. The data does not satisfy the assumptions of variable independence, normal distribution, nor a linear relationship between predictors and target variable. Thus, we chose to use non-parametric algorithms to model our data instead. 
+
+```{r histogram, echo=FALSE, fig.align='center', fig.height=8, fig.width=6, fig.cap = 'Distribution of predictor and target variables\\label{sec:fig4}'}
+#histograms - note skew in prices
+par(mfrow=c(4, 3))
+for (i in numeric_cols) {
+  hist(df[[i]], main = paste(i), xlab = '', col = 4)
+}
+#boxplot and outliers
+for (i in numeric_cols) {
+  boxplot(df[[i]], main = paste(i), xlab = '', col = 4)
+}
+```
+```{r linear correlation, echo=FALSE, message=FALSE, fig.cap='Scatterplot of Predictors vs. Final Price\\label{sec:fig5}', fig.align='center',fig.height=4}
+par(mfrow=c(2,3))
+for (i in numeric_cols[2:6]) {
+  plot(df[[i]], df$final_price, main = paste(i), xlab = '', col = 4, ylab = 'final_price')
+}
+```
+We chose final_price as our target variable, but still wished to include list_price in the deployment of our application. Therefore, the list price is predicted via the following linear regression (\hyperref[sec:fig6]{Figure 6}): $$list\_price = 1.032594 * final\_price - 36525.78$$ 
+```{r final list, echo=FALSE, fig.align='center',fig.cap='Final Price vs. List Price\\label{sec:fig6}', message=FALSE, fig.width=3,fig.height=2, warning=FALSE, message = FALSE}
+price_lm <- lm(list_price ~ final_price, df)
+ggplot(df, aes(x=final_price,y=list_price)) + geom_point() + geom_smooth(method = 'lm') + annotate('text', label = paste('R-sqr = ', round(summary(price_lm)$adj.r.squared, 2)), x = 0.6*max(df$list_price), y= max(df$final_price))
+```
+\newpage
+## Modeling
+
+The k-fold cross-validation method evaluates the model performance on different subsets of the training data calculates the average prediction error rate. We used k = 10 for our project,and this method was used instead of the simple train-test-split as it gives a more valid estimation of model effectiveness.
+
+### Decision Tree Model
+
+The decision tree model was tuned with different values of cp (complexity). Value of cp = 0.00001 was found to be the optimal value.
+
+```{r Decision Tree Model, echo=FALSE, fig.align = 'center', fig.height=2.5, fig.width=4, warning=FALSE, message = FALSE}
+decision_tree_model <- readRDS("decision_tree_model.rds")
+barplot(decision_tree_model$variable.importance[9:1], horiz = TRUE, col = 'blue', las = 2, main = 'Variable Importance - Decision Tree', cex.axis = 0.6, xlab = 'Importance', cex = 0.5, cex.main = 0.8, cex.lab = 0.8)
+```
+### Random Forest Model
+
+The Random Forest was original trained with ntree = 300 and mtry = 8. After tuning the model, ntree = 150 and mtry = 6 were used due to better model performance.
+```{r Random Forest Model, echo=FALSE,fig.align = 'center', fig.height = 2.5, fig.width=4, warning=FALSE, message = FALSE}
+Random_Forest_model <- readRDS("randomForests.rds")
+a <- data.frame(Random_Forest_model$importance)
+a<- a[order(a$IncNodePurity), ]
+barplot(a$IncNodePurity, col = 'blue', xlab = 'Importance', horiz= TRUE, names = rownames(a), las = 2, main = 'Variable Importance - Random Forest', cex.axis = 0.6, cex = 0.5, cex.main = 0.8, cex.lab = 0.8)
+```
+### Gradient Boosting Model
+
+The gradient boosting model was tuned by several different parameters. The best performing model used the following parameters: n.trees = 200, interaction.depth = 9, shrinkage = 0.1 and n.minobsinnode = 20.
+```{r Gradient Boosting Model, echo=FALSE, fig.align = 'center', fig.show = 'hide', warning=FALSE, message = FALSE}
+Gradient_Boosting_model <- readRDS("gbm3.rds")
+invisible(model_importance <- summary(Gradient_Boosting_model$finalModel))
+```
+```{r GBM importance, echo=FALSE, fig.align = 'center', fig.height=2.5, warning=FALSE, fig.width=4, message = FALSE}
+barplot(model_importance[9:1, 'rel.inf'], col = 'blue', xlab = 'Relative Influence', horiz = TRUE, las = 2, names = model_importance[9:1, 'var'], main = 'Variable Importance - GBM', cex = 0.5, cex.main = 0.8, cex.lab = 0.8, cex.axis = 0.6)
+```
+
+### Extreme Gradient Boosting Model
+
+The XGBoost model was tuned with several parameters. The best performing model used the following parameters: nrounds = 200, max_depth = 6, eta = 0.1, gamma = 0, colsample_bytree = 0.8, min_child_weight = 5 and subsample = 0.8.
+```{r Extreme Gradient Boosting Model, echo=FALSE, message=FALSE, fig.height=2.5, fig.align = 'center', warning=FALSE, fig.width=4, results='hide',fig.keep='all'}
+invisible(Extreme_Gradient_Boosting_model <- readRDS("albina_model.rds"))
+invisible(barplot(data.frame(xgb.importance(model = Extreme_Gradient_Boosting_model$finalModel))$Gain[9:1], horiz = TRUE, names = data.frame(xgb.importance(model = Extreme_Gradient_Boosting_model$finalModel))$Feature[9:1], las = 2, col = 'blue', main = 'Variable Importance - XGBoost', xlab = 'Gain',cex.axis=0.6 , cex = 0.5, cex.main = 0.8, cex.lab = 0.8))
+```
+### Model Summary
+
+All models found sqft and mean_district_income to be important predictors of final_price. Mean Absolute Error (MAE) tells the average error of the variable we want to predict. Root Mean-Squared Error (RMSE) is similar with MAE but it is more useful when we are interested in fewer larger errors over many small errors. Overall, we prioritize model stability and thus prioritized RMSE over MAE. $R^2$ computes how much better the regression fits the data than the mean line, which gives an overall score. All the models had similar RMSE, MAE and $R^2$. For predicting house price, we desired a model with the lowest RMSE and MAE to keep the high accuracy of prediction. The XGBoost model had the highest $R^2$ as well as the lowest RMSE and MAE, thus, it was chosen for deployment.
+```{r create dataframe of model performance, echo=FALSE}
+models <- c("decision_tree","random_forest","gradient_boosting", "extreme_gradient_boosting")
+model_performance <- data.frame(matrix(unlist(models), nrow=4, byrow=TRUE), stringsAsFactors = FALSE)
+colnames(model_performance) <- c("model")
+RMSE<- c(274957.8,233734.1,257316.5,220850.4)
+R2 <- c(0.8067,0.846707,0.8282601,0.861169)
+MAE <- c(135701,119745.2,134117.1,116308.5)
+model_performance <- model_performance %>% mutate(RMSE = round(RMSE,2), R2=round(R2,2), MAE=round(MAE,2))
+kable(model_performance, format = 'pipe', caption = 'Model Accuracy')
+```
+### Deployment
+
+The user interface (UI) contains a map of Toronto for geographic navigation and also allows the user to select various inputs to predict property price. While the user would choose a district of interest from the front end, the back end links the district chosen with income and uses mean_district_income as the model input instead. We chose to use XGBoost, since it was the most accurate model as the back-end for our application.
+
+# Discussion
+
+Our project applied several non-parametric machine learning algorithms to predict Toronto house prices. We cleaned the dataset by imputing missing values using the CART algorithm from MICE. We then tuned each model with cross-validation of k=10 using gridSearch. Overall, we found the XGBoost model to be the most accurate, with an RMSE of 220850.4, an $R^2$ of 0.83, and a MAE of 116308.5. We then used R Shiny to deploy our application with XGBoost as the predictive back-end. The application can aid both potential Toronto home buyers and sellers in making purchasing decisions, whether it's by validating list prices or predicting final prices. 
+
+Our study does come with several limitations. First, the dataset only ranged from 2018 to 2019 and is now likely to be dated. The Toronto housing market had seen incredible growth over the past few years. While the recent advent of the COVID-19 pandemic has led to a steep decline in both listings and sales by 41% and 48% respectively, prices are still forecasted to grow by 5% year-over-year [@noauthor_housing-market-insight-toronto-cma_nodate][@mcnutt_toronto_2020][@noauthor_housing_nodate]. Therefore, the model will need to be re-trained and re-evaluated on new data. A second limitation is that we had to imputed missing values for sqft. While MICE is a robust package for imputing missing data, it may nevertheless introduce additional bias. Third, we believe there are other important features that were not captured in our model, such as proximity to nature, accessibility to public transit, and renovations and amenities - to name a few. To increase the potential accuracy of our model, the current dataset would ideally be linked with other sources of data.
+
+## Ethical Considerations
+
+There are strong financial incentives associated with purchasing property. "All models are wrong, but some are useful" is a common saying within the statistics and data science community. As even our most accurate model is still prone to an average error of around $100,000, blindly trusting the model without consulting other sources of knowledge may result in highly unprofitable decisions. As such, we hope that the application serves mostly as a proof-of-concept rather than a robust money-making tool. Nevertheless, we still found certain factors, such as square footage and mean-district income, to be salient predictors of housing price.  
+
+Another ethical concern might be that the application can be used as an easily accessible method for estimating wealth. Out of sheer curiosity (or perhaps out of malicious intent), a user may use the application to predict the house prices of unsuspecting strangers, neighbors, or family members. While one might be able to generate a reasonable price estimate based on intuition, research, or subject matter expertise, the application provides an near-instantaneous calculation. Should the model become highly accurate, then the application could lead to abuse by any number of interested stakeholders, such as banks, private loaners, or criminals. Therefore, regulations on application usage might be implemented, such as allowing access to only trusted institutions with an acceptable use. An example of such would be to allow a realtor to predict a listing price before putting a house up for sale.
+
+We also worry that the widespread use of such a deterministic application will negatively impact free-market dynamics within housing ecosystems. Would growth stagnate if prices are pre-determined by a machine-learning algorithm? Of course, we expect that buyers and sellers will try to 'play the system' - but that can lead to another caveat where injustice is created by accessibility. If the app is under regulation, that could still lead to abuse from institutional players. An interesting comparison might be to the investing community, where apps such as Robinhood or Wealthsimple have massively created accessibility to the stock market for individual investors. However, research has shown that individual investors on average under-perform both professional traders and the market at large [@barber_chapter_2013]. Therefore, any app that claims to generate deep financial incentives ought to properly inform its users of the potential risks.
+
+
+# Acknowledgements
+
+The authors would like to thank Hashmat Rohian, adjunct faculty at York University for supervision of the project. We also thank Slava Spirin for the original extraction of the Toronto Housing dataset  [@spirin_slavaspirintoronto-housing-price-prediction_2020]. Finally, we thank Steve V. Miller for creation of the manuscript template in R Markdown  [@miller_r_nodate].
+
+\newpage
+# References
+\noindent
