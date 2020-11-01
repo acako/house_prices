@@ -171,14 +171,14 @@
 
     \vskip 8.5pt % \small 
 
-\noindent The project focuses on building a machine learning model for predicting
+\noindent The project focuses on building a machine learning model to predict
 house prices in Toronto. The training dataset contained 15234 sold
-listings between 2018 and 2019. The model was based off of 6 features:
-area (in square feet), mean distrinct income, number of bedrooms, number
-of bathrooms, number of parking spaces, and property type. We evaluated
-four different machine-learning models and chose XGBoost as the most
-accurate model. A Shiny app was then created to predict the estimated
-listing and final prices.
+listings between 2018 and 2019. The model was based on 6 features: area
+(in square feet), mean distrinct income, number of bedrooms, number of
+bathrooms, number of parking spaces and property type. We evaluated four
+different machine-learning models and chose XGBoost as the most accurate
+model. A Shiny app was then created to predict the estimated listing and
+final prices.
 
 
 \vskip 8.5pt \noindent \emph{Keywords}: house prices, machine learning, caret, shiny \par
@@ -200,42 +200,34 @@ listing and final prices.
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
-Purchasing property is often an important life decision for every
+Purchasing a property is often an important life decision for every
 individual and requires a considerable amount of research. Buying a home
-also holds many different purposes, whether it is for dwelling as soon
-as possible or for as a future investment. Selling a house also requires
-significant research to decide the optimal listing price. Commonly,
-people will seek advice from various websites or realtors before
-purchasing; however, due to big data trends, house price prediction can
-be also done by using machine learning strategies based on large
-datasets from previous years. House Price Index (HPI) can measure the
-price changes of residential housing as a percentage change. In Canada
-the new Housing Price Index is calculated monthly by Statistics Canada.
-HPI is useful but because it is a rough indicator calculated from all
-transactions, it is inefficient for predicting a specific house with its
+holds many different purposes, whether it is for dwelling or as a future
+investment. Also, selling a house requires significant research to
+decide the optimal listing price. Commonly, people will seek advice from
+various websites or real estate agents before purchasing; however, due
+to big data trends, house price prediction can be also done by using
+machine learning strategies based on large datasets from previous years.
+House Price Index (HPI) can measure the price changes of residential
+housing as a percentage change. In Canada, the new Housing Price Index
+is calculated monthly by Statistics Canada. HPI is useful, however, it
+does not give a precise estimate of any specific house with its own
 attributes {[}1{]}. The objective of this project was to evaluate the
 application of several machine learning algorithms to predict house
-prices in the City of Toronto. We also intend to create an app where
-both buyers and sellers can easily check the predicted list price or
-final price based on the attributes of the house such as location, area,
-or number of bedrooms.
+prices in the City of Toronto using their attributes and location.
 
-The House Pricing Prediction app is created to estimate the house price
-for both buyer and seller based on different factors such as total sqft,
-house locations, etc. The deployment was constructed using ShinyApp. A
-user friendly app for both buyer and seller, with simple click of
-factors users will get an estimated housing price. The app can be used
-for individual buyers who want to know the final price of the houses
-they are interested or for individual sellers to know what is the best
-listing price. The app uses regression model for prediction, which was
-trained by the data set of Toronto housing price. The housing price is
-strongly correlated with other factors, for increasing the model
-accuracy decreasing errors, it is important to try different factors and
-combinations. This project will comprehensively validate four different
-models: decision tree, random forest, gradient boosting machine, and
-XGBoost. This report will go through data analysis, modeling
-implementation and provide an optimal result for housing price
-prediction.
+The House Pricing Prediction app was created to estimate both the final
+and list prices, so it can be used by buyers and sellers. The deployment
+was constructed using ShinyApp and it used the houses' locations and
+attributes. The app can be used for individual buyers who want to know
+the final price of the houses they are interested in or for individual
+sellers to know what the best listing price is. This project used
+regression and comprehensively validated four different machine learning
+models: decision tree, random forest, gradient boosting machine and
+XGBoost. The models were tuned and the XGBoost was chosen for deployment
+for its high accuracy. In this report we present the full process of
+data visualization, cleaning and manipulation, as well as feature
+selection, model training, model tuning and deployment on ShinyApp.
 
 \hypertarget{methodology}{%
 \section{Methodology}\label{methodology}}
@@ -246,8 +238,8 @@ prediction.
 The housing dataset, originally shared on Github {[}2{]}, was extracted
 from Zoocasa.com in 2019. The dataset contains all completed property
 sales in the city of Toronto within a 1-year span between 2018-2019. We
-then performed several data exploration and cleaning steps to prepare
-this data for modeling.
+performed several data exploration and cleaning steps to prepare the
+dataset for modeling.
 
 \hypertarget{missingness}{%
 \subsection{Missingness}\label{missingness}}
@@ -324,7 +316,7 @@ type & & categorical\tabularnewline
 \end{longtable}
 
 We chose final\_price as the target variable. While the dataset also
-contained a list\_price variable. rather than training two models to
+contained a list\_price variable, rather than training two models to
 predict on both list and final price, the predicted list price was
 instead approximated by a linear equation between list and final price
 from the original dataset.
@@ -516,7 +508,7 @@ were associated with missingness. Using Chi-squared and Kruskal Wallis
 tests for categorical and numerical variables, respectively, we
 determined that housing and price had significant correlation
 (p\textless0.01) with sqft missingness, where properties missing sqft
-trended towards higher prices. Thus,we conclude that sqft is not MCAR,
+trended towards higher prices. Thus, we conclude that sqft is not MCAR,
 so we cannot simply remove observations where sqft is missing without
 introducing bias. To account for missing values, we chose to use the
 CART (Classification and Regression Trees) method of imputation
@@ -611,15 +603,15 @@ estimation of model effectiveness.
 \subsubsection{Decision Tree Model}\label{decision-tree-model}}
 
 The decision tree model was tuned with different values of cp
-(complexity). Cp = 0.001 was found to be the optimal value.
+(complexity). Value of cp = 0.00001 was found to be the optimal value.
 
 \begin{center}\includegraphics{R-markdown_sean_files/figure-latex/Decision Tree Model-1} \end{center}
 
 \hypertarget{random-forest-model}{%
 \subsubsection{Random Forest Model}\label{random-forest-model}}
 
-The Random Forest was original trained with ntree = 300 and mtry = 8,
-after tuning the model, ntree = 150 and mtry = 6 are used for better
+The Random Forest was original trained with ntree = 300 and mtry = 8.
+After tuning the model, ntree = 150 and mtry = 6 were used due to better
 model performance.
 
 \begin{center}\includegraphics{R-markdown_sean_files/figure-latex/Random Forest Model-1} \end{center}
@@ -627,9 +619,9 @@ model performance.
 \hypertarget{gradient-boosting-model}{%
 \subsubsection{Gradient Boosting Model}\label{gradient-boosting-model}}
 
-The model of gradient boosting was tuned by several different parameters
-and the best model used n.trees = 200, interaction.depth = 9, shrinkage
-= 0.1 and n.minobsinnode = 20.
+The gradient boosting model was tuned by several different parameters.
+The best performing model used the following parameters: n.trees = 200,
+interaction.depth = 9, shrinkage = 0.1 and n.minobsinnode = 20.
 
 \begin{center}\includegraphics{R-markdown_sean_files/figure-latex/GBM importance-1} \end{center}
 
@@ -637,9 +629,10 @@ and the best model used n.trees = 200, interaction.depth = 9, shrinkage
 \subsubsection{Extreme Gradient Boosting
 Model}\label{extreme-gradient-boosting-model}}
 
-The best model has parameters nrounds = 200, max\_depth = 6, eta = 0.1,
-gamma = 0, colsample\_bytree = 0.8, min\_child\_weight = 5 and subsample
-= 0.8 after tuning.
+The XGBoost model was tuned with several parameters. The best performing
+model used the following parameters: nrounds = 200, max\_depth = 6, eta
+= 0.1, gamma = 0, colsample\_bytree = 0.8, min\_child\_weight = 5 and
+subsample = 0.8.
 
 \begin{center}\includegraphics{R-markdown_sean_files/figure-latex/Extreme Gradient Boosting Model-1} \end{center}
 
@@ -647,17 +640,17 @@ gamma = 0, colsample\_bytree = 0.8, min\_child\_weight = 5 and subsample
 \subsubsection{Model Summary}\label{model-summary}}
 
 All models found sqft and mean\_district\_income to be important
-predictors of final\_price. The XGBoost model had the lowest RMSE, the
-highest R-Squared and the lowest MAE. Mean Absolute Error (MAE) tells
-the average error of the variable we want to predict. Root Mean-Squared
-Error (RMSE) is similar with MAE but it is more useful when we are
-interested in fewer larger errors over a lot of small errors. Overall we
-prioritize model stability, and thus prioritize RMSE over MAE. \(R^2\)
-computes how much better the regression fits the data than the mean
-line, which gives an overall score. All the models had similar RMSE, MAE
-and \(R^2\). For predicting house price, we desired a model with the
-lowest RMSE and MAE to keep the high accuracy of prediction. The XGBoost
-model had the highest \(R^2\) as well as the lowest RMSE and MAE.
+predictors of final\_price. Mean Absolute Error (MAE) tells the average
+error of the variable we want to predict. Root Mean-Squared Error (RMSE)
+is similar with MAE but it is more useful when we are interested in
+fewer larger errors over many small errors. Overall, we prioritize model
+stability and thus prioritized RMSE over MAE. \(R^2\) computes how much
+better the regression fits the data than the mean line, which gives an
+overall score. All the models had similar RMSE, MAE and \(R^2\). For
+predicting house price, we desired a model with the lowest RMSE and MAE
+to keep the high accuracy of prediction. The XGBoost model had the
+highest \(R^2\) as well as the lowest RMSE and MAE, thus, it was chosen
+for deployment.
 
 \begin{longtable}[]{@{}lrrr@{}}
 \caption{Model Accuracy}\tabularnewline
@@ -669,7 +662,7 @@ model & RMSE & R2 & MAE\tabularnewline
 model & RMSE & R2 & MAE\tabularnewline
 \midrule
 \endhead
-decision\_tree & 296103.0 & 0.79 & 141375.0\tabularnewline
+decision\_tree & 274957.8 & 0.81 & 135701.0\tabularnewline
 random\_forest & 233734.1 & 0.85 & 119745.2\tabularnewline
 gradient\_boosting & 257316.5 & 0.83 & 134117.1\tabularnewline
 extreme\_gradient\_boosting & 220850.4 & 0.86 & 116308.5\tabularnewline
@@ -709,9 +702,9 @@ both listings and sales by 41\% and 48\% respectively, prices are still
 forecasted to grow by 5\% year-over-year {[}15{]}{[}16{]}{[}17{]}.
 Therefore, the model will need to be re-trained and re-evaluated on new
 data. A second limitation is that we had to imputed missing values for
-sqft. While the MICE is a robust package for imputing missing data, it
-may nevertheless introduces additional bias. Third, we believe there are
-other important features that was not captured in our model, such as
+sqft. While MICE is a robust package for imputing missing data, it may
+nevertheless introduce additional bias. Third, we believe there are
+other important features that were not captured in our model, such as
 proximity to nature, accessibility to public transit, and renovations
 and amenities - to name a few. To increase the potential accuracy of our
 model, the current dataset would ideally be linked with other sources of
@@ -727,12 +720,12 @@ most accurate model is still prone to an average error of around
 \$100,000, blindly trusting the model without consulting other sources
 of knowledge may result in highly unprofitable decisions. As such, we
 hope that the application serves mostly as a proof-of-concept rather
-than a robust money-making tool. Neverthless, we still found certain
+than a robust money-making tool. Nevertheless, we still found certain
 factors, such as square footage and mean-district income, to be salient
 predictors of housing price.
 
 Another ethical concern might be that the application can be used as an
-easily accessible method of estimating wealth. Out of sheer curiosity
+easily accessible method for estimating wealth. Out of sheer curiosity
 (or perhaps out of malicious intent), a user may use the application to
 predict the house prices of unsuspecting strangers, neighbors, or family
 members. While one might be able to generate a reasonable price estimate
@@ -745,20 +738,20 @@ implemented, such as allowing access to only trusted institutions with
 an acceptable use. An example of such would be to allow a realtor to
 predict a listing price before putting a house up for sale.
 
-We also worry that widepsread use of such a deterministic application
-will negatively impact free-market dynamics within housing ecosystems.
-Would growth stagnate if prices are pre-determined by a machine-learning
-algorithm? Of course, we expect that buyers and sellers will try to
-`play the system' - but that then leads to another caveat where
-injustice is created by accessibility. If the app is under regulation,
-that could still lead to abuse from institutional players. An
-interesting comparison might be to the investing community, where apps
-such as Robinhood or Wealthsimple have massively created accessibility
-to the stock market for retail investors. However, research has shown
-that individual investors on average underperform both professional
-traders and the market at large {[}18{]}. Therefore, any app that claims
-to generate deep financial incentives ought to properly inform its users
-of the potential risks.
+We also worry that the widespread use of such a deterministic
+application will negatively impact free-market dynamics within housing
+ecosystems. Would growth stagnate if prices are pre-determined by a
+machine-learning algorithm? Of course, we expect that buyers and sellers
+will try to `play the system' - but that can lead to another caveat
+where injustice is created by accessibility. If the app is under
+regulation, that could still lead to abuse from institutional players.
+An interesting comparison might be to the investing community, where
+apps such as Robinhood or Wealthsimple have massively created
+accessibility to the stock market for individual investors. However,
+research has shown that individual investors on average under-perform
+both professional traders and the market at large {[}18{]}. Therefore,
+any app that claims to generate deep financial incentives ought to
+properly inform its users of the potential risks.
 
 \hypertarget{acknowledgements}{%
 \section{Acknowledgements}\label{acknowledgements}}
