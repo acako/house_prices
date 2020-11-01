@@ -11,6 +11,7 @@ library(shiny)
 library(shinythemes)
 library(readr)
 library(leaflet)
+library(shinydashboard)
 #read in the district data
 district_data <- read.csv('districts.csv')
 types <- list("Condo"=1, "Detached"=2, "Semi-Detached"=3, "Multiplex"=4, "Townhouse"=5)
@@ -18,7 +19,9 @@ districts <- as.list(district_data$district)
 # Define UI for application that shows house prices
 shinyUI(fluidPage(
     theme = shinytheme("sandstone"),
-
+    tags$style(HTML('body {font-family:"Times New Roman",Georgia,Serif; background-color:lightpink}')),
+    tags$style('body {color:blue;}'),
+    
     # Application title
     titlePanel("Toronto House Price Estimator"),
     # Sidebar with a slider input for number of bins
@@ -59,7 +62,8 @@ shinyUI(fluidPage(
         # Show the map
         mainPanel(
             leafletOutput("map"),
-            textOutput("prediction")
-        )
+            textOutput("prediction"),
+            tags$style(type="text/css", "#prediction { height: 50px; width: 100%; text-align:center; font-size: 25px; display: block;}"),    
+            )
     )
 ))
