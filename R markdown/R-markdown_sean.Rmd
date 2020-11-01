@@ -5,6 +5,7 @@ output:
     fig_caption: true
     latex_engine: pdflatex
     template: svm-latex-ms.tex
+    extra_dependencies: "subfig"
 title: "Predicting House Prices in Toronto: A Machine Learning Approach"
 author:
 - name: Albina Cako, BSc
@@ -36,19 +37,6 @@ The objective of this project was to evaluate the application of machine learnin
 Purchasing a house is a big life decision for every individual and needs a considerable amount of research. Everyone has different purpose of buying houses, someone would prefer by the house at the best rate for living now, someone would buy houses for future investment. Selling the houses is also very important and needs to do research and decide what is the best leasing price. Commonly, people will ask advise from various websites, real estate agents or realtors before purchasing or leasing; However, due to the trend towards big data, house pricing prediction can be done by using machine learning strategies base on large amount of data from previous years more correctly. House Price Index (HPI) can measure the price changes of residential housing as a percentage change, In Canada the new Housing Price Index is calculated monthly by Statistics Canada. HPI is useful but because it is a rough indicator calculated from all transactions, it is inefficient for predicting a specific house with its attributes. The purpose of this project is to create an app for both buyers and sellers can easily check the predicted list price or final price based on the attributes of the house such as locations, square foot, number of bedrooms, etc.  
 
 # Methodology
-
-## Data Preprocessing
-The housing dataset, originally shared on Github[@spirin_slavaspirintoronto-housing-price-prediction_2020], was extracted from Zoocasa.com in the summer of 2019. The dataset contained all completed property sales in the city of Toronto within an approximately 1-year span. We performed several data exploration and cleaning steps to prepare this data for modeling.
-
-## Missingness
-We assessed the dataset for missing values. Many parametric machine learning models do not accept missing data, and the accuracy of even non-parametric models are often negatively impacted by missingness. Thus, missing values ought to be either imputed or removed before data modeling. We then determined whether missing data was Missing Completely at Random (MCAR), Missing at Random (MAR), or Missing Not at Random (MNAR). Should the data be MCAR, then it is acceptable to simply remove each observation that is missing, as doing so would not introduce bias to the remaining observations. However, if there was a correlation between missingness and other data features, then imputation must be performed. Missingness correlation was assessed using the missing_compare() function from the finalfit library, which applies the Kruskal Wallis correlation test for numerical variables and chi-squared correlation test for categorical variables to determine correlation. Using the MICE package in R, we then applied the following imputation methods: 1) simple, which imputes a value from a simple random sample from the rest of the data;
-2) mean, which imputes the average of all observations; 3) random forest, which applies a random forest algorithm; and 4) CART, which  imputes by classification and regression trees. The distribution of the imputed data were evaluated with a density plot and an imputed dataset was chosen based on best fit.
-
-## Data Curation
-
-## Modeling
-As the data contained a mix of categorical and numerical variables and did not satisfy many requirements of parametric models, such as variable independence, and normally distributed data. Thus, several parametric models were used. We trained four different non-parametric models using k-fold cross validation. The models were then tuned using various grid searches to improve the accuracy. The final model was chosen based on three metrics: Root Mean-Squared Error (RMSE), Pearson correlation (R^2), and Mean Average Error (MAE).
-
 ```{r load packages, include=FALSE}
 # load the packages
 library(dplyr)
@@ -58,8 +46,8 @@ library('plot.matrix')
 library(caret)
 library(gbm)
 library(car)
+library(finalfit)
 library(pscl)
-library(ROCR)
 library(grid)
 library(gridExtra)
 library(ggcorrplot)
@@ -68,59 +56,132 @@ library(VIM)
 library(gbm)
 library(qwraps2)
 library(descr)
+library(kableExtra)
+library(Hmisc)
+library(corrplot)
+library(mice)
+```
+## Data Preprocessing
+The housing dataset, originally shared on Github[@spirin_slavaspirintoronto-housing-price-prediction_2020], was extracted from Zoocasa.com in the summer of 2019. The dataset contained all completed property sales in the city of Toronto within a 1-year span. We performed several data exploration and cleaning steps to prepare this data for modeling.
+
+## Missingness
+We assessed the dataset for missing values. Many parametric machine learning models do not accept missing data, and the accuracy of even non-parametric models are often negatively impacted by missingness. Thus, missing values ought to be either imputed or removed before data modeling. We then determined whether missing data was Missing Completely at Random (MCAR), Missing at Random (MAR), or Missing Not at Random (MNAR). Should the data be MCAR, then it is acceptable to simply remove each observation that is missing, as doing so would not introduce bias to the remaining observations. However, if there was a correlation between missingness and other data features, then imputation must be performed. Missingness correlation was assessed using the missing_compare() function from the finalfit library, which applies the Kruskal Wallis correlation test for numerical variables and Chi-squared correlation test for categorical variables to determine correlation. Using the MICE package in R, we then applied the following imputation methods: 1) simple, which imputes a value from a simple random sample from the rest of the data;
+2) mean, which imputes the average of all observations; 3) random forest, which applies a random forest algorithm; and 4) CART, which  imputes by classification and regression trees. The distribution of the imputed data were evaluated with a density plot and an imputed dataset was chosen based on best fit.
+
+## Assessing Parametric Fit
+Outliers were visualized with the boxplot() function. Data were considered outliers if they were less than Q1 - 1.5 X Inter-Quartile Range and greater Q3 + 1.5 X Inter-Quartile Range. Normality of the distribution of variables were visualized with density plots. A correlogram with Pearson's R determined collinearity. Linear relationship between outcome variable and predictors was tested via scatterplots.
+
+## Data Curation
+The following variables were removed as they did not have any data utility or were not easily parseable (i.e. free text): title, description, mls, type, full_link, full_address. A numeric 'bedrooms' column was created by combining bedrooms_ag and bedrooms_bg. We also removed district_code and city_district. Both were categorical variables with number of factors = 140; keeping these would significantly increase model training time. We also did not consider longitude and latitude, as including these variables in training sets would have required geocoding and district clustering; complexities which were outside our scope for this application. Mean_district_income was left as an approximation of the effect of districts on property price. After consultation with a real-estate expert, we decreased the number of property types by generalizing types to: Townhouse, Condo, Detached, Semi-Detached, and Plex. Thus, the predictors chosen were:
+
+```{r predictor table, echo=FALSE, message=FALSE}
+predictors_list <- list('sqft', 'beds', 'bathrooms', 'parking','mean_district_income','type')
+predictors_type <- list('numeric', 'numeric', 'numeric', 'numeric', 'numeric', 'categorical')
+predictors_df <- data.frame(matrix(unlist(predictors_list), nrow=6, byrow=TRUE), stringsAsFactors = FALSE)
+predictors_df <- predictors_df %>% mutate(blank = c(" "," "," "," "," "," "),Description = predictors_type)
+colnames(predictors_df) <- c("Label", "             ", "Description")
+kable(predictors_df, format='pipe', caption = 'Predictor variables')
 
 ```
-### **Decision Tree Model**\
+We chose final_price as the target variable. While the dataset also contained a list_price variable. rather than training two models to predict on both list and final price, the predicted list price was instead approximated by a linear equation between list and final price from the original dataset.
 
-### **Random Forest Model**\
-
-### **Decision Tree Model**\
-
-### **Gradient Boosting Model**\
-
+## Modeling
+The data contained a mix of categorical and numerical variables. These variables did not satisfy the many requirements of parametric models, such as variable independence, normally distributed data, and linear relationship with outcome. Thus, several non-parametric models were used instead. We trained four different models using k-fold cross validation. The models were then tuned using various grid searches to improve the accuracy. The final model was then chosen based on three accuracy metrics: Root Mean-Squared Error (RMSE), Pearson correlation (R^2), and Mean Average Error (MAE).
+```{r model table, echo=FALSE, message=FALSE, warning=FALSE}
+models_list <- list('Decision
+Tree','Random
+Forest','Gradient 
+Boosting Machines','XGBoost')
+models_description <- list('Decision trees repeatedly partition data at specific nodes until the data at the bottom of each branch (known as a leaf) is as homogenous as possible. The model increases in complexity with each additional partition and subsequently becomes more accurate.','Random Forest Model Random Forests are an ensemble learning method for classification and regression. This method will construct a multitude of decision trees and output the mean/average prediction problem for regression or the classes for classification problem. The algorithm can control the number of variable available for splitting at each tree or the number of trees to get a higher accuracy. ',' Gradient Boosting Machines (gbm) begin with creating a preliminary \'weak learner\' decision tree, then sequentially grows more trees that aim to reduce the error of the last one. The algorithm optimizes the loss function by minimizing the residuals at each iteration (difference between predicted and actual value).','XGBoost uses ensemble learning, which is a systematic solution that combines the predictive power of multiple learners. It outputs a single model that gives the combined output from many models. This allows the opportunity to not rely on the results of a single machine learning model. In this particular model, the trees are built sequentially, such that the next tree focuses on reducing  the errors of the previous tree.')
+models_params <- list('cp (complexity)','ntree, mtry','n.trees, shrinkage, interaction.depth, n.minobssinnode','nrounds, max_depth, eta, gamma, colsample_bytree, min_child_weight, subsample')
+models_table <- data.frame(unlist(models_list), unlist(models_description), unlist(models_params))
+colnames(models_table) <- c('Model', 'Description', 'Tuning parameters')
+mtable <- kbl(models_table, caption = 'Non-parametric Models Used', format = 'pipe')
+kable_styling(mtable, font_size = 10)
+```
+## Deployment
+The application was created using R shiny and hosted on the Shinyapps.io cloud. EDIT : this could probably all go to results section --> The user interface (UI) contains a map of Toronto for geographic navigation and also allows the user to select various inputs to predict property price. While the user would choose a district of interest from the front end, the back end links the district chosen with income and uses mean_district_income as the model input instead. We chose INSERT_MODEL HERE, since it was the most accurate model as the back-end for our application.
 
 # Results
-The original housing dataset contained 21 variables and 15234 observations. Table 1 defines each variable of the dataset.
+The original housing dataset contained 21 variables and 15234 observations. Table 1 defines each variable of the dataset. Figure 1 plots the geographic distribution of properties based on longitude and latitude.
 
-```{r create a table describing the columns and rows, echo=FALSE}
+```{r create a table describing the columns and rows, echo=FALSE, message=FALSE}
 data_description <- c('Title of the listing', 'Final price of the property', 'Listing price of the property', 'Number of bedrooms','Number of bathrooms','Area of property in square feet',
-                      'Number of parking spaces', 'Verbatim text description of the property', 'MLS ID', 'Property type', 'URL to listing', 'Full address of the property', 'Latitude', 'Longitude','Toronto district to which property belonged to', 'Average household income of district', 'Numerical code of the district', 'Box-Cox transformation of final price', 'Log transformation of final price', 'Number of bedrooms above ground', 'Number of bedrooms below ground' )
+                      'Number of parking spaces', 'Verbatim text description of the property', 'MLS Listing ID', 'Property type', 'URL to listing', 'Full address of the property', 'Latitude', 'Longitude','Toronto district to which property belonged to', 'Average household income of district', 'Numerical code of the district', 'Box-Cox transformation of final price', 'Log transformation of final price', 'Number of bedrooms above ground', 'Number of bedrooms below ground' )
 
 data <- c("title", "final_price", "list_price", "bedrooms", "bathrooms", "sqft", "parking", "description", "mls", "type", "full_link", "full_address", "lat", "long", "city_district", "mean_district_income", "district_code", "final_price_transformed", "final_price_log", "bedrooms_ag", "bedrooms_bg")
 
 datadictionary <- data.frame(matrix(unlist(data), nrow=21, byrow=TRUE), stringsAsFactors = FALSE)
 datadictionary <- datadictionary %>% mutate(blank = c(" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "),Description = data_description)
-colnames(datadictionary) <- c("Label", "             ", "Description")
+colnames(datadictionary) <- c("Variable", "             ", "Type")
 kable(datadictionary, format='pipe', caption = 'Data Dictionary')
 
 ```
-
 ## Data Exploration
+The mean final price property price in Toronto between 2018 and 2019 was $715,000, with a median number of 3 bedrooms and 2 bathrooms. The most common properties types were condo (58.2%), detached (28.8%), and semi-detached (9.4%). 
+```{r text summary, echo=FALSE}
+#text summary
+df <- read.csv('houses_edited.csv')
+df$bedrooms <- df$bedrooms_bg + df$bedrooms_ag
+df <-  df[, !names(df) %in% c('index', 'title', 'full_link', 'mls', 'description', 'full_address', 'final_price_transformed', 'final_price_log')]
+numeric_cols <- list('final_price', 'bathrooms', 'sqft', 'parking', 'mean_district_income', 'bedrooms')
+predictor_cols <- list('bathrooms', 'sqft', 'parking', 'mean_district_income', 'bedrooms', 'type')
+df$type[df$type=='Att/Row/Twnhouse'] <- 'Townhouse'
+df$type[df$type=='Co-Op Apt'] <- 'Condo'
+df$type[df$type=='Co-Ownership Apt'] <- 'Condo'
+df$type[df$type=='Comm Element Condo'] <- 'Condo'
+df$type[df$type=='Condo Apt'] <- 'Condo'
+df$type[df$type=='Condo Townhouse'] <- 'Condo'
+df$type[df$type=='Link'] <- 'Detached'
+df$type[df$type=='Store W/Apt/Offc'] <- 'Condo'
+summary(df[, names(df) %in% numeric_cols])
+table(df$type)
+```
+```{r map, echo=FALSE, message=FALSE, fig.align='center', fig.cap='Latitude and Longitude distribution of Property Data'}
+df %>% ggplot(aes(x=lat, y=long)) + geom_point(aes(colour=city_district)) + theme(legend.position = 'none')
+```
+The 'sqft' variable was missing 1435 observations (approx. 30%).  To test whether the missing data was MCAR, we compared whether other variables were associated with missingness. Using Chi-squared and Kruskal Wallis tests for categorical and numerical variables, respectively, we determined that housing and price had significant correlation (p<0.01) with sqft missingness, where properties missing sqft trended towards higher prices. Thus,we conclude that sqft is not MCAR, so we cannot simply remove observations where sqft is missing without introducing bias. 
+To account for missing values, we chose to use the CART (Classification and Regression Trees) method of imputation (Figure 1). Blue represents the distribution of the original data, while red represents the distribution of imputed data. The mean sqft increased from 1116 to 1311 as a result of the imputation.
 
-```{r load data, message=FALSE}
-data <- read.csv('houses_edited.csv')
-numeric_cols <- list('final_price', 'list_price', 'bathrooms', 'sqft', 'parking', 'lat', 'long', 'mean_district_income', 'bedrooms_ag', 'bedrooms_bg')
-predictor_cols <- list('bathrooms', 'sqft', 'parking', 'lat', 'long', 'mean_district_income', 'bedrooms_ag', 'bedrooms_bg')
-
+```{r CART imputation, echo=FALSE, fig.align='center', fig.height=3, fig.width=4, fig.cap = 'CART-imputed values for sqft'}
+cart <- readRDS('imputed_df_cart.rds')
+summary(complete(cart)$sqft)
+densityplot(cart)
 ```
 
-
-```{r, results = "asis", echo=FALSE}
-descr(data, style = 'rmarkdown')
-#summary(data)
+```{r corrplot, echo=FALSE, fig.align='center', fig.height=5, fig.width=5, fig.cap='Correlogram'}
+#corrplot for numerical
+cor <- rcorr(as.matrix(df[, names(df) %in% numeric_cols]))
+p.mat <- cor_pmat(as.matrix(df[, names(df) %in% numeric_cols]))
+par(mfrow=c(1,1))
+ggcorrplot(cor$r, type = 'upper', p.mat = p.mat, sig.level = 0.05, lab = TRUE)
 ```
+We then performed a correlation analysis based on Pearson's coefficient between each numeric predictor. We considered a correlation > 0.5, with p < 0.05 as a significant correlation. Figure 2 demonstrates significant correlation between many of our predictor variables. 
 
-
-###
-
-```{r}
+We also summarize the distribution of predictor and target variables (Figure 3). Note the right skew in each predictor variable as well as amount of outliers in each of our predictor variables. Finally, we checked for whether a linear relationship existed between each predictor variables and the target variable (Figure 4). Overall, the data is unlikely to be well-fit for parametric machine-learning algorithms such as generalized linear regression. The data does not satisfy the assumptions of variable independence, normal distribution, nor a linear relationship between predictors and target variable. Thus, we chose to use non-parametric algorithms to model our data instead. 
+```{r histogram, echo=FALSE, fig.align='center', fig.height=8, fig.width=6, fig.cap = 'Distribution of predictor and target variables'}
 #histograms - note skew in prices
-par(mfrow=c(2, 5))
+par(mfrow=c(4, 3))
 for (i in numeric_cols) {
-  hist(data[[i]], main = paste(i), xlab = '', col = 4)
+  hist(df[[i]], main = paste(i), xlab = '', col = 4)
 }
-
+#boxplot and outliers
+for (i in numeric_cols) {
+  boxplot(df[[i]], main = paste(i), xlab = '', col = 4)
+}
 ```
+```{r linear correlation, echo=FALSE, message=FALSE, fig.cap='Scatterplot of Predictors vs. Final Price', fig.align='center',fig.height=4}
+par(mfrow=c(2,3))
+for (i in numeric_cols[2:6]) {
+  plot(df[[i]], df$final_price, main = paste(i), xlab = '', col = 4, ylab = 'final_price')
+}
+```
+We chose final_price as our target variable, but still wished to include list_price in the deployment of our application. Therefore, the list price is predicted via the following linear regression: list_price = 1.03 * final_price - 36525.78.
+```{r final list, echo=FALSE, fig.align='center',fig.cap='Final Price vs. List Price', message=FALSE, fig.width=3,fig.height=3}
+price_lm <- lm(list_price ~ final_price, df)
+ggplot(df, aes(x=final_price,y=list_price)) + geom_point() + geom_smooth(method = 'lm') + annotate('text', label = paste('R-sqr = ', round(summary(price_lm)$adj.r.squared, 2)), x = 0.6*max(df$list_price), y= max(df$final_price))
+```
+
 
 
 # Discussion
